@@ -13,10 +13,10 @@ timezone:
 
 
 
-admin:
-  username: 4ct10n
-  # password_hash: $2y$10$r2Zca9MNVqhkbOty2xDK6u0dh.YwrGbVJ3YSSAeVTMoMrqCYbCa26
-  secret: a secret something
+# admin:
+#   username: 4ct10n
+#   # password_hash: $2y$10$r2Zca9MNVqhkbOty2xDK6u0dh.YwrGbVJ3YSSAeVTMoMrqCYbCa26
+#   secret: a secret something
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://yoursite.com
@@ -50,6 +50,11 @@ highlight:
   auto_detect: false
   tab_replace:
 
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
@@ -76,6 +81,9 @@ time_format: HH:mm:ss
 per_page: 10
 pagination_dir: page
 
+
+plugin:
+  - hexo-generator-feed
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
@@ -90,7 +98,5 @@ deploy:
       server : root@45.78.29.252:/root/Blog/blog.git
       github : git@github.com:actionyz/actionyz.github.io.git
     branch: master
-
-
 
 
