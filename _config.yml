@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 4ct10n's Blog
 subtitle:
 description:
-author: John Doe
-language:
+author: 4ct10n
+language: zh-Hans
 timezone:
 
 
@@ -89,7 +89,10 @@ plugin:
 ## Themes: https://hexo.io/themes/
 theme: next 
 #landscape
+links_title: Links
 
+links:
+  xyazh: http://xyazh.com/
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
