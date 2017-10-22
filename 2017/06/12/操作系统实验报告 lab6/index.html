@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统实验," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="练习0 填写已有实验meld的软件进行对比即可 现在将需要修改的文件罗列如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.c根据注释的提示，主要是一下两个函数需要额外加以修改。alloc_proc函数 完整代码如下：static struct proc_struct *allocproc(void) {    struct proc">
+<meta name="keywords" content="操作系统实验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实验报告 lab6">
+<meta property="og:url" content="http://yoursite.com/2017/06/12/操作系统实验报告 lab6/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="练习0 填写已有实验meld的软件进行对比即可 现在将需要修改的文件罗列如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.c根据注释的提示，主要是一下两个函数需要额外加以修改。alloc_proc函数 完整代码如下：static struct proc_struct *allocproc(void) {    struct proc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630212834411?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630213052599?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:28.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统实验报告 lab6">
+<meta name="twitter:description" content="练习0 填写已有实验meld的软件进行对比即可 现在将需要修改的文件罗列如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.c根据注释的提示，主要是一下两个函数需要额外加以修改。alloc_proc函数 完整代码如下：static struct proc_struct *allocproc(void) {    struct proc">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170630212834411?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/12/操作系统实验报告 lab6/"/>
+
+
+
+
+
+  <title>操作系统实验报告 lab6 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/12/操作系统实验报告 lab6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统实验报告 lab6</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T02:47:00+08:00">
+                2017-06-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:28+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>练习0 填写已有实验meld的软件进行对比即可 现在将需要修改的文件罗列如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.c根据注释的提示，主要是一下两个函数需要额外加以修改。alloc_proc函数 完整代码如下：static struct proc_struct *alloc<em>proc(void) {    struct proc</em><br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><p><div class="toc"><div class="toc"><br><ul><br><li><a href="#练习0-填写已有实验">练习0 填写已有实验</a></li><br><li><a href="#练习1-使用round-robin调度算法">练习1 使用Round Robin调度算法</a><ul><br><li><a href="#0x1-执行过程">0x1 执行过程</a></li><br><li><a href="#0x2-算法实现">0x2 算法实现</a></li><br></ul><br></li><br><li><a href="#练习2-实现stride-scheduling调度算法">练习2 实现Stride Scheduling调度算法</a></li><br><li><a href="#实验结果">实验结果</a></li><br><li><a href="#实验心得">实验心得</a></li><br></ul><br></div><br></div><br></p><br><h1 id="练习0-填写已有实验">练习0 填写已有实验</h1><br><p>meld的软件进行对比即可 <br><br>现在将需要修改的文件罗列如下：<br></p><br><pre class="prettyprint"><code class=" hljs avrasm">proc<span class="hljs-preprocessor">.c</span><br>default_pmm<span class="hljs-preprocessor">.c</span><br>pmm<span class="hljs-preprocessor">.c</span><br>swap_fifo<span class="hljs-preprocessor">.c</span><br>vmm<span class="hljs-preprocessor">.c</span><br>trap<span class="hljs-preprocessor">.c</span></code></pre><br><p>根据注释的提示，主要是一下两个函数需要额外加以修改。</p><br><hr><br><p><strong>alloc_proc函数</strong> <br><br>完整代码如下：<br></p><br><pre class="prettyprint"><code class=" hljs lasso">static struct proc_struct <span class="hljs-subst"><em></em></span><br>alloc_proc(<span class="hljs-literal">void</span>) {<br>    struct proc_struct <span class="hljs-subst"></span>proc <span class="hljs-subst">=</span> kmalloc(sizeof(struct proc_struct));<br>    <span class="hljs-keyword">if</span> (proc <span class="hljs-subst">!=</span> <span class="hljs-built_in">NULL</span>) {<br>        proc<span class="hljs-subst">-&gt;</span>state <span class="hljs-subst">=</span> PROC_UNINIT; <span class="hljs-comment">//设置进程初始状态</span><br>        proc<span class="hljs-subst">-&gt;</span>pid <span class="hljs-subst">=</span> <span class="hljs-subst">-</span><span class="hljs-number">1</span>;            <span class="hljs-comment">//进程id=-1</span><br>        proc<span class="hljs-subst">-&gt;</span>runs <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;            <span class="hljs-comment">//初始化时间片为0</span><br>        proc<span class="hljs-subst">-&gt;</span>kstack <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;          <span class="hljs-comment">//初始化内存栈的地址为0</span><br>        proc<span class="hljs-subst">-&gt;</span>need_resched <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;    <span class="hljs-comment">//是否需要调度设为不需要</span><br>        proc<span class="hljs-subst">-&gt;</span><span class="hljs-keyword">parent</span> <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;       <span class="hljs-comment">//将父节点置空</span><br>        proc<span class="hljs-subst">-&gt;</span>mm <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;           <span class="hljs-comment">//置空虚拟内存</span><br>        memset(<span class="hljs-subst">&amp;</span>(proc<span class="hljs-subst">-&gt;</span>context), <span class="hljs-number">0</span>, sizeof(struct context));<span class="hljs-comment">//初始化上下文</span><br>        proc<span class="hljs-subst">-&gt;</span>tf <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;           <span class="hljs-comment">//将中断帧指针置空</span><br>        proc<span class="hljs-subst">-&gt;</span>cr3 <span class="hljs-subst">=</span> boot_cr3;      <span class="hljs-comment">//将页目录设内核页目录表的基址</span><br>        proc<span class="hljs-subst">-&gt;</span>flags <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;           <span class="hljs-comment">//初始化标志位</span><br>        memset(proc<span class="hljs-subst">-&gt;</span>name, <span class="hljs-number">0</span>, PROC_NAME_LEN);<span class="hljs-comment">//置空进程名</span><br>        proc<span class="hljs-subst">-&gt;</span>wait_state <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;      <span class="hljs-comment">//初始化进程等待状态  </span><br>        proc<span class="hljs-subst">-&gt;</span>cptr<span class="hljs-subst">=</span>proc<span class="hljs-subst">-&gt;</span>yptr<span class="hljs-subst">=</span>proc<span class="hljs-subst">-&gt;</span>optr <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;<span class="hljs-comment">//初始化进程相关指针  </span><br>        proc<span class="hljs-subst">-&gt;</span>rq <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;<span class="hljs-comment">//置空运行队列 </span><br>        list_init(<span class="hljs-subst">&amp;</span>(proc<span class="hljs-subst">-&gt;</span>run_link));<span class="hljs-comment">//初始化运行队列的指针</span><br>        proc<span class="hljs-subst">-&gt;</span>time_slice <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;      <span class="hljs-comment">//初始化时间片</span><br>        proc<span class="hljs-subst">-&gt;</span>lab6_run_pool<span class="hljs-built_in">.</span>left <span class="hljs-subst">=</span> proc<span class="hljs-subst">-&gt;</span>lab6_run_pool<span class="hljs-built_in">.</span>right <span class="hljs-subst">=</span> proc<span class="hljs-subst">-&gt;</span>lab6_run_pool<span class="hljs-built_in">.</span><span class="hljs-keyword">parent</span> <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>; <span class="hljs-comment">//初始化各类指针为空</span><br>        proc<span class="hljs-subst">-&gt;</span>lab6_stride <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;     <span class="hljs-comment">//初始化当前运行步数</span><br>        proc<span class="hljs-subst">-&gt;</span>lab6_priority <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;   <span class="hljs-comment">//初始化优先级</span><br>    }<br>    <span class="hljs-keyword">return</span> proc;<br>}</code></pre><br><hr><br><p>相比于lab5，lab6对proc_struct结构体再次做了扩展，这里主要是多出了以下部分</p><br><pre class="prettyprint"><code class=" hljs lasso"><br>    proc<span class="hljs-subst">-&gt;</span>rq <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;             <span class="hljs-comment">//初始化运行队列为空</span><br>    list_init(<span class="hljs-subst">&amp;</span>(proc<span class="hljs-subst">-&gt;</span>run_link));<span class="hljs-comment">//初始化运行队列的指针</span><br>    proc<span class="hljs-subst">-&gt;</span>time_slice <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;        <span class="hljs-comment">//初始化时间片</span><br>    proc<span class="hljs-subst">-&gt;</span>lab6_run_pool<span class="hljs-built_in">.</span>left <span class="hljs-subst">=</span> proc<span class="hljs-subst">-&gt;</span>lab6_run_pool<span class="hljs-built_in">.</span>right proc<span class="hljs-subst">-&gt;</span>lab6_run_pool<span class="hljs-built_in">.</span><span class="hljs-keyword">parent</span> <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>; <span class="hljs-comment">//初始化各类指针为空，包括父进程等待</span><br>    proc<span class="hljs-subst">-&gt;</span>lab6_stride <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;       <span class="hljs-comment">//步数初始化 </span><br>    proc<span class="hljs-subst">-&gt;</span>lab6_priority <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;     <span class="hljs-comment">//初始化优先级</span></code></pre><br><hr><br><p><strong>trap_dispatch</strong>函数</p><br><pre class="prettyprint"><code class=" hljs lasso">static <span class="hljs-literal">void</span><br>trap_dispatch(struct trapframe <span class="hljs-subst"><em></em></span>tf) {<br>    <span class="hljs-attribute">…</span><span class="hljs-attribute">…</span><br>    <span class="hljs-attribute">…</span><span class="hljs-attribute">…</span><br>    ticks <span class="hljs-subst">++</span>;<br>    assert(current <span class="hljs-subst">!=</span> <span class="hljs-built_in">NULL</span>);<br>    run_timer_list(); <span class="hljs-comment">//更新定时器，并根据参数调用调度算法  </span><br>    break;<br>    <span class="hljs-attribute">…</span><span class="hljs-attribute">…</span><br>    <span class="hljs-attribute">…</span><span class="hljs-attribute">…</span><br>}</code></pre><br><h1 id="练习1-使用round-robin调度算法">练习1 使用Round Robin调度算法</h1><br><blockquote><br><p>理解并分析sched_calss中各个函数指针的用法，并接合Round Robin 调度算法描ucore的调度执行过程</p><br></blockquote><br><h2 id="0x1-执行过程">0x1 执行过程</h2><br><blockquote><br><p>让所有runnable态的进程分时轮流使用CPU时间。RR调度器维护当前runnable进程的有序运行队列。当前进程的时间片用完之后，调度器将当前进程放置到运行队列的尾部，再从其头部取出进程进行调度。RR调度算法的就绪队列在组织结构上也是一个双向链表，只是增加了一个成员变量，表明在此就绪进程队列中的最大执行时间片。而且在进程控制块proc_struct中增加了一个成员变量time_slice，用来记录进程当前的可运行时间片段。这是由于RR调度算法需要考虑执行进程的运行时间不能太长。在每个timer到时的时候，操作系统会递减当前执行进程的time_slice，当time_slice为0时，就意味着这个进程运行了一段时间（这个时间片段称为进程的时间片），需要把CPU让给其他进程执行，于是操作系统就需要让此进程重新回到rq的队列尾，且重置此进程的时间片为就绪队列的成员变量最大时间片max_time_slice值，然后再从rq的队列头取出一个新的进程执行。</p><br></blockquote><br><h2 id="0x2-算法实现">0x2 算法实现</h2><br><p><strong>RR_init完成了对进程队列的初始化</strong></p><br><pre class="prettyprint"><code class=" hljs cs">    <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span><br>    RR_init(<span class="hljs-keyword">struct</span> run_queue rq) {<br>        list_init(&amp;(rq-&gt;run_list));<br>        rq-&gt;proc_num = <span class="hljs-number">0</span>;<br>    }  </code></pre><br><hr><br><p><strong>RR_enqueue的函数实现如下表所示。即把某进程的进程控制块指针放入到rq队列末尾，且如果进程控制块的时间片为0，则需要把它重置为rq成员变量max_time_slice。这表示如果进程在当前的执行时间片已经用完，需要等到下一次有机会运行时，才能再执行一段时间。</strong></p><br><pre class="prettyprint"><code class=" hljs haskell">    static void<br>    <span class="hljs-type">RR_enqueue</span>(struct run_queue <em>rq, struct proc_struct </em><span class="hljs-keyword">proc</span>) {<br>        assert(list_empty(&amp;(<span class="hljs-keyword">proc</span>-&gt;run_link)));<br>        list_add_before(&amp;(rq-&gt;run_list), &amp;(<span class="hljs-keyword">proc</span>-&gt;run_link));<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">proc</span>-&gt;time_slice == <span class="hljs-number">0</span> || <span class="hljs-keyword">proc</span>-&gt;time_slice &gt; rq-&gt;max_time_slice) {<br>            <span class="hljs-keyword">proc</span>-&gt;time_slice = rq-&gt;max_time_slice;<br>        }<br>        <span class="hljs-keyword">proc</span>-&gt;rq = rq;<br>        rq-&gt;proc_num ++;<br>    }  </code></pre><br><hr><br><p><strong>RR_dequeue的函数实现如下表所示。即把就绪进程队列rq的进程控制块指针的队列元素删除，并把表示就绪进程个数的proc_num减一。</strong></p><br><pre class="prettyprint"><code class=" hljs haskell">    static void<br>    <span class="hljs-type">RR_dequeue</span>(struct run_queue <em>rq, struct proc_struct </em><span class="hljs-keyword">proc</span>) {<br>        assert(!list_empty(&amp;(<span class="hljs-keyword">proc</span>-&gt;run_link)) &amp;&amp; <span class="hljs-keyword">proc</span>-&gt;rq == rq);<br>        list_del_init(&amp;(<span class="hljs-keyword">proc</span>-&gt;run_link));<br>        rq-&gt;proc_num <span class="hljs-comment">–;  </span><br>    }  </code></pre><br><hr><br><p><strong>RR_pick_next的函数实现如下表所示。即选取就绪进程队列rq中的队头队列元素，并把队列元素转换成进程控制块指针。</strong></p><br><pre class="prettyprint"><code class=" hljs objectivec">    <span class="hljs-keyword">static</span> <span class="hljs-keyword">struct</span> proc_struct <em><br>    RR_pick_next(<span class="hljs-keyword">struct</span> run_queue </em>rq) {<br>        list_entry_t <em>le = list_next(&amp;(rq-&gt;run_list));<br>        <span class="hljs-keyword">if</span> (le != &amp;(rq-&gt;run_list)) {<br>            <span class="hljs-keyword">return</span> le2proc(le, run_link);<br>        }<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    }  </em></code></pre><br><hr><br><p><strong>RR_proc_tick的函数实现如下表所示。即每次timer到时后，trap函数将会间接调用此函数来把当前执行进程的时间片time_slice减一。如果time_slice降到零，则设置此进程成员变量need_resched标识为1，这样在下一次中断来后执行trap函数时，会由于当前进程程成员变量need_resched标识为1而执行schedule函数，从而把当前执行进程放回就绪队列末尾，而从就绪队列头取出在就绪队列上等待时间最久的那个就绪进程执行。</strong></p><br><pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-title">static</span> void <span class="hljs-type">RR_proc_tick</span>(struct run_queue rq, struct proc_struct <em><span class="hljs-keyword">proc</span>) {<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">proc</span>-&gt;time_slice &gt; <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">proc</span>-&gt;time_slice <span class="hljs-comment">–;  </span><br>    }<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">proc</span>-&gt;time_slice == <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">proc</span>-&gt;need_resched = <span class="hljs-number">1</span>;<br>    }<br>}  </em></code></pre><br><h1 id="练习2-实现stride-scheduling调度算法">练习2 实现Stride Scheduling调度算法</h1><br><blockquote><br><p>首先需要换掉RR调度器的实现，即用default_sched_stride_c覆盖default_sched.c。然后根据此文件和后续文档对Stride度器的相关描述，完成Stride调度算法的实现。</p><br></blockquote><br><p>首先，根据实验指导书的要求，先用default_sched_stride_c覆盖default_sched.c，即覆盖掉Round Robin调度算法的实现。 <br><br>覆盖掉之后需要在该框架上实现Stride Scheduling调度算法。 <br><br>关于Stride Scheduling调度算法，经过查阅资料和实验指导书，我们可以简单的把思想归结如下：<br><br></p><br><pre><code>1、为每个runnable的进程设置一个当前状态stride，表示该进程当前的调度权。另外定义其对应的pass值，表示对应进程在调度后，stride 需要进行的累加值。<br>2、每次需要调度时，从当前 runnable 态的进程中选择 stride最小的进程调度。对于获得调度的进程P，将对应的stride加上其对应的步长pass（只与进程的优先权有关系）。<br>3、在一段固定的时间之后，回到步骤2，重新调度当前stride最小的进程<br></code></pre><br><p>首先是初始化函数stride_init。 <br><br>开始初始化运行队列，并初始化当前的运行队，然后设置当前运行队列内进程数目为0。<br></p><br><pre class="prettyprint"><code class=" hljs lasso">static <span class="hljs-literal">void</span><br>stride_init(struct run_queue <span class="hljs-subst"></span>rq) {<br>     <span class="hljs-comment">/<em> LAB6: YOUR CODE </em>/</span><br>     list_init(<span class="hljs-subst">&amp;</span>(rq<span class="hljs-subst">-&gt;</span>run_list));<br>     rq<span class="hljs-subst">-&gt;</span>lab6_run_pool <span class="hljs-subst">=</span> <span class="hljs-built_in">NULL</span>;<br>     rq<span class="hljs-subst">-&gt;</span>proc_num <span class="hljs-subst">=</span> <span class="hljs-number">0</span>;<br>}  </code></pre><br><hr><br><p>然后是入队函数stride_enqueue，根据之前对该调度算法的分析，这里函数主要是初始化刚进入运行队列的进程 proc 的stride属性，然后比较队头元素与当前进程的步数大小，选择步数最小的运行，即将其插入放入运行队列中去，这里并未放置在队列头部。最后初始化时间片，然后将运行队列进程数目加一。</p><br><pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-title">static</span> void<br><span class="hljs-title">stride_enqueue</span>(struct run_queue <em>rq, struct proc_struct </em><span class="hljs-keyword">proc</span>) {<br>     /<em> <span class="hljs-type">LAB6</span>: <span class="hljs-type">YOUR</span> <span class="hljs-type">CODE</span> </em>/<br><span class="hljs-preprocessor">#if USE_SKEW_HEAP  </span><br>     rq-&gt;lab6_run_pool = //在使用优先队列的实现中表示当前优先队列的头元素<br>          skew_heap_insert(rq-&gt;lab6_run_pool, &amp;(<span class="hljs-keyword">proc</span>-&gt;lab6_run_pool), proc_stride_comp_f);//比较队头元素与当前进程的步数大小，选择步数最小的运行<br><span class="hljs-preprocessor">#else  </span><br>     assert(list_empty(&amp;(<span class="hljs-keyword">proc</span>-&gt;run_link)));<br>     list_add_before(&amp;(rq-&gt;run_list), &amp;(<span class="hljs-keyword">proc</span>-&gt;run_link));//将 <span class="hljs-keyword">proc</span>插入放入运行队列中去<br><span class="hljs-preprocessor">#endif  </span><br>     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">proc</span>-&gt;time_slice == <span class="hljs-number">0</span> || <span class="hljs-keyword">proc</span>-&gt;time_slice &gt; rq-&gt;max_time_slice) {//初始化时间片<br>          <span class="hljs-keyword">proc</span>-&gt;time_slice = rq-&gt;max_time_slice;<br>     }<br>     <span class="hljs-keyword">proc</span>-&gt;rq = rq;<br>     rq-&gt;proc_num ++;<br>}  </code></pre><br><hr><br><p>然后是出队函数stride_dequeue，即完成将一个进程从队列中移除的功能，这里使用了优先队列。最后运行队列数目减一。</p><br><pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-title">static</span> void<br><span class="hljs-title">stride_dequeue</span>(struct run_queue <em>rq, struct proc_struct </em><span class="hljs-keyword">proc</span>) {<br>     /<em> <span class="hljs-type">LAB6</span>: <span class="hljs-type">YOUR</span> <span class="hljs-type">CODE</span> </em>/<br><span class="hljs-preprocessor">#if USE_SKEW_HEAP  </span><br>     rq-&gt;lab6_run_pool =<br>          skew_heap_remove(rq-&gt;lab6_run_pool, &amp;(<span class="hljs-keyword">proc</span>-&gt;lab6_run_pool), proc_stride_comp_f);// 在斜堆中删除相应元素<br><span class="hljs-preprocessor">#else  </span><br>     assert(!list_empty(&amp;(<span class="hljs-keyword">proc</span>-&gt;run_link)) &amp;&amp; <span class="hljs-keyword">proc</span>-&gt;rq == rq);<br>     list_del_init(&amp;(<span class="hljs-keyword">proc</span>-&gt;run_link));// 从运行队列中删除相应元素<br><span class="hljs-preprocessor">#endif  </span><br>     rq-&gt;proc_num <span class="hljs-comment">–;  </span><br>}  </code></pre><br><hr><br><p>接下来就是进程的调度函数stride_pick_next，观察代码，它的核心是先扫描整个运行队列，返回其中stride值最小的对应进程，然后更新对应进程的stride值，将步长设置为优先级的倒数，如果为0则设置为最大的步长。</p><br><pre class="prettyprint"><code class=" hljs lasso">static struct proc_struct <span class="hljs-subst"><em></em></span><br>stride_pick_next(struct run_queue <span class="hljs-subst"></span>rq) {<br>     <span class="hljs-comment">/<em> LAB6: YOUR CODE </em>/</span><br><span class="hljs-variable">#if</span> USE_SKEW_HEAP<br>     <span class="hljs-keyword">if</span> (rq<span class="hljs-subst">-&gt;</span>lab6_run_pool <span class="hljs-subst">==</span> <span class="hljs-built_in">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-built_in">NULL</span>;<br>     struct proc_struct <span class="hljs-subst"><em></em></span>p <span class="hljs-subst">=</span> le2proc(rq<span class="hljs-subst">-&gt;</span>lab6_run_pool, lab6_run_pool);<br><span class="hljs-variable">#else</span><br>     list_entry_t <span class="hljs-subst"></span>le <span class="hljs-subst">=</span> list_next(<span class="hljs-subst">&amp;</span>(rq<span class="hljs-subst">-&gt;</span>run_list));<br><br>     <span class="hljs-keyword">if</span> (le <span class="hljs-subst">==</span> <span class="hljs-subst">&amp;</span>rq<span class="hljs-subst">-&gt;</span>run_list)<br>          <span class="hljs-keyword">return</span> <span class="hljs-built_in">NULL</span>;<br><br>     struct proc_struct <span class="hljs-subst"><em></em></span>p <span class="hljs-subst">=</span> le2proc(le, run_link);<br>     le <span class="hljs-subst">=</span> list_next(le);<br>     <span class="hljs-keyword">while</span> (le <span class="hljs-subst">!=</span> <span class="hljs-subst">&amp;</span>rq<span class="hljs-subst">-&gt;</span>run_list)<br>     {<br>          struct proc_struct <span class="hljs-subst"></span>q <span class="hljs-subst">=</span> le2proc(le, run_link);<br>          <span class="hljs-keyword">if</span> ((int32_t)(p<span class="hljs-subst">-&gt;</span>lab6_stride <span class="hljs-subst">-</span> q<span class="hljs-subst">-&gt;</span>lab6_stride) <span class="hljs-subst">&gt;</span> <span class="hljs-number">0</span>)<br>               p <span class="hljs-subst">=</span> q;<br>          le <span class="hljs-subst">=</span> list_next(le);<br>     }<br><span class="hljs-variable">#endif</span><br>    <span class="hljs-comment">//更新对应进程的stride值</span><br>     <span class="hljs-keyword">if</span> (p<span class="hljs-subst">-&gt;</span>lab6_priority <span class="hljs-subst">==</span> <span class="hljs-number">0</span>)<span class="hljs-comment">//优先级设置  </span><br>          p<span class="hljs-subst">-&gt;</span>lab6_stride <span class="hljs-subst">+=</span> BIG_STRIDE;<span class="hljs-comment">//步长为0则设置为最大步长保持相减的有效性  </span><br>     <span class="hljs-keyword">else</span> p<span class="hljs-subst">-&gt;</span>lab6_stride <span class="hljs-subst">+=</span> BIG_STRIDE <span class="hljs-subst">/</span> p<span class="hljs-subst">-&gt;</span>lab6_priority;<span class="hljs-comment">//步长设置为优先级的倒数  </span><br>     <span class="hljs-keyword">return</span> p;<br>}</code></pre><br><hr><br><p>函数stride_proc_tick的主要工作是检测当前进程的时间片是否已经用完。如果时间片已经用完,就会按照正确的流程进行进程的切换工作。这里和之前实现的Round Robin调度算法一样，所采用的思想也是一致的</p><br><p>优先队列比较函数proc_stride_comp_f的实现，主要利用思路是通过相减之后的值，进行判断大小</p><br><pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span><br>proc_stride_comp_f(<span class="hljs-keyword">void</span> <em>a, <span class="hljs-keyword">void</span> </em>b)<br>{<br>     <span class="hljs-keyword">struct</span> proc_struct <em>p = le2proc(a, lab6_run_pool);<br>     <span class="hljs-keyword">struct</span> proc_struct </em>q = le2proc(b, lab6_run_pool);<br>     int32_t c = p-&gt;lab6_stride - q-&gt;lab6_stride;<span class="hljs-comment">//步数相减，通过正负比较大小关系  </span><br>     <span class="hljs-keyword">if</span> (c &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (c == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>     <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>}  </code></pre><br><h1 id="实验结果">实验结果</h1><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170630212834411?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170630213052599?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><h1 id="实验心得">实验心得</h1><br><p>通过这一次实验我对轮转法以及stride法有了更多的了解，stride法其实就是轮转法的一种升级。stride法加入了对进程优先级的调整，步数越小，进程优先级越大。这种改变更加合理。进程的调度极大的提高了CPU的利用率。更加深刻的理解了进程切换的原理，对Stride Schedule算法的原理和算法可控性和确定性有了更深的认识。</p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统实验/" rel="tag"># 操作系统实验</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/12/操作系统实验报告 lab8/" rel="next" title="操作系统实验报告 lab8">
+                <i class="fa fa-chevron-left"></i> 操作系统实验报告 lab8
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/12/操作系统实验报告 lab7/" rel="prev" title="操作系统实验报告 lab7">
+                操作系统实验报告 lab7 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#练习0-填写已有实验"><span class="nav-number">1.</span> <span class="nav-text">练习0 填写已有实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习1-使用round-robin调度算法"><span class="nav-number">2.</span> <span class="nav-text">练习1 使用Round Robin调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-执行过程"><span class="nav-number">2.1.</span> <span class="nav-text">0x1 执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-算法实现"><span class="nav-number">2.2.</span> <span class="nav-text">0x2 算法实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习2-实现stride-scheduling调度算法"><span class="nav-number">3.</span> <span class="nav-text">练习2 实现Stride Scheduling调度算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验结果"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验心得"><span class="nav-number">5.</span> <span class="nav-text">实验心得</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

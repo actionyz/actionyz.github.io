@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统实验," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="练习0 填写已有实验将已完成的lab7和lab8进行对比  需要修改的文件如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.csche.cmonitor.check_sync.c练习1 完成读文件操作的实现  首先了解打开文件的处理流程，然后参考本实验后续的文件读写操作的过程分析，编写在sfs_inode.c中sfs_io_nolo">
+<meta name="keywords" content="操作系统实验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实验报告 lab8">
+<meta property="og:url" content="http://yoursite.com/2017/06/12/操作系统实验报告 lab8/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="练习0 填写已有实验将已完成的lab7和lab8进行对比  需要修改的文件如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.csche.cmonitor.check_sync.c练习1 完成读文件操作的实现  首先了解打开文件的处理流程，然后参考本实验后续的文件读写操作的过程分析，编写在sfs_inode.c中sfs_io_nolo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170707102000629?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170612013345716?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170612014054434?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170707102143669?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:29.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统实验报告 lab8">
+<meta name="twitter:description" content="练习0 填写已有实验将已完成的lab7和lab8进行对比  需要修改的文件如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.csche.cmonitor.check_sync.c练习1 完成读文件操作的实现  首先了解打开文件的处理流程，然后参考本实验后续的文件读写操作的过程分析，编写在sfs_inode.c中sfs_io_nolo">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170707102000629?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/12/操作系统实验报告 lab8/"/>
+
+
+
+
+
+  <title>操作系统实验报告 lab8 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/12/操作系统实验报告 lab8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统实验报告 lab8</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T01:05:00+08:00">
+                2017-06-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:29+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>练习0 填写已有实验将已完成的lab7和lab8进行对比  需要修改的文件如下：proc.cdefault_pmm.cpmm.cswap_fifo.cvmm.ctrap.csche.cmonitor.check_sync.c练习1 完成读文件操作的实现  首先了解打开文件的处理流程，然后参考本实验后续的文件读写操作的过程分析，编写在sfs_inode.c中sfs_io_nolo<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><h1 id="练习0-填写已有实验">练习0 填写已有实验</h1><br><p>将已完成的lab7和lab8进行对比 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170707102000629?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>需要修改的文件如下：<br><br></p><br><pre class="prettyprint"><code class=" hljs avrasm">proc<span class="hljs-preprocessor">.c</span><br>default_pmm<span class="hljs-preprocessor">.c</span><br>pmm<span class="hljs-preprocessor">.c</span><br>swap_fifo<span class="hljs-preprocessor">.c</span><br>vmm<span class="hljs-preprocessor">.c</span><br>trap<span class="hljs-preprocessor">.c</span><br>sche<span class="hljs-preprocessor">.c</span><br>monitor.<br>check_sync<span class="hljs-preprocessor">.c</span></code></pre><br><h1 id="练习1-完成读文件操作的实现">练习1 完成读文件操作的实现</h1><br><blockquote><br><p>首先了解打开文件的处理流程，然后参考本实验后续的文件读写操作的过程分析，编写在sfs_inode.c中sfs_io_nolock读文件中数据的实现代码。</p><br></blockquote><br><h2 id="0x1-ucore文件系统总体介绍">0x1 ucore文件系统总体介绍</h2><br><p>根据实验指导书，我们可以了解到，ucore的文件系统架构主要由四部分组成：</p><br><ul><br><li><strong>通用文件系统访问接口层:</strong>该层提供了一个从用户空间到文件系统的标准访问接口。这一层访问接口让应用程序能够通过一个简单的接口获得ucore内核的文件系统服务。</li><br><li><strong>文件系统抽象层:</strong>向上提供一个一致的接口给内核其他部分（文件系统相关的系统调用实现模块和其他内核功能模块）访问。向下提供一个抽象函数指针列表和数据结构来屏蔽不同文件系统的实现细节。</li><br><li><strong>Simple FS文件系统层:</strong>一个基于索引方式的简单文件系统实例。向上通过各种具体函数实现以对应文件系统抽象层提出的抽象函数。向下访问外设接口</li><br><li><strong>外设接口层:</strong>向上提供device访问接口屏蔽不同硬件细节。向下实现访问各种具体设备驱动的接口,比如disk设备接口/串口设备接口/键盘设备接口等。</li><br></ul><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170612013345716?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><h2 id="0x2-ucore文件相关关键数据结构及其关系">0x2 ucore文件相关关键数据结构及其关系</h2><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170612014054434?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><h2 id="0x3-重要数据结构">0x3 重要数据结构</h2><br><p>首先是file数据结构：</p><br><pre class="prettyprint"><code class=" hljs rust"><span class="hljs-keyword">struct</span> file {<br><span class="hljs-keyword">enum</span> {<br>FD_NONE, FD_INIT, FD_OPENED, FD_CLOSED,<br>} status;       <span class="hljs-comment">//访问文件的执行状态</span><br><span class="hljs-keyword">bool</span> readable; <span class="hljs-comment">//文件是否可读</span><br><span class="hljs-keyword">bool</span> writable; <span class="hljs-comment">//文件是否可写</span><br><span class="hljs-keyword">int</span> fd;        <span class="hljs-comment">//文件在filemap中的索引值</span><br>off_t pos;    <span class="hljs-comment">//访问文件的当前位置</span><br><span class="hljs-keyword">struct</span> inode <em>node;<span class="hljs-comment">//该文件对应的内存inode指针</span><br>atomic_t open_count;<span class="hljs-comment">//打开此文件的次数</span><br>};</em></code></pre><br><p>接下来inode数据结构，它是位于内存的索引节点，把不同文件系统的特定索引节点信息(甚至不能算是一个索引节点)统一封装起来，避免了进程直接访问具体文件系统</p><br><pre class="prettyprint"><code class=" hljs rust"><span class="hljs-keyword">struct</span> inode {<br>union { <span class="hljs-comment">//包含不同文件系统特定inode信息的union域</span><br><span class="hljs-keyword">struct</span> device <span class="hljs-number"><strong></strong></span>device_info;  <span class="hljs-comment">//设备文件系统内存inode信息</span><br><span class="hljs-keyword">struct</span> sfs_inode <span class="hljs-number"></span>sfs_inode_info; <span class="hljs-comment">//SFS文件系统内存inode信息</span><br>} in_info;<br><span class="hljs-keyword">enum</span> {<br>inode_type_device_info = <span class="hljs-number">0x1234</span>,<br>inode_type_sfs_inode_info,<br>} in_type;  <span class="hljs-comment">//此inode所属文件系统类型</span><br>atomic_t ref_count;   <span class="hljs-comment">//此inode的引用计数</span><br>atomic_t open_count;  <span class="hljs-comment">//打开此inode对应文件的个数</span><br><span class="hljs-keyword">struct</span> fs in_fs;     <span class="hljs-comment">//抽象的文件系统,包含访问文件系统的函数指针</span><br><span class="hljs-keyword">const</span> <span class="hljs-keyword">struct</span> inode_ops <em>in_ops;   <span class="hljs-comment">//抽象的inode操作,包含访问inode的函数指针</span><br>};</em></code></pre><br><p>内存中的索引节点</p><br><pre class="prettyprint"><code class=" hljs applescript">struct sfs_inode {<br>    struct sfs_disk_inode din;                     /<em> <span class="hljs-function_start"><span class="hljs-keyword">on</span></span>-disk inode </em>/<br>    uint32_t ino;                                   /<em> inode <span class="hljs-type">number</span> </em>/<br>    uint32_t flags;                                 /<em> inode flags </em>/<br>    bool dirty;                                     /<em> <span class="hljs-constant">true</span> <span class="hljs-keyword">if</span> inode modified </em>/<br>    int reclaim_count;                              /<em> kill inode <span class="hljs-keyword">if</span> <span class="hljs-keyword">it</span> hits zero </em>/<br>    semaphore_t sem;                                /<em> semaphore <span class="hljs-keyword">for</span> din </em>/<br>    list_entry_t inode_link;                        /<em> entry <span class="hljs-keyword">for</span> linked-<span class="hljs-type">list</span> <span class="hljs-keyword">in</span> sfs_fs </em>/<br>    list_entry_t hash_link;                         /<em> entry <span class="hljs-keyword">for</span> hash linked-<span class="hljs-type">list</span> <span class="hljs-keyword">in</span> sfs_fs </em>/<br>};</code></pre><br><p>SFS中的磁盘索引节点代表了一个实际位于磁盘上的文件。首先我们看看在硬盘上的索引节点的内容：</p><br><pre class="prettyprint"><code class=" hljs fsharp"><span class="hljs-keyword">struct</span> sfs_disk_inode {<br>    uint32_t size;                              如果inode表示常规文件，则size是文件大小<br>    uint16_t <span class="hljs-class"><span class="hljs-keyword">type</span>;                                  <span class="hljs-title">inode</span>的文件类型</span><br>    uint16_t nlinks;                               此inode的硬链接数<br>    uint32_t blocks;                              此inode的数据块数的个数<br>    uint32_t direct[SFS_NDIRECT];                此inode的直接数据块索引值（有SFS_NDIRECT个）<br>    uint32_t indirect;                            此inode的一级间接数据块索引值<br>};</code></pre><br><h2 id="0x4-打开文件原理">0x4 打开文件原理</h2><br><blockquote><br><p>首先假定用户进程需要打开的文件已经存在在硬盘上。以user/sfs_filetest1.c为例，首先用户进程会调用在main函数中的如下语句： <br><br>  int fd1 = safe_open(“/test/testfile”, O_RDWR | O_TRUNC);<br></p><br></blockquote><br><p>①通用文件访问接口层的处理流程</p><br><blockquote><br><p>首先进入通用文件访问接口层的处理流程，即进一步调用如下用户态函数： open-&gt;sys_open-&gt;syscall，从而引起系统调用进入到内核态。到了内核态后，通过中断处理例程，会调用到sys_open内核函数，并进一步调用sysfile_open内核函数。到了这里，需要把位于用户空间的字符串”/test/testfile”拷贝到内核空间中的字符串path中，并进入到文件系统抽象层的处理流程完成进一步的打开文件操作中。</p><br></blockquote><br><p>②文件系统抽象层的处理流程</p><br><blockquote><br><p>Ⅰ、分配一个空闲的file数据结构变量file在文件系统抽象层的处理中，首先调用的是file_open函数，它要给这个即将打开的文件分配一个file数据结构的变量，这个变量其实是当前进程的打开文件数组current-&gt;fs_struct-&gt;filemap[]中的一个空闲元素（即还没用于一个打开的文件），而这个元素的索引值就是最终要返回到用户进程并赋值给变量fd1。到了这一步还仅仅是给当前用户进程分配了一个file数据结构的变量，还没有找到对应的文件索引节点。 <br><br>  为此需要进一步调用vfs_open函数来找到path指出的文件所对应的基于inode数据结构的VFS索引节点node。vfs_open函数需要完成两件事情：通过vfs_lookup找到path对应文件的inode；调用vop_open函数打开文件。<br></p><br><p>Ⅱ、找到文件设备的根目录“/”的索引节点需要注意，这里的vfs_lookup函数是一个针对目录的操作函数，它会调用vop_lookup函数来找到SFS文件系统中的“/test”目录下的“testfile”文件。为此，vfs_lookup函数首先调用get_device函数，并进一步调用vfs_get_bootfs函数（其实调用了）来找到根目录“/”对应的inode。这个inode就是位于vfs.c中的inode变量bootfs_node。这个变量在init_main函数（位于kern/process/proc.c）执行时获得了赋值。</p><br><p>Ⅲ、找到根目录“/”下的“test”子目录对应的索引节点，在找到根目录对应的inode后，通过调用vop_lookup函数来查找“/”和“test”这两层目录下的文件“testfile”所对应的索引节点，如果找到就返回此索引节点。</p><br><p>Ⅳ、把file和node建立联系。完成第3步后，将返回到file_open函数中，通过执行语句“file-&gt;node=node;”，就把当前进程的current-&gt;fs_struct-&gt;filemap[fd]（即file所指变量）的成员变量node指针指向了代表“/test/testfile”文件的索引节点node。这时返回fd。经过重重回退，通过系统调用返回，用户态的syscall-&gt;sys_open-&gt;open-&gt;safe_open等用户函数的层层函数返回，最终把把fd赋值给fd1。自此完成了打开文件操作。但这里我们还没有分析第2和第3步是如何进一步调用SFS文件系统提供的函数找位于SFS文件系统上的“/test/testfile”所对应的sfs磁盘inode的过程。下面需要进一步对此进行分析。</p><br></blockquote><br><p>③SFS文件系统层的处理流程</p><br><blockquote><br><p>这里需要分析文件系统抽象层中没有彻底分析的vop_lookup函数到底做了啥。下面我们来看看。在sfs_inode.c中的sfs_node_dirops变量定义了“.vop_lookup = sfs_lookup”，所以我们重点分析sfs_lookup的实现。</p><br><p>sfs_lookup有三个参数：node，path，node_store。其中node是根目录“/”所对应的inode节点；path是文件“testfile”的绝对路径“/test/testfile”，而node_store是经过查找获得的“testfile”所对应的inode节点。</p><br><p>Sfs_lookup函数以“/”为分割符，从左至右逐一分解path获得各个子目录和最终文件对应的inode节点。在本例中是分解出“test”子目录，并调用sfs_lookup_once函数获得“test”子目录对应的inode节点subnode，然后循环进一步调用sfs_lookup_once查找以“test”子目录下的文件“testfile1”所对应的inode节点。当无法分解path后，就意味着找到了testfile1对应的inode节点，就可顺利返回了。</p><br><p>sfs_lookup_once将调用sfs_dirent_search_nolock函数来查找与路径名匹配的目录项，如果找到目录项，则根据目录项中记录的inode所处的数据块索引值找到路径名对应的SFS磁盘inode，并读入SFS磁盘inode对的内容，创建SFS内存inode。</p><br></blockquote><br><h2 id="0x5-代码填写">0x5 代码填写</h2><br><p>调用了SFS文件系统层的vfs_lookup函数去寻找node，这里在sfs_inode.c中我们能够知道.vop_lookup = sfs_lookup <br><br><code>sfs_lookup</code><br></p><br><pre class="prettyprint"><code class=" hljs cpp"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> sfs_lookup(<span class="hljs-keyword">struct</span> inode <em>node, <span class="hljs-keyword">char</span> </em>path, <span class="hljs-keyword">struct</span> inode <strong>node_store) {<br><span class="hljs-keyword">struct</span> sfs_fs <em>sfs = fsop_info(vop_fs(node), sfs);<br>assert(</em>path != <span class="hljs-string">‘\0’</span> &amp;&amp; <em>path != <span class="hljs-string">‘/‘</span>);    <span class="hljs-comment">//以“/”为分割符，从左至右逐一分解path获得各个子目录和最终文件对应的inode节点。</span><br>vop_ref_inc(node);<br><span class="hljs-keyword">struct</span> sfs_inode </em><span class="hljs-built_in">sin</span> = vop_info(node, sfs_inode);<br><span class="hljs-keyword">if</span> (<span class="hljs-built_in">sin</span>-&gt;din-&gt;type != SFS_TYPE_DIR) {<br>    vop_ref_dec(node);<br>    <span class="hljs-keyword">return</span> -E_NOTDIR;<br>}<br><span class="hljs-keyword">struct</span> inode <em>subnode;<br><span class="hljs-keyword">int</span> ret = sfs_lookup_once(sfs, <span class="hljs-built_in">sin</span>, path, &amp;subnode, NULL);  <span class="hljs-comment">//循环进一步调用sfs_lookup_once查找以“test”子目录下的文件“testfile1”所对应的inode节点。</span><br><br>vop_ref_dec(node);<br><span class="hljs-keyword">if</span> (ret != <span class="hljs-number">0</span>) {<br>    <span class="hljs-keyword">return</span> ret;<br>}
+</em>node_store = subnode;  <span class="hljs-comment">//当无法分解path后，就意味着找到了需要对应的inode节点，就可顺利返回了。</span><br><span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>}</strong></code></pre><br><p>sfs_lookup_once函数，它调用sfs_dirent_search_nolock函数来查找与路径名匹配的目录项，如果找到目录项，则根据目录项中记录的inode所处的数据块索引值找到路径名对应的SFS磁盘inode，并读入SFS磁盘inode对的内容，创建SFS内存inode。 </p><br><pre class="prettyprint"><code class=" hljs cpp"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> sfs_lookup_once(<span class="hljs-keyword">struct</span> sfs_fs <em>sfs, <span class="hljs-keyword">struct</span> sfs_inode </em><span class="hljs-built_in">sin</span>, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *name, <span class="hljs-keyword">struct</span> inode node_store, <span class="hljs-keyword">int</span> <em>slot) {<br><span class="hljs-keyword">int</span> ret;<br>uint32_t ino;<br>lock_sin(<span class="hljs-built_in">sin</span>);<br>{   <span class="hljs-comment">// find the NO. of disk block and logical index of file entry</span><br>    ret = sfs_dirent_search_nolock(sfs, <span class="hljs-built_in">sin</span>, name, &amp;ino, slot, NULL);<br>}<br>unlock_sin(<span class="hljs-built_in">sin</span>);<br><span class="hljs-keyword">if</span> (ret == <span class="hljs-number">0</span>) {<br>    <span class="hljs-comment">// load the content of inode with the the NO. of disk block</span><br>    ret = sfs_load_inode(sfs, node_store, ino);<br>}<br><span class="hljs-keyword">return</span> ret;<br>}</em></code></pre><br><p>接下来我们需要完成sfs_io_nolock函数中读文件的过程，代码如下，这里只将我们所需要填写的部分罗列出来了：</p><br><pre class="prettyprint"><code class=" hljs cs"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span><br>sfs_io_nolock(<span class="hljs-keyword">struct</span> sfs_fs sfs, <span class="hljs-keyword">struct</span> sfs_inode <em>sin, <span class="hljs-keyword">void</span> </em>buf, off_t offset, size_t <em>alenp, <span class="hljs-keyword">bool</span> write) {<br>……<br>……<br><br><span class="hljs-keyword">if</span> ((blkoff = offset % SFS_BLKSIZE) != <span class="hljs-number">0</span>) {                   <span class="hljs-comment">//读取第一部分的数据</span><br>    size = (nblks != <span class="hljs-number">0</span>) ? (SFS_BLKSIZE - blkoff) : (endpos - offset); <span class="hljs-comment">//计算第一个数据块的大小</span><br>    <span class="hljs-keyword">if</span> ((ret = sfs_bmap_load_nolock(sfs, sin, blkno, &amp;ino)) != <span class="hljs-number">0</span>) {   <span class="hljs-comment">//找到内存文件索引对应的block的编号ino</span><br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br><br>    <span class="hljs-keyword">if</span> ((ret = sfs_buf_op(sfs, buf, size, ino, blkoff)) != <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br>    <span class="hljs-comment">//完成实际的读写操作</span><br>    alen += size;<br>    <span class="hljs-keyword">if</span> (nblks == <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br>    buf += size, blkno ++, nblks –;<br>}<br><br><span class="hljs-comment">//读取中间部分的数据，将其分为size大学的块，然后一次读一块直至读完</span><br>size = SFS_BLKSIZE;<br><span class="hljs-keyword">while</span> (nblks != <span class="hljs-number">0</span>) {<br>    <span class="hljs-keyword">if</span> ((ret = sfs_bmap_load_nolock(sfs, sin, blkno, &amp;ino)) != <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br>    <span class="hljs-keyword">if</span> ((ret = sfs_block_op(sfs, buf, ino, <span class="hljs-number">1</span>)) != <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br>    alen += size, buf += size, blkno ++, nblks –;<br>}<br><span class="hljs-comment">//读取第三部分的数据</span><br><span class="hljs-keyword">if</span> ((size = endpos % SFS_BLKSIZE) != <span class="hljs-number">0</span>) {<br>    <span class="hljs-keyword">if</span> ((ret = sfs_bmap_load_nolock(sfs, sin, blkno, &amp;ino)) != <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br>    <span class="hljs-keyword">if</span> ((ret = sfs_buf_op(sfs, buf, size, ino, <span class="hljs-number">0</span>)) != <span class="hljs-number">0</span>) {<br>        <span class="hljs-keyword">goto</span> <span class="hljs-keyword">out</span>;<br>    }<br>    alen += size;<br>}</em></code></pre><br><h1 id="练习2-完成基于文件系统的执行程序机制的实现">练习2 完成基于文件系统的执行程序机制的实现</h1><br><blockquote><br><p>改写proc.c中的load_icode函数和其他相关函数，实现基于文件系统的执行程序机制。执行：make qemu。如果能看看到sh用户程序的执行界面，则基本成功了。如果在sh用户界面上可以执行”ls”,”hello”等其他放置在sfs文件系统中的其他执行程序，则可以认为本实验基本成功。</p><br></blockquote><br><p><code>在proc.c中，根据注释我们需要先初始化fs中的进程控制结构，即在alloc_proc函数中我们需要做一下修改，加上一句proc-&gt;filesp = NULL;从而完成初始化。</code></p><br><p>然后就是要实现load_icode函数，具体的实现及注释如下所示：</p><br><pre class="prettyprint"><code class=" hljs fsharp"><span class="hljs-keyword">static</span> int<br>load_icode(int fd, int argc, char **kargv) {<br><br>    / (<span class="hljs-number">1</span>) create a <span class="hljs-keyword">new</span> mm <span class="hljs-keyword">for</span> current process<br>     <em> (<span class="hljs-number">2</span>) create a <span class="hljs-keyword">new</span> PDT, <span class="hljs-keyword">and</span> mm-&gt;pgdir= kernel virtual addr <span class="hljs-keyword">of</span> PDT
+     </em> (<span class="hljs-number">3</span>) copy TEXT/DATA/BSS parts <span class="hljs-keyword">in</span> binary <span class="hljs-keyword">to</span> memory space <span class="hljs-keyword">of</span> process<br>     <em>    (<span class="hljs-number">3.1</span>) read raw data content <span class="hljs-keyword">in</span> file <span class="hljs-keyword">and</span> resolve elfhdr
+     </em>    (<span class="hljs-number">3.2</span>) read raw data content <span class="hljs-keyword">in</span> file <span class="hljs-keyword">and</span> resolve proghdr based on info <span class="hljs-keyword">in</span> elfhdr<br>     <em>    (<span class="hljs-number">3.3</span>) call mm_map <span class="hljs-keyword">to</span> build vma related <span class="hljs-keyword">to</span> TEXT/DATA
+     </em>    (<span class="hljs-number">3.4</span>) callpgdir_alloc_page <span class="hljs-keyword">to</span> allocate page <span class="hljs-keyword">for</span> TEXT/DATA, read contents <span class="hljs-keyword">in</span> file<br>     <em>          <span class="hljs-keyword">and</span> copy them into the <span class="hljs-keyword">new</span> allocated pages
+     </em>    (<span class="hljs-number">3.5</span>) callpgdir_alloc_page <span class="hljs-keyword">to</span> allocate pages <span class="hljs-keyword">for</span> BSS, memset zero <span class="hljs-keyword">in</span> these pages<br>     <em> (<span class="hljs-number">4</span>) call mm_map <span class="hljs-keyword">to</span> setup user stack, <span class="hljs-keyword">and</span> put parameters into user stack
+     </em> (<span class="hljs-number">5</span>) setup current process’s mm, cr3, reset pgidr (using lcr3 MARCO)<br>     <em> (<span class="hljs-number">6</span>) setup uargc <span class="hljs-keyword">and</span> uargv <span class="hljs-keyword">in</span> user stacks
+     </em> (<span class="hljs-number">7</span>) setup trapframe <span class="hljs-keyword">for</span> user environment<br>     <em> (<span class="hljs-number">8</span>) <span class="hljs-keyword">if</span> up steps failed, you should cleanup the env.
+     </em>/<br>    <span class="hljs-keyword">assert</span>(argc &gt;= <span class="hljs-number">0</span> &amp;&amp; argc &lt;= EXEC_MAX_ARG_NUM);<br>    <span class="hljs-comment">//(1)建立内存管理器</span><br>    <span class="hljs-keyword">if</span> (current-&gt;mm != NULL) {    <span class="hljs-comment">//要求当前内存管理器为空</span><br>        panic(<span class="hljs-string">“load_icode: current-&gt;mm must be empty.\n”</span>);<br>    }<br><br>    int ret = -E_NO_MEM;    <span class="hljs-comment">// E_NO_MEM代表因为存储设备产生的请求错误</span><br>    <span class="hljs-keyword">struct</span> mm_struct <em>mm;  <span class="hljs-comment">//建立内存管理器</span><br>    <span class="hljs-keyword">if</span> ((mm = mm_create()) == NULL) {<br>        goto bad_mm;<br>    }<br><br>    <span class="hljs-comment">//(2)建立页目录</span><br>    <span class="hljs-keyword">if</span> (setup_pgdir(mm) != <span class="hljs-number">0</span>) {<br>        goto bad_pgdir_cleanup_mm;<br>    }<br>    <span class="hljs-keyword">struct</span> Page </em>page;<span class="hljs-comment">//建立页表</span><br><br>    <span class="hljs-comment">//(3)从文件加载程序到内存</span><br>    <span class="hljs-keyword">struct</span> elfhdr <strong>elf, *elf = &amp;</strong>elf;<br>    <span class="hljs-keyword">if</span> ((ret = load_icode_read(fd, elf, sizeof(<span class="hljs-keyword">struct</span> elfhdr), <span class="hljs-number">0</span>)) != <span class="hljs-number">0</span>) {<span class="hljs-comment">//读取elf文件头</span><br>        goto bad_elf_cleanup_pgdir;<br>    }<br><br>    <span class="hljs-keyword">if</span> (elf-&gt;e_magic != ELF_MAGIC) {<br>        ret = -E_INVAL_ELF;<br>        goto bad_elf_cleanup_pgdir;<br>    }<br><br>    <span class="hljs-keyword">struct</span> proghdr <strong>ph, *ph = &amp;</strong>ph;<br>    uint32_t vm_flags, perm, phnum;<br>    <span class="hljs-keyword">for</span> (phnum = <span class="hljs-number">0</span>; phnum &lt; elf-&gt;e_phnum; phnum ++) {  <span class="hljs-comment">//e_phnum代表程序段入口地址数目，即多少各段</span><br>        off_t phoff = elf-&gt;e_phoff + sizeof(<span class="hljs-keyword">struct</span> proghdr) <em> phnum;  <span class="hljs-comment">//循环读取程序的每个段的头部   </span><br>        <span class="hljs-keyword">if</span> ((ret = load_icode_read(fd, ph, sizeof(<span class="hljs-keyword">struct</span> proghdr), phoff)) != <span class="hljs-number">0</span>) {<br>            goto bad_cleanup_mmap;<br>        }<br>        <span class="hljs-keyword">if</span> (ph-&gt;p_type != ELF_PT_LOAD) {<br>            continue ;<br>        }<br>        <span class="hljs-keyword">if</span> (ph-&gt;p_filesz &gt; ph-&gt;p_memsz) {<br>            ret = -E_INVAL_ELF;<br>            goto bad_cleanup_mmap;<br>        }<br>        <span class="hljs-keyword">if</span> (ph-&gt;p_filesz == <span class="hljs-number">0</span>) {<br>            continue ;<br>        }<br>        vm_flags = <span class="hljs-number">0</span>, perm = PTE_U;<span class="hljs-comment">//建立虚拟地址与物理地址之间的映射</span><br>        <span class="hljs-keyword">if</span> (ph-&gt;p_flags &amp; ELF_PF_X) vm_flags |= VM_EXEC;<br>        <span class="hljs-keyword">if</span> (ph-&gt;p_flags &amp; ELF_PF_W) vm_flags |= VM_WRITE;<br>        <span class="hljs-keyword">if</span> (ph-&gt;p_flags &amp; ELF_PF_R) vm_flags |= VM_READ;<br>        <span class="hljs-keyword">if</span> (vm_flags &amp; VM_WRITE) perm |= PTE_W;<br>        <span class="hljs-keyword">if</span> ((ret = mm_map(mm, ph-&gt;p_va, ph-&gt;p_memsz, vm_flags, NULL)) != <span class="hljs-number">0</span>) {<br>            goto bad_cleanup_mmap;<br>        }<br>        off_t offset = ph-&gt;p_offset;<br>        size_t off, size;<br>        uintptr_t start = ph-&gt;p_va, <span class="hljs-keyword">end</span>, la = ROUNDDOWN(start, PGSIZE);<br><br><br>        ret = -E_NO_MEM;<br><br>        <span class="hljs-comment">//复制数据段和代码段</span><br>        <span class="hljs-keyword">end</span> = ph-&gt;p_va + ph-&gt;p_filesz;      <span class="hljs-comment">//计算数据段和代码段终止地址</span><br>        <span class="hljs-keyword">while</span> (start &lt; <span class="hljs-keyword">end</span>) {<br>            <span class="hljs-keyword">if</span> ((page = pgdir_alloc_page(mm-&gt;pgdir, la, perm)) == NULL) {<br>                ret = -E_NO_MEM;<br>                goto bad_cleanup_mmap;<br>            }<br>            off = start - la, size = PGSIZE - off, la += PGSIZE;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">end</span> &lt; la) {<br>                size -= la - <span class="hljs-keyword">end</span>;<br>            }<br>            <span class="hljs-comment">//每次读取size大小的块，直至全部读完</span><br>            <span class="hljs-keyword">if</span> ((ret = load_icode_read(fd, page2kva(page) + off, size, offset)) != <span class="hljs-number">0</span>) {       <span class="hljs-comment">//load_icode_read通过sysfile_read函数实现文件读取</span><br>                goto bad_cleanup_mmap;<br>            }<br>            start += size, offset += size;<br>        }<br>        <span class="hljs-comment">//建立BSS段</span><br>        <span class="hljs-keyword">end</span> = ph-&gt;p_va + ph-&gt;p_memsz;   <span class="hljs-comment">//同样计算终止地址</span><br><br>        <span class="hljs-keyword">if</span> (start &lt; la) {<br>            <span class="hljs-keyword">if</span> (start == <span class="hljs-keyword">end</span>) {<br>                continue ;<br>            }<br>            off = start + PGSIZE - la, size = PGSIZE - off;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">end</span> &lt; la) {<br>                size -= la - <span class="hljs-keyword">end</span>;<br>            }<br>            memset(page2kva(page) + off, <span class="hljs-number">0</span>, size);<br>            start += size;<br>            <span class="hljs-keyword">assert</span>((<span class="hljs-keyword">end</span> &lt; la &amp;&amp; start == <span class="hljs-keyword">end</span>) || (<span class="hljs-keyword">end</span> &gt;= la &amp;&amp; start == la));<br>        }<br><br>        <span class="hljs-keyword">while</span> (start &lt; <span class="hljs-keyword">end</span>) {<br>            <span class="hljs-keyword">if</span> ((page = pgdir_alloc_page(mm-&gt;pgdir, la, perm)) == NULL) {<br>                ret = -E_NO_MEM;<br>                goto bad_cleanup_mmap;<br>            }<br>            off = start - la, size = PGSIZE - off, la += PGSIZE;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">end</span> &lt; la) {<br>                size -= la - <span class="hljs-keyword">end</span>;<br>            }<br>            <span class="hljs-comment">//每次操作size大小的块</span><br>            memset(page2kva(page) + off, <span class="hljs-number">0</span>, size);<br>            start += size;<br>        }<br>    }<br>    sysfile_close(fd);<span class="hljs-comment">//关闭文件，加载程序结束</span><br><br>    <span class="hljs-comment">//(4)建立相应的虚拟内存映射表</span><br>    vm_flags = VM_READ | VM_WRITE | VM_STACK;<br>    <span class="hljs-keyword">if</span> ((ret = mm_map(mm, USTACKTOP - USTACKSIZE, USTACKSIZE, vm_flags, NULL)) != <span class="hljs-number">0</span>) {<br>        goto bad_cleanup_mmap;<br>    }<br>    <span class="hljs-keyword">assert</span>(pgdir_alloc_page(mm-&gt;pgdir, USTACKTOP-PGSIZE , PTE_USER) != NULL);<br>    <span class="hljs-keyword">assert</span>(pgdir_alloc_page(mm-&gt;pgdir, USTACKTOP-<span class="hljs-number">2</span></em>PGSIZE , PTE_USER) != NULL);<br>    <span class="hljs-keyword">assert</span>(pgdir_alloc_page(mm-&gt;pgdir, USTACKTOP-<span class="hljs-number">3</span><em>PGSIZE , PTE_USER) != NULL);<br>    <span class="hljs-keyword">assert</span>(pgdir_alloc_page(mm-&gt;pgdir, USTACKTOP-<span class="hljs-number">4</span></em>PGSIZE , PTE_USER) != NULL);<br>    <span class="hljs-comment">//(5)设置用户栈</span><br>    mm_count_inc(mm);<br>    current-&gt;mm = mm;<br>    current-&gt;cr3 = PADDR(mm-&gt;pgdir);<br>    lcr3(PADDR(mm-&gt;pgdir));<br><br>    <span class="hljs-comment">//(6)处理用户栈中传入的参数，其中argc对应参数个数，uargv[]对应参数的具体内容的地址</span><br>    uint32_t argv_size=<span class="hljs-number">0</span>, i;<br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; argc; i ++) {<br>        argv_size += strnlen(kargv[i],EXEC_MAX_ARG_LEN + <span class="hljs-number">1</span>)+<span class="hljs-number">1</span>;<br>    }<br><br>    uintptr_t stacktop = USTACKTOP - (argv_size/sizeof(long)+<span class="hljs-number">1</span>)<em>sizeof(long);<br>    char<strong> uargv=(char </strong>)(stacktop  - argc </em> sizeof(char <em>));<br><br>    argv_size = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; argc; i ++) {         <span class="hljs-comment">//将所有参数取出来放置uargv</span><br>        uargv[i] = strcpy((char </em>)(stacktop + argv_size ), kargv[i]);<br>        argv_size +=  strnlen(kargv[i],EXEC_MAX_ARG_LEN + <span class="hljs-number">1</span>)+<span class="hljs-number">1</span>;<br>    }<br><br>    stacktop = (uintptr_t)uargv - sizeof(int);   <span class="hljs-comment">//计算当前用户栈顶</span><br>    <em>(int </em>)stacktop = argc;<br>    <span class="hljs-comment">//(7)设置进程的中断帧   </span><br>    <span class="hljs-keyword">struct</span> trapframe *tf = current-&gt;tf;<br>    memset(tf, <span class="hljs-number">0</span>, sizeof(<span class="hljs-keyword">struct</span> trapframe));<span class="hljs-comment">//初始化tf，设置中断帧</span><br>    tf-&gt;tf_cs = USER_CS;<br>    tf-&gt;tf_ds = tf-&gt;tf_es = tf-&gt;tf_ss = USER_DS;<br>    tf-&gt;tf_esp = stacktop;<br>    tf-&gt;tf_eip = elf-&gt;e_entry;<br>    tf-&gt;tf_eflags = FL_IF;<br>    ret = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//(8)错误处理部分</span><br>out:<br>    <span class="hljs-keyword">return</span> ret;           <span class="hljs-comment">//返回</span><br>bad_cleanup_mmap:<br>    exit_mmap(mm);<br>bad_elf_cleanup_pgdir:<br>    put_pgdir(mm);<br>bad_pgdir_cleanup_mm:<br>    mm_destroy(mm);<br>bad_mm:<br>    goto out;<br>}</code></pre><br><p>load_icode主要是将文件加载到内存中执行，根据注释的提示分为了一共七个步骤：</p><br><pre><code>1、建立内存管理器<br>2、建立页目录<br>3、将文件逐个段加载到内存中，这里要注意设置虚拟地址与物理地址之间的映射<br>4、建立相应的虚拟内存映射表<br>5、建立并初始化用户堆栈<br>6、处理用户栈中传入的参数<br>7、最后很关键的一步是设置用户进程的中断帧<br></code></pre><br><h1 id="实验结果">实验结果</h1><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170707102143669?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><h2 id="实验心得">实验心得</h2><br><p>本次实验让我重新认识了文件系统的管理，其中第二个小是一个大综合，结合了前面的物理内存，虚拟内存，进程，文件操作系统，用户栈···，做过之后感觉对以前知识的掌握更加的牢固。但同时我对于文件用户的权限管理不是太了解，接下来会进一步学习。</p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统实验/" rel="tag"># 操作系统实验</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/06/Python 2.7.8 手动安装 & Python 环境变量添加/" rel="next" title="Python 2.7.8 手动安装 & Python 环境变量添加">
+                <i class="fa fa-chevron-left"></i> Python 2.7.8 手动安装 & Python 环境变量添加
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/12/操作系统实验报告 lab6/" rel="prev" title="操作系统实验报告 lab6">
+                操作系统实验报告 lab6 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#练习0-填写已有实验"><span class="nav-number">1.</span> <span class="nav-text">练习0 填写已有实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习1-完成读文件操作的实现"><span class="nav-number">2.</span> <span class="nav-text">练习1 完成读文件操作的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-ucore文件系统总体介绍"><span class="nav-number">2.1.</span> <span class="nav-text">0x1 ucore文件系统总体介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-ucore文件相关关键数据结构及其关系"><span class="nav-number">2.2.</span> <span class="nav-text">0x2 ucore文件相关关键数据结构及其关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x3-重要数据结构"><span class="nav-number">2.3.</span> <span class="nav-text">0x3 重要数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x4-打开文件原理"><span class="nav-number">2.4.</span> <span class="nav-text">0x4 打开文件原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x5-代码填写"><span class="nav-number">2.5.</span> <span class="nav-text">0x5 代码填写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习2-完成基于文件系统的执行程序机制的实现"><span class="nav-number">3.</span> <span class="nav-text">练习2 完成基于文件系统的执行程序机制的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验结果"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验心得"><span class="nav-number">4.1.</span> <span class="nav-text">实验心得</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

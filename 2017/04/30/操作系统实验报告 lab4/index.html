@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统实验," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="操作系统实验报告 lab4">
+<meta name="keywords" content="操作系统实验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实验报告 lab4">
+<meta property="og:url" content="http://yoursite.com/2017/04/30/操作系统实验报告 lab4/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="操作系统实验报告 lab4">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170524125559566?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170524222250501?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:33.267Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统实验报告 lab4">
+<meta name="twitter:description" content="操作系统实验报告 lab4">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170524125559566?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/30/操作系统实验报告 lab4/"/>
+
+
+
+
+
+  <title>操作系统实验报告 lab4 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/30/操作系统实验报告 lab4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统实验报告 lab4</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-30T22:44:00+08:00">
+                2017-04-30
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:33+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>操作系统实验报告 lab4<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><p><div class="toc"><br><ul><br><li><a href="#练习0-填写已有实验">练习0  填写已有实验</a></li><br><li><a href="#练习1-分配并初始化一个进程控制块需要编码">练习1 分配并初始化一个进程控制块需要编码</a><ul><br><li><a href="#关键数据结构-struct-procstruct">关键数据结构 struct proc_struct</a></li><br><li><a href="#代码填写">代码填写</a></li><br><li><a href="#context和tf的作用分析">context和tf的作用分析</a></li><br></ul><br></li><br><li><a href="#练习2-为新创建的内核线程分配资源">练习2 为新创建的内核线程分配资源</a><ul><br><li><a href="#执行步骤">执行步骤</a></li><br><li><a href="#代码填写-1">代码填写</a></li><br></ul><br></li><br><li><a href="#练习3-理解procrun和它调用的函数如何完成进程切换的">练习3 理解proc_run和它调用的函数如何完成进程切换的</a><ul><br><li><a href="#schedule代码分析">schedule代码分析</a></li><br><li><a href="#procrun代码分析">proc_run代码分析</a></li><br><li><a href="#switchto函数分析">switch_to函数分析</a></li><br><li><a href="#运行截图">运行截图</a></li><br></ul><br></li><br><li><a href="#实验总结">实验总结</a></li><br></ul><br></div><br></p><br><h1 id="练习0-填写已有实验">练习0  填写已有实验</h1><br><blockquote><br><p>本实验依赖实验1～实验3。请把已做的实验1～实验3的代码填入本实验中代码中有lab1，lab2，lab3的注释部分。</p><br></blockquote><br><p>运用meld软件进行比较，截图如下： <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170524125559566?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>可以看到，需要补全的文件是<br><br></p><br><pre class="prettyprint"><code class=" hljs avrasm">default_pmm<span class="hljs-preprocessor">.c</span><br>pmm<span class="hljs-preprocessor">.c</span><br>swap_fifo<span class="hljs-preprocessor">.c</span><br>vmm<span class="hljs-preprocessor">.c</span><br>trap<span class="hljs-preprocessor">.c</span></code></pre><br><hr><br><h1 id="练习1-分配并初始化一个进程控制块需要编码">练习1 分配并初始化一个进程控制块（需要编码）</h1><br><blockquote><br><p>alloc_proc函数（位于kern/process/proc.c中）负责分配并返回一个新的struct proc_struct结构，用于存储新建立的内核线程的管理信息。ucore需要对这个结构进行最基本的初始化，完成这个初始化过程。</p><br></blockquote><br><h2 id="关键数据结构-struct-procstruct">关键数据结构 struct proc_struct</h2><br><pre class="prettyprint"><code class=" hljs http"><br><br><span class="cs">    <span class="hljs-keyword">struct</span> proc_struct {<br>        <span class="hljs-keyword">enum</span> proc_state state; <span class="hljs-comment">// Process state  </span><br>        <span class="hljs-keyword">int</span> pid; <span class="hljs-comment">// Process ID  </span><br>        <span class="hljs-keyword">int</span> runs; <span class="hljs-comment">// the running times of Proces  </span><br>        uintptr_t kstack; <span class="hljs-comment">// Process kernel stack  </span><br>        <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">bool</span> need_resched; <span class="hljs-comment">// need to be rescheduled to release CPU?  </span><br>        <span class="hljs-keyword">struct</span> proc_struct <em>parent; <span class="hljs-comment">// the parent process  </span><br>        <span class="hljs-keyword">struct</span> mm_struct </em>mm; <span class="hljs-comment">// Process’s memory management field  </span><br>        <span class="hljs-keyword">struct</span> context context; <span class="hljs-comment">// Switch here to run process  </span><br>        <span class="hljs-keyword">struct</span> trapframe <em>tf; <span class="hljs-comment">// Trap frame for current interrupt  </span><br>        uintptr_t cr3; <span class="hljs-comment">// the base addr of Page Directroy Table(PDT)  </span><br>        uint32_t flags; <span class="hljs-comment">// Process flag  </span><br>        <span class="hljs-keyword">char</span> name[PROC_NAME_LEN + <span class="hljs-number">1</span>]; <span class="hljs-comment">// Process name  </span><br>        list_entry_t list_link; <span class="hljs-comment">// Process link list  </span><br>        list_entry_t hash_link; <span class="hljs-comment">// Process hash list  </span><br>    };  </em></span></code></pre><br><p>下面对参数进行简单的讲解</p><br><blockquote><br><p>mm：内存管理的信息，包括内存映射列表、页表指针等。 <br><br>  state：进程所处的状态。 <br><br>  parent：用户进程的父进程（创建它的进程）。 <br><br>  kstack：记录了分配给该进程/线程的内核桟的位置。 <br><br>  need_resched：是否需要调度 <br><br>  context：进程的上下文，用于进程切换 <br><br>  tf：中断帧的指针 <br><br>  cr3: cr3 保存页表的物理地址<br><br><br><br><br><br><br></p><br></blockquote><br><h2 id="代码填写">代码填写</h2><br><p>根据题目中的提示填写代码</p><br><pre class="prettyprint"><code class=" hljs fsharp">    <span class="hljs-keyword">static</span> <span class="hljs-keyword">struct</span> proc_struct <br>    alloc_proc(<span class="hljs-keyword">void</span>) {<br>        <span class="hljs-keyword">struct</span> proc_struct <em>proc = kmalloc(sizeof(<span class="hljs-keyword">struct</span> proc_struct));<br>        <span class="hljs-keyword">if</span> (proc != NULL) {<br>        <span class="hljs-comment">//LAB4:EXERCISE1 YOUR CODE  </span><br>        /</em><br>         <em> below fields <span class="hljs-keyword">in</span> proc_struct need <span class="hljs-keyword">to</span> be initialized 
+         </em>       enum proc_state state;                      <span class="hljs-comment">// Process state </span><br>         <em>       int pid;                                    <span class="hljs-comment">// Process ID </span>
+         </em>       int runs;                                   <span class="hljs-comment">// the running times of Proces </span><br>         <em>       uintptr_t kstack;                           <span class="hljs-comment">// Process kernel stack </span>
+         </em>       volatile bool need_resched; <span class="hljs-comment">// bool value: need to be rescheduled to release CPU? </span><br>         <em>       <span class="hljs-keyword">struct</span> proc_struct </em>parent;                 <span class="hljs-comment">// the parent process </span><br>         <em>       <span class="hljs-keyword">struct</span> mm_struct </em>mm;               <span class="hljs-comment">// Process’s memory management field </span><br>         <em>       <span class="hljs-keyword">struct</span> context context;                     <span class="hljs-comment">// Switch here to run process </span>
+         </em>       <span class="hljs-keyword">struct</span> trapframe <em>tf;                       <span class="hljs-comment">// Trap frame for current interrupt </span>
+         </em>       uintptr_t cr3;      <span class="hljs-comment">// CR3 register: the base addr of Page Directroy Table(PDT) </span><br>         <em>       uint32_t flags;                             <span class="hljs-comment">// Process flag </span>
+         </em>       char name[PROC_NAME_LEN + <span class="hljs-number">1</span>];               <span class="hljs-comment">// Process name </span><br>         <em>/<br>            proc-&gt;state = PROC_UNINIT;  <span class="hljs-comment">//设置进程为“初始”态  </span><br>            proc-&gt;pid = -<span class="hljs-number">1</span>; <span class="hljs-comment">//设置进程pid的未初始化值  </span><br>            proc-&gt;runs = <span class="hljs-number">0</span>;<span class="hljs-comment">//初始化时间片  </span><br>            proc-&gt;kstack = <span class="hljs-number">0</span>;<span class="hljs-comment">//内核栈的地址  </span><br>            proc-&gt;need_resched = <span class="hljs-number">0</span>;<span class="hljs-comment">//是否需要调度  </span><br>            proc-&gt;parent = NULL;<span class="hljs-comment">//父节点为空  </span><br>            proc-&gt;mm = NULL; <span class="hljs-comment">//内存管理初始化  </span><br>            memset(&amp;(proc-&gt;context), <span class="hljs-number">0</span>, sizeof(<span class="hljs-keyword">struct</span> context));<span class="hljs-comment">//进程上下文初始化  </span><br>            proc-&gt;tf = NULL; <span class="hljs-comment">//中断帧指针置为空，总是能够指向中断前的trapframe  </span><br>            proc-&gt;cr3 = boot_cr3;<span class="hljs-comment">//设置内核页目录表的基址  </span><br>            proc-&gt;flags = <span class="hljs-number">0</span>; <span class="hljs-comment">//标志位初始化  </span><br>            memset(proc-&gt;name, <span class="hljs-number">0</span>, PROC_NAME_LEN); <span class="hljs-comment">//进程名初始化  </span><br>        }<br>        <span class="hljs-keyword">return</span> proc;<br>    }  </em></code></pre><br><h2 id="context和tf的作用分析">context和tf的作用分析</h2><br><p>①context：进程的上下文，用于进程切换。起到的作用就是保存了现场。在 ucore中，所有的进程在内核中也是相对独立的，因此context 保存寄存器的目的就在于在内核态中能够进行上下文之间的切换。实际利用context进行上下文切换的函数是在kern/process/switch.S中定义switch_to。</p><br><p>② tf：中断帧的指针，总是指向内核栈的某个位置：当进程从用户空间跳到内核空间时，中断帧记录了进程在被中断前的状态。当内核需要跳回用户空间时，需要调整中断帧以恢复让进程继续执行的各寄存器值。除此之外，ucore内核允许嵌套中断。因此为了保证嵌套中断发生时tf 总是能够指向当前的tf，ucore 在内核栈上维护了 tf 的链。</p><br><hr><br><h1 id="练习2-为新创建的内核线程分配资源">练习2 为新创建的内核线程分配资源</h1><br><blockquote><br><p>创建一个内核线程需要分配和设置好很多资源。kernel_thread函数通过调用do_fork函数完成具体内核线程的创建工作。do_kernel函数会调用alloc_proc函数来分配并初始化一个进程控制块，但alloc_proc只是找到了一小块内存用以记录进程的必要信息，并没有实际分配这些资源。ucore一般通过do_fork实际创建新的内核线程。do_fork的作用是，创建当前内核线程的一个副本，它们的执行上下文、代码、数据都一样，但是存储位置不同。在这个过程中，需要给新内核线程分配资源，并且复制原进程的状态。完成在kern/process/proc.c中的do_fork函数中的处理过程。</p><br></blockquote><br><h2 id="执行步骤">执行步骤</h2><br><p>①调用alloc_proc，首先获得一块用户信息块。 <br><br>②为进程分配一个内核栈。 <br><br>③复制原进程的内存管理信息到新进程（但内核线程不必做此事） <br><br>④复制原进程上下文到新进程 <br><br>⑤将新进程添加到进程列表 <br><br>⑥唤醒新进程 <br><br>⑦返回新进程号（设置子进程号为返回值）<br><br><br><br><br><br></p><br><h2 id="代码填写-1">代码填写</h2><br><p>根据代码提示填写代码如下，同时标注了对于代码的认识理解</p><br><pre class="prettyprint"><code class=" hljs fsharp">    int<br>    do_fork(uint32_t clone_flags, uintptr_t stack, <span class="hljs-keyword">struct</span> trapframe <em>tf) {<br>        int ret = -E_NO_FREE_PROC;<br>        <span class="hljs-keyword">struct</span> proc_struct </em>proc;<br>        <span class="hljs-keyword">if</span> (nr_process &gt;= MAX_PROCESS) {<br>            goto fork_out;<br>        }<br>        ret = -E_NO_MEM;<br>        <span class="hljs-comment">//LAB4:EXERCISE2 YOUR CODE  </span><br>        /<em> 
+         </em> Some Useful MACROs, Functions <span class="hljs-keyword">and</span> DEFINEs, you can <span class="hljs-keyword">use</span> them <span class="hljs-keyword">in</span> below implementation.<br>         <em> MACROs <span class="hljs-keyword">or</span> Functions: 
+         </em>   alloc_proc:   create a proc <span class="hljs-keyword">struct</span> <span class="hljs-keyword">and</span> init fields (lab4:exercise1)<br>         <em>   setup_kstack: alloc pages <span class="hljs-keyword">with</span> size KSTACKPAGE <span class="hljs-keyword">as</span> process kernel stack 
+         </em>   copy_mm:      process <span class="hljs-string">“proc”</span> duplicate OR share process <span class="hljs-string">“current”</span><span class="hljs-attribute">‘s</span> mm according clone_flags<br>         <em>                 <span class="hljs-keyword">if</span> clone_flags &amp; CLONE_VM, <span class="hljs-keyword">then</span> <span class="hljs-string">“share”</span> ; <span class="hljs-keyword">else</span> <span class="hljs-string">“duplicate”</span> 
+         </em>   copy_thread:  setup the trapframe on the  process’s kernel stack top <span class="hljs-keyword">and</span><br>         <em>                 setup the kernel entry point <span class="hljs-keyword">and</span> stack <span class="hljs-keyword">of</span> process 
+         </em>   hash_proc:    add proc into proc hash_list<br>         <em>   get_pid:      alloc a unique pid <span class="hljs-keyword">for</span> process 
+         </em>   wakup_proc:   set proc-&gt;state = PROC_RUNNABLE<br>         <em> VARIABLES: 
+         </em>   proc_list:    the process set’s list<br>         <em>   nr_process:   the number <span class="hljs-keyword">of</span> process set 
+         </em>/<br><br>        <span class="hljs-comment">//    1. call alloc_proc to allocate a proc_struct  </span><br>        <span class="hljs-comment">//    2. call setup_kstack to allocate a kernel stack for child process  </span><br>        <span class="hljs-comment">//    3. call copy_mm to dup OR share mm according clone_flag  </span><br>        <span class="hljs-comment">//    4. call copy_thread to setup tf &amp; context in proc_struct  </span><br>        <span class="hljs-comment">//    5. insert proc_struct into hash_list &amp;&amp; proc_list  </span><br>        <span class="hljs-comment">//    6. call wakup_proc to make the new child process RUNNABLE  </span><br>    <span class="hljs-comment">//    7. set ret vaule using child proc’s pid  </span><br>    <span class="hljs-comment">//第一步：申请内存块，如果失败，直接返回处理  </span><br>        <span class="hljs-keyword">if</span> ((proc = alloc_proc()) == NULL) {<br>            goto fork_out;<br>        }<br>    <span class="hljs-comment">//将子进程的父节点设置为当前进程  </span><br>        proc-&gt;parent = current;<br>    <span class="hljs-comment">//第二步：为进程分配一个内核栈  </span><br>        <span class="hljs-keyword">if</span> (setup_kstack(proc) != <span class="hljs-number">0</span>) {<br>            goto bad_fork_cleanup_proc;<br>    }<br>    <span class="hljs-comment">//第三步：复制父进程的内存信息到子进程  </span><br>        <span class="hljs-keyword">if</span> (copy_mm(clone_flags, proc) != <span class="hljs-number">0</span>) {<br>            goto bad_fork_cleanup_kstack;<br>        }<br>        <span class="hljs-comment">//第四步：复制父进程相关寄存器信息（上下文）  </span><br>    copy_thread(proc, stack, tf);<br>    <span class="hljs-comment">//第五步：将新进程添加到进程列表（此过程需要加保护锁）  </span><br>        bool intr_flag;<br>        local_intr_save(intr_flag);<br>        {<br>            proc-&gt;pid = get_pid();<br>    <span class="hljs-comment">//建立散列映射方便查找  </span><br>            hash_proc(proc);<br>    <span class="hljs-comment">//将进程链节点加入进程列表  </span><br>            list_add(&amp;proc_list, &amp;(proc-&gt;list_link));<br>    <span class="hljs-comment">//进程数+1  </span><br>            nr_process ++;<br>        }<br>        local_intr_restore(intr_flag);<br>    <span class="hljs-comment">//第六步：一切准备就绪，唤醒子进程  </span><br>        wakeup_proc(proc);<br>    <span class="hljs-comment">//第七步：别忘了设置返回的子进程号  </span><br>        ret = proc-&gt;pid;<br>    fork_out:<br>        <span class="hljs-keyword">return</span> ret;<br><br>    bad_fork_cleanup_kstack:<br>        put_kstack(proc);<br>    bad_fork_cleanup_proc:<br>        kfree(proc);<br>        goto fork_out;<br>    }  </code></pre><br><p>在使用 fork 或 clone 系统调用时产生的进程均会由内核分配一个新的唯一的PID值。 <br><br>具体来说，就是在分配PID时，设置一个保护锁，暂时不允许中断，保证了ID的唯一性。上述操作真正完成了资源分配的工作，与第一步中的工作有着明显的区别。do_fork只是创建当前进程的副本，他们执行的上下文，寄存器，代码都是一样的。<br></p><br><hr><br><h1 id="练习3-理解procrun和它调用的函数如何完成进程切换的">练习3 理解proc_run和它调用的函数如何完成进程切换的</h1><br><h2 id="schedule代码分析">schedule代码分析</h2><br><p>在分析 proc_run 函数之前，我们先分析调度函数 schedule() 。 <br><br>schedule()代码如下：<br></p><br><pre class="prettyprint"><code class=" hljs perl">void<br>schedule(void) {<br>    bool intr_flag;<br>    list_entry_t <span class="hljs-variable"><em>le</em></span>, <span class="hljs-variable">last</span>;<br>    struct proc_struct <span class="hljs-variable"><em>next</em></span> = NULL;<br>    local_intr_save(intr_flag);<br>    {<br>        current-&gt;need_resched = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">last</span> = (current == idleproc) ? &amp;proc_list : &amp;(current-&gt;list_link);<br>        le = <span class="hljs-keyword">last</span>;<br>        <span class="hljs-keyword">do</span> {<br>            <span class="hljs-keyword">if</span> ((le = list_next(le)) != &amp;proc_list) {<br>                <span class="hljs-keyword">next</span> = le2proc(le, list_link);<br>                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">next</span>-&gt;<span class="hljs-keyword">state</span> == PROC_RUNNABLE) {<br>                    <span class="hljs-keyword">break</span>;<br>                }<br>            }<br>        } <span class="hljs-keyword">while</span> (le != <span class="hljs-keyword">last</span>);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">next</span> == NULL || <span class="hljs-keyword">next</span>-&gt;<span class="hljs-keyword">state</span> != PROC_RUNNABLE) {<br>            <span class="hljs-keyword">next</span> = idleproc;<br>        }<br>        <span class="hljs-keyword">next</span>-&gt;runs ++;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">next</span> != current) {<br>            proc_run(<span class="hljs-keyword">next</span>);<br>        }<br>    }<br>    local_intr_restore(intr_flag);<br>}</code></pre><br><blockquote><br><p>简单介绍一下schedule的执行过程： <br><br>  ①设置当前内核线程current-&gt;need_resched为0；  <br><br>  ②proc_list队列存储着所有状态的进程/线程，在其中查找下一个处于“就绪”态的线程或进程next；  <br><br>  ③找到这样的进程后，就调用proc_run函数，保存当前进程current的执行现场（进程上下文），恢复新进程的执行现场，完成进程切换。 <br><br>  至此，新的进程next就开始执行了。由于在proc10中只有两个内核线程，且idleproc要让出CPU给initproc执行，我们可以看到schedule函数通过查找proc_list进程队列，只能找到一个处于“就绪”态的initproc内核线程。<br><br><br><br></p><br></blockquote><br><h2 id="procrun代码分析">proc_run代码分析</h2><br><pre class="prettyprint"><code class=" hljs haskell"><span class="hljs-title">void</span> proc_run(struct proc_struct <span class="hljs-keyword">proc</span>) {<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">proc</span> != current) {<br>        bool intr_flag;<br>        struct proc_struct <em>prev = current, </em>next = <span class="hljs-keyword">proc</span>;<br>        local_intr_save(intr_flag);<br>        {<br>            current = <span class="hljs-keyword">proc</span>;<br>            load_esp0(next-&gt;kstack + <span class="hljs-type">KSTACKSIZE</span>);<br>            lcr3(next-&gt;cr3);<br>            switch_to(&amp;(prev-&gt;context), &amp;(next-&gt;context));<br>        }<br>        local_intr_restore(intr_flag);<br>    }<br>}</code></pre><br><blockquote><br><p>通过proc_run和进一步的switch_to函数完成两个执行现场的切换，具体流程如下： <br><br>  ①让current指向next内核线程initproc； <br><br>  ②设置任务状态段ts中特权态0下的栈顶指针esp0为next内核线程initproc的内核栈的栈顶，即next-&gt;kstack + KSTACKSIZE ； <br><br>  ③设置CR3寄存器的值为next内核线程initproc的页目录表起始地址next-&gt;cr3，这实际上是完成进程间的页表切换； <br><br>  由switch_to函数完成具体的两个线程的执行现场切换，即切换各个寄存器，当switch_to函数执行完“ret”指令后，就切换到initproc执行了。<br><br><br><br></p><br></blockquote><br><h2 id="switchto函数分析">switch_to函数分析</h2><br><p>switch_to函数的执行流程：</p><br><pre class="prettyprint"><code class=" hljs perl">.globl switch_to<br>switch_to: <span class="hljs-comment"># switch_to(from, to)  </span><br><span class="hljs-comment"># 保存前一个进程的执行现场，前两条汇编指令（如下所示）保存了进程在返回switch_to函数后的指令地址到context.eip中  </span><br>movl <span class="hljs-number">4</span>(<span class="hljs-variable">%esp</span>), <span class="hljs-variable">%eax</span> <span class="hljs-comment"># eax points to from  </span><br>popl <span class="hljs-number">0</span>(<span class="hljs-variable">%eax</span>) <span class="hljs-comment"># esp–&gt; return address, so save return addr in FROM’s </span><br><span class="hljs-comment"># 保存前一个进程的其他7个寄存器到context中的相应成员变量中。 </span><br>movl <span class="hljs-variable">%esp</span>, <span class="hljs-number">4</span>(<span class="hljs-variable">%eax</span>)<br>movl <span class="hljs-variable">%ebx</span>, <span class="hljs-number">8</span>(<span class="hljs-variable">%eax</span>)<br>movl <span class="hljs-variable">%ecx</span>, <span class="hljs-number">12</span>(<span class="hljs-variable">%eax</span>)<br>movl <span class="hljs-variable">%edx</span>, <span class="hljs-number">16</span>(<span class="hljs-variable">%eax</span>)<br>movl <span class="hljs-variable">%esi</span>, <span class="hljs-number">20</span>(<span class="hljs-variable">%eax</span>)<br>movl <span class="hljs-variable">%edi</span>, <span class="hljs-number">24</span>(<span class="hljs-variable">%eax</span>)<br>movl <span class="hljs-variable">%ebp</span>, <span class="hljs-number">28</span>(<span class="hljs-variable">%eax</span>)<br><span class="hljs-comment">#再往后是恢复向一个进程的执行现场，这其实就是上述保存过程的逆执行过程，即从 context 的高地址的域 ebp 开始，逐一把相关域的值赋值给对应的寄存器。</span></code></pre><br><p>设置了initproc-&gt;context.eip = (uintptr_t)forkret，这样，当执行switch_to函数并返回后，initproc将执行其实际上的执行入口地址forkret。</p><br><h2 id="运行截图">运行截图</h2><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170524222250501?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><hr><br><h1 id="实验总结">实验总结</h1><br><p>本次实验主要针对内核线程的管理，所有内核线程直接使用共同的ucore内核内存空间，而用户进程需要维护各自的用户内存空间。以及了解到了进程切换的相关细节操作，更加深一步的了解了操作系统。</p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统实验/" rel="tag"># 操作系统实验</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/24/操作系统实验报告 lab3/" rel="next" title="操作系统实验报告 lab3">
+                <i class="fa fa-chevron-left"></i> 操作系统实验报告 lab3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/02/堆溢出利用/" rel="prev" title="堆溢出利用">
+                堆溢出利用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#练习0-填写已有实验"><span class="nav-number">1.</span> <span class="nav-text">练习0  填写已有实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习1-分配并初始化一个进程控制块需要编码"><span class="nav-number">2.</span> <span class="nav-text">练习1 分配并初始化一个进程控制块（需要编码）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关键数据结构-struct-procstruct"><span class="nav-number">2.1.</span> <span class="nav-text">关键数据结构 struct proc_struct</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码填写"><span class="nav-number">2.2.</span> <span class="nav-text">代码填写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#context和tf的作用分析"><span class="nav-number">2.3.</span> <span class="nav-text">context和tf的作用分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习2-为新创建的内核线程分配资源"><span class="nav-number">3.</span> <span class="nav-text">练习2 为新创建的内核线程分配资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#执行步骤"><span class="nav-number">3.1.</span> <span class="nav-text">执行步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码填写-1"><span class="nav-number">3.2.</span> <span class="nav-text">代码填写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习3-理解procrun和它调用的函数如何完成进程切换的"><span class="nav-number">4.</span> <span class="nav-text">练习3 理解proc_run和它调用的函数如何完成进程切换的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#schedule代码分析"><span class="nav-number">4.1.</span> <span class="nav-text">schedule代码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#procrun代码分析"><span class="nav-number">4.2.</span> <span class="nav-text">proc_run代码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switchto函数分析"><span class="nav-number">4.3.</span> <span class="nav-text">switch_to函数分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行截图"><span class="nav-number">4.4.</span> <span class="nav-text">运行截图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验总结"><span class="nav-number">5.</span> <span class="nav-text">实验总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

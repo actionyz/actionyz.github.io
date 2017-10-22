@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统实验," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="操作系统实验报告 lab3">
+<meta name="keywords" content="操作系统实验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实验报告 lab3">
+<meta property="og:url" content="http://yoursite.com/2017/04/24/操作系统实验报告 lab3/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="操作系统实验报告 lab3">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424222601557?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424085008770?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424090053714?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424222730808?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170424222810399?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:33.759Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统实验报告 lab3">
+<meta name="twitter:description" content="操作系统实验报告 lab3">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170424222601557?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/24/操作系统实验报告 lab3/"/>
+
+
+
+
+
+  <title>操作系统实验报告 lab3 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/24/操作系统实验报告 lab3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统实验报告 lab3</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-24T09:26:00+08:00">
+                2017-04-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:33+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>操作系统实验报告 lab3<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><h2 id="操作系统实验报告-lab3"><center><strong>操作系统实验报告 lab3</strong> </center></h2><br><p><strong>目录：</strong></p><br><p><div class="toc"><div class="toc"><br><ul><br><li><ul><br><li><a href="#操作系统实验报告-lab3">操作系统实验报告 lab3   </a></li><br></ul><br></li><br><li><a href="#练习0-填写已有实验">练习0 填写已有实验</a></li><br><li><a href="#练习1-给未被映射的地址映射上物理页">练习1 给未被映射的地址映射上物理页</a><ul><br><li><a href="#1-问题分析">问题分析</a></li><br><li><a href="#2-结构体分析">结构体分析</a><ul><br><li><a href="#vmastruct">vma_struct</a></li><br><li><a href="#mmstruct">mm_struct</a></li><br></ul><br></li><br><li><a href="#3-管理结构关系">管理结构关系</a></li><br><li><a href="#实现代码">实现代码</a></li><br></ul><br></li><br><li><a href="#练习2-补充完成基于fifo的页面替换算法">练习2 补充完成基于FIFO的页面替换算法</a><ul><br><li><a href="#问题分析">问题分析</a></li><br><li><a href="#函数分析">函数分析</a></li><br><li><a href="#实现代码-1">实现代码</a></li><br></ul><br></li><br><li><a href="#实验截图">实验截图</a></li><br><li><a href="#总结">总结</a></li><br></ul><br></div><br></div><br></p><br><blockquote><br><p>本次实验主要完成ucore内核对虚拟内存的管理工作。首先完成初始化虚拟内存管理机制，即需要设置好哪些页需要放在物理内存中，哪些页不需要放在物理内存中，而是可被换出到硬盘上，并涉及完善建立页表映射、页错误异常处理操作等函数实现。最后测试编写的代码有没有达到预期的效果。整体的实验不难，但需要掌握一些数据结构之间的关系，这样对理解虚拟内存管理有很大的帮助。</p><br></blockquote><br><h1 id="练习0-填写已有实验">练习0 填写已有实验</h1><br><blockquote><br><p>将实验二代码补全至实验三</p><br></blockquote><br><p>在这里了仍然采用meld工具直接进行比较，截图如下</p><br><p></p><center> <br><br><img alt="*这里有图 1*" src="http://img.blog.csdn.net/20170424222601557?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>图1 文件夹对比<br><br></center><p></p><br><p>总共需要修改的文件有三个</p><br><pre class="prettyprint"><code class=" hljs avrasm">default_pmm<span class="hljs-preprocessor">.c</span><br>pmm<span class="hljs-preprocessor">.c</span><br>trap<span class="hljs-preprocessor">.c</span></code></pre><br><p>将代码直接从<code>lab2</code>复制至<code>lab3</code>，修改完之后进入下面的实验</p><br><h1 id="练习1-给未被映射的地址映射上物理页">练习1 给未被映射的地址映射上物理页</h1><br><blockquote><br><p>完成 do_pgfault函数,给未被映射的地址映射上物理页。设置访问权限的时候要参考所在页面的VMA权限，同时需要注意映射物理页时需要操作内存控制结构指定的页表，而不是内核页表</p><br></blockquote><br><h2 id="1-问题分析">1 问题分析：</h2><br><p>当启动分页机制以后，如果一条指令或数据的虚拟地址所对应的物理页不在内存中，或者访问权限不够，那么就会产生页错误异常。其具体原因有以下三点：</p><br><ol><br><li>页表项全为0——虚拟地址与物理地址未建立映射关系或已被撤销。</li><br><li>物理页面不在内存中——需要进行换页机制。</li><br><li>访问权限不够——应当报错。</li><br></ol><br><p>当出现上面情况之一,那么就会产生页面page fault(#PF)异常。产生异常的线性地址存储在 <br><br>CR2中,并且将是page fault的产生类型保存在 error code 中<br></p><br><h2 id="2-结构体分析">2 结构体分析</h2><br><h3 id="vmastruct">vma_struct</h3><br><p>每个进程只有一个<code>mm_struct</code>结构，在每个进程的<code>task_struct</code>结构体中，有一个指向该进程的结构。可以说，<code>mm_struct</code>结构是对整个用户空间的描述。 <br><br><br></p><center></center><p></p><br><pre class="prettyprint"><code class=" hljs sql"> struct vma_struct {<br>        // the <span class="hljs-operator"><span class="hljs-keyword">set</span> <span class="hljs-keyword">of</span> vma <span class="hljs-keyword">using</span> the same PDT<br>        struct mm_struct <em>vm_mm;</em></span><br>        uintptr_t vm_start;      // <span class="hljs-operator"><span class="hljs-keyword">start</span> addr <span class="hljs-keyword">of</span> vma<br>        uintptr_t vm_end;</span>      // <span class="hljs-operator"><span class="hljs-keyword">end</span> addr <span class="hljs-keyword">of</span> vma<br>        uint32_t vm_flags;</span>     // flags of vma<br>        //linear list link which sorted by <span class="hljs-operator"><span class="hljs-keyword">start</span> addr <span class="hljs-keyword">of</span> vma<br>        list_entry_t list_link;</span><br>    };  </code></pre><br><blockquote><br><p>1.vm_start和vm_end描述的是一个合理的地址空间范围（即严格确保 vm_start &lt; vm_end的关系）； <br><br>  2.list_link是一个双向链表，按照从小到大的顺序把一系列用vma_struct表示的虚拟内存空间链接起来，并且还要求这些链起来的vma_struct应该是不相交的，即vma之间的地址空间无交集； <br><br>  3.vm_flags表示了这个虚拟内存空间的属性，目前的属性包括 <br><br>   #define VM_READ 0x00000001   //只读 <br><br>    #define VM_WRITE 0x00000002  //可读写 <br><br>    #define VM_EXEC 0x00000004   //可执行 <br><br>  4.vm_mm是一个指针，指向一个比vma_struct更高的抽象层次的数据结构mm_struct<br><br><br><br><br><br></p><br></blockquote><br><h3 id="mmstruct">mm_struct</h3><br><p>较高层次的结构<code>vm_area_struct</code>描述了虚拟地址空间的一个区间(简称虚拟区)。 <br><br><br></p><center></center><p></p><br><pre class="prettyprint"><code class=" hljs cs">   <span class="hljs-keyword">struct</span> mm_struct {<br>        <span class="hljs-comment">// linear list link which sorted by start addr of vma  </span><br>        list_entry_t mmap_list;<br>        <span class="hljs-comment">// current accessed vma, used for speed purpose  </span><br>        <span class="hljs-keyword">struct</span> vma_struct mmap_cache;<br>        pde_t <em>pgdir; <span class="hljs-comment">// the PDT of these vma  </span><br>        <span class="hljs-keyword">int</span> map_count; <span class="hljs-comment">// the count of these vma  </span><br>        <span class="hljs-keyword">void</span> </em>sm_priv; <span class="hljs-comment">// the private data for swap manager  </span><br>    }; </code></pre><br><blockquote><br><p>1.mmap_list是双向链表头，链接了所有属于同一页目录表的虚拟内存空间 <br><br>  2.mmap_cache是指向当前正在使用的虚拟内存空间 <br><br>  3.pgdir所指向的就是 mm_struct数据结构所维护的页表 <br><br>  4.map_count记录mmap_list里面链接的vma_struct的个数 <br><br>  5.sm_priv指向用来链接记录页访问情况的链表头<br><br><br><br></p><br></blockquote><br><h2 id="3-管理结构关系">3 管理结构关系</h2><br><p>在进程的<code>task_struct</code>结构中包含一个指向 <code>mm_struct</code>结构的指针，<code>mm_strcut</code>用来描述一个进程的虚拟地址空间。 <br><br>进程的 <code>mm_struct</code> 则包含装入的可执行映像信息以及进程的页目录指针<code>pgd</code>。该结构还包含有指向 <code>vm_area_struct</code> 结构的几个指针. <br><br>每个<code>vm_area_struct</code> 代表进程的一个虚拟地址区间。<code>vm_area_struct</code> 结构含有指向<code>vm_operations_struct</code> 结构的一个指针，<code>vm_operations_struct</code> 描述了在这个区间的操作。<code>vm_operations</code> 结构中包含的是函数指针；其中，<code>open</code>、<code>close</code> 分别用于虚拟区间的打开、关闭，而<code>nopage</code> 用于当虚存页面不在物理内存而引起的“缺页异常”时所应该调用的函数，当 Linux 处理这一缺页异常时（请页机制），就可以为新的虚拟内存区分配实际的物理内存。 <br><br><br><br><br></p><center> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424085008770?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>图2 管理结构图 <br><br><center> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424090053714?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>图3 关系图<br><br></center><br><br><br></center><p></p><br><h2 id="实现代码">实现代码</h2><br><pre><code>1.目标页面不存在（页表项全为0，即该线性地址与物理地址尚未建立映射或者已经撤销）;<br>2.相应的物理页面不在内存中（页表项非空，但Present标志位=0，比如在swap分区或磁盘文件上）<br>3.访问权限不符合（此时页表项P标志=1，比如企图写只读页面）.<br></code></pre><br><p></p><center></center><p></p><br><pre class="prettyprint"><code class="language-c++ hljs objectivec"><br><span class="hljs-keyword">int</span> do_pgfault(<span class="hljs-keyword">struct</span> mm_struct <em>mm,uint32_t error_code,uintptr addr)<br>{<br>  pte_t </em>ptep=<span class="hljs-literal">NULL</span>;<span class="hljs-comment">//页目录</span><br><br> <span class="hljs-keyword">if</span> ((ptep = get_pte(mm-&gt;pgdir, addr, <span class="hljs-number">1</span>)) == <span class="hljs-literal">NULL</span>) { <span class="hljs-comment">//查找页目录 如果不存在则失败</span><br>        cprintf(<span class="hljs-string">“get_pte in do_pgfault failed\n”</span>);<br>        <span class="hljs-keyword">goto</span> failed;<br>    }<br><br>    <span class="hljs-keyword">if</span> (<em>ptep == <span class="hljs-number">0</span>) {   <span class="hljs-comment">//如果物理地址不存在，那么分配一个物理页 并且与虚拟内存建立对应关系</span><br>        <span class="hljs-keyword">if</span> (pgdir_alloc_page(mm-&gt;pgdir, addr, perm) == <span class="hljs-literal">NULL</span>) {<br>            cprintf(<span class="hljs-string">“pgdir_alloc_page in do_pgfault failed\n”</span>);<br>            <span class="hljs-keyword">goto</span> failed;<br>        }<br>    }<br>    <span class="hljs-keyword">else</span> {   <span class="hljs-comment">//页表项非空，可以尝试换入页面 </span><br>        <span class="hljs-keyword">if</span>(swap_init_ok) {<br>            <span class="hljs-keyword">struct</span> Page </em>page=<span class="hljs-literal">NULL</span>;<span class="hljs-comment">//新建内存页指针</span><br>            <span class="hljs-keyword">if</span> ((ret = swap_in(mm, addr, &amp;page)) != <span class="hljs-number">0</span>) {<span class="hljs-comment">//根据mm结构和addr地址，尝试将硬盘中的内容换入至page中</span><br>                cprintf(<span class="hljs-string">“swap_in in do_pgfault failed\n”</span>);<br>                <span class="hljs-keyword">goto</span> failed;<br>            }<br>            page_insert(mm-&gt;pgdir, page, addr, perm);<span class="hljs-comment">//建立虚拟地址和物理地址之间的对应关系 </span><br>            swap_map_swappable(mm, addr, page, <span class="hljs-number">1</span>);<span class="hljs-comment">//将此页面设置为可交换的  </span><br>            page-&gt;pra_vaddr = addr;<br>        }<br>        <span class="hljs-keyword">else</span> {<br>            cprintf(<span class="hljs-string">“no swap_init_ok but ptep is %x, failed\n”</span>,<em>ptep);<br>            <span class="hljs-keyword">goto</span> failed;<br>        }<br>   }<br>   ret = <span class="hljs-number">0</span><br>   failed:<br>   <span class="hljs-keyword">return</span> ret;<br>}</em></code></pre><br><h1 id="练习2-补充完成基于fifo的页面替换算法">练习2 补充完成基于FIFO()的页面替换算法</h1><br><blockquote><br><p>完成vmm.c中的do_pgfault函数，并且在实现FIFO算法的swap_fifo.c中完成map_swappable和swap_out_vistim函数。通过对swap的测试。</p><br></blockquote><br><h2 id="问题分析">问题分析</h2><br><p>根据练习1，当页错误异常发生时，有可能是因为页面保存在swap区或者磁盘文件上造成的，练习2需要利用页面替换算法解决这个问题。</p><br><h2 id="函数分析">函数分析</h2><br><p><code>map_swappable()</code> 主要解决的问题是将最近被用到的页面添加到算法所维护的次序队列。 <br><br>链表是由<code>list_entry_t</code>指针串起来的 <br><br><code>mm_struct</code>结构体的<code>sm_priv</code>元素是交换管理的私有数据 是一串链表 满足<code>FIFO</code>先进先出<br><br></p><br><p><code>_fifo_swap_out_victim()</code>函数是用来查询哪个页面需要被换出，它的主要作用是用来查询哪个页面需要被换出。</p><br><h2 id="实现代码-1">实现代码</h2><br><p><strong>_fifo_map_swappable()</strong></p><br><pre class="prettyprint"><code class="language-c++ hljs objectivec"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> _fifo_map_swappable(<span class="hljs-keyword">struct</span> mm_struct mm, uintptr_t addr, <span class="hljs-keyword">struct</span> Page <em>page, <span class="hljs-keyword">int</span> swap_in) {<br>        list_entry_t </em>head=(list_entry_t<em>) mm-&gt;sm_priv;<br>        list_entry_t </em>entry=&amp;(page-&gt;pra_page_link);<br>        assert(entry != <span class="hljs-literal">NULL</span> &amp;&amp; head != <span class="hljs-literal">NULL</span>);<br>        list_add(head, entry); <span class="hljs-comment">//将最近用到的页面添加到次序队尾  </span><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    } </code></pre><br><p><strong>_fifo_swap_out_victim()</strong></p><br><pre class="prettyprint"><code class=" hljs rust"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span><br><span class="hljs-number">_f</span>ifo_swap_out_victim(<span class="hljs-keyword">struct</span> mm_struct <em>mm, <span class="hljs-keyword">struct</span> Page ** ptr_page, <span class="hljs-keyword">int</span> in_tick) {<br>    list_entry_t </em>head=(list_entry_t<em>) mm-&gt;sm_priv;<br>    <span class="hljs-keyword">assert</span>(head != NULL);<br>    <span class="hljs-keyword">assert</span>(in_tick==<span class="hljs-number">0</span>);<br>    list_entry_t </em>le = head-&gt;prev;  <span class="hljs-comment">//用le指示需要被换出的页，最先进入队列的元素head的另一端             </span><br>    <span class="hljs-keyword">assert</span>(head!=le);<br>    <span class="hljs-keyword">struct</span> Page <em>p = le2page(le, pra_page_link);<span class="hljs-comment">//le2page宏可以根据链表元素获得对应的Page指针p 这里是物理页属性      </span><br>    list_del(le);      <span class="hljs-comment">//将进来最早的页面从队列中删除      </span><br>    <span class="hljs-keyword">assert</span>(p !=NULL);       
+    </em>ptr_page = p; <span class="hljs-comment">//将这一页的地址存储在ptr_page中</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>}</code></pre><br><h1 id="实验截图">实验截图</h1><br><p></p><center> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424222730808?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>图4 实验效果图<br><br></center><p></p><br><pre class="prettyprint"><code class=" hljs erlang-repl"><span class="hljs-function_or_atom">check_vma_struct</span>() <span class="hljs-function_or_atom">succeeded</span><span class="hljs-exclamation_mark">!</span><br><span class="hljs-function_or_atom">page</span> <span class="hljs-function_or_atom">fault</span> <span class="hljs-function_or_atom">at</span> <span class="hljs-number">0</span>x00000100: <span class="hljs-variable">K</span>/<span class="hljs-variable">W</span> [<span class="hljs-function_or_atom">no</span> <span class="hljs-function_or_atom">page</span> <span class="hljs-function_or_atom">found</span>].<br><span class="hljs-function_or_atom">check_pgfault</span>() <span class="hljs-function_or_atom">succeeded</span><span class="hljs-exclamation_mark">!</span><br><span class="hljs-function_or_atom">check_vmm</span>() <span class="hljs-function_or_atom">succeeded</span>.</code></pre><br><p></p><center> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170424222810399?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>图5 实验效果图<br><br></center><p></p><br><p><code>check_swap() succeeded!</code> <br><br>实验运行成功！<br></p><br><h1 id="总结">总结</h1><br><p>1.整个实验下来感觉自己收获很多，通过上网查找资料，自己深刻学习了虚拟内存管理的机制，通过实验更是加深了印象。 <br><br>2.实验中遇到了很多的问题，比如进程虚拟内存的管理涉及到的一些结构体的关系，由于种类比较多很容易混乱，通过列图梳理了他们之间的关系。 <br><br>3.操作系统这门课程比较基础，涉及到的内容比较多。有时学起来会比较吃力，但这门课程非常重要，是以后专业课的基石，希望在以后自己留给更多的时间在做实验上，从而更加深入的理解、掌握操作系统<br><br></p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统实验/" rel="tag"># 操作系统实验</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/22/缓冲区溢出实验/" rel="next" title="缓冲区溢出实验">
+                <i class="fa fa-chevron-left"></i> 缓冲区溢出实验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/30/操作系统实验报告 lab4/" rel="prev" title="操作系统实验报告 lab4">
+                操作系统实验报告 lab4 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统实验报告-lab3"><span class="nav-number">1.</span> <span class="nav-text">操作系统实验报告 lab3 </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习0-填写已有实验"><span class="nav-number"></span> <span class="nav-text">练习0 填写已有实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习1-给未被映射的地址映射上物理页"><span class="nav-number"></span> <span class="nav-text">练习1 给未被映射的地址映射上物理页</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-问题分析"><span class="nav-number">1.</span> <span class="nav-text">1 问题分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-结构体分析"><span class="nav-number">2.</span> <span class="nav-text">2 结构体分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vmastruct"><span class="nav-number">2.1.</span> <span class="nav-text">vma_struct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mmstruct"><span class="nav-number">2.2.</span> <span class="nav-text">mm_struct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-管理结构关系"><span class="nav-number">3.</span> <span class="nav-text">3 管理结构关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现代码"><span class="nav-number">4.</span> <span class="nav-text">实现代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习2-补充完成基于fifo的页面替换算法"><span class="nav-number"></span> <span class="nav-text">练习2 补充完成基于FIFO()的页面替换算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析"><span class="nav-number">1.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数分析"><span class="nav-number">2.</span> <span class="nav-text">函数分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现代码-1"><span class="nav-number">3.</span> <span class="nav-text">实现代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验截图"><span class="nav-number"></span> <span class="nav-text">实验截图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

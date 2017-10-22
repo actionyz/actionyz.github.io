@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="总结了常见的PHP函数漏洞，希望对大家有用">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP 函数漏洞总结">
+<meta property="og:url" content="http://yoursite.com/2017/03/09/PHP 函数漏洞总结/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="总结了常见的PHP函数漏洞，希望对大家有用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-22T02:14:37.891Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP 函数漏洞总结">
+<meta name="twitter:description" content="总结了常见的PHP函数漏洞，希望对大家有用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/09/PHP 函数漏洞总结/"/>
+
+
+
+
+
+  <title>PHP 函数漏洞总结 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/09/PHP 函数漏洞总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP 函数漏洞总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-09T20:59:00+08:00">
+                2017-03-09
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:37+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>总结了常见的PHP函数漏洞，希望对大家有用<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><hr><br><h2 id="1md5-compare漏洞">1.MD5 compare漏洞</h2><br><p>PHP在处理哈希字符串时，会利用”!=”或”==”来对哈希值进行比较，它把每一个以”0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以”0E”开头的，那么PHP将会认为他们相同，都是0。 <br><br><strong>常见的payload有</strong><br></p><br><pre class="prettyprint"><code class=" hljs scss">0x01 <span class="hljs-function">md5(str)</span><br>    QNKCDZO<br>    240610708<br>    s878926199a<br>    s155964671a<br>    s214587387a<br>    s214587387a<br>     <span class="hljs-function">sha1(str)</span><br>    <span class="hljs-function">sha1(<span class="hljs-string">‘aaroZmOk’</span>)</span><br>    <span class="hljs-function">sha1(<span class="hljs-string">‘aaK1STfY’</span>)</span><br>    <span class="hljs-function">sha1(<span class="hljs-string">‘aaO8zKZF’</span>)</span><br>    <span class="hljs-function">sha1(<span class="hljs-string">‘aa3OFF9m’</span>)</span><br><br>0x02 <span class="hljs-function">md5(<span class="hljs-function">md5(str)</span>.<span class="hljs-string">“SALT”</span>)</span><br>    2</code></pre><br><p>同时MD5不能处理数组，若有以下判断则可用数组绕过</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-keyword">if</span>(@md5(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘a’</span>]) == @md5(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘b’</span>]))<br>{<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">“yes”</span>;<br>}<br><span class="hljs-comment">//<a href="http://127.0.0.1/1.php?a[]=1&amp;b[]=2" target="_blank" rel="external">http://127.0.0.1/1.php?a[]=1&amp;b[]=2</a></span></code></pre><br><h2 id="2ereg函数漏洞00截断">2.ereg函数漏洞：00截断</h2><br><pre class="prettyprint"><code class="language-php hljs ">ereg (<span class="hljs-string">“^[a-zA-Z0-9]+$”</span>, <span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘password’</span>]) === <span class="hljs-keyword">FALSE</span></code></pre><br><p>字符串对比解析 <br><br>在这里如果 $_GET[‘password’]为数组，则返回值为NULL <br><br>如果为123 || asd || 12as || 123%00&amp;&amp;&amp;<strong>，则返回值为true <br><br>其余为false<br><br><br></strong></p><br><h2 id="3变量本身的key">3.变量本身的key</h2><br><p>说到变量的提交很多人只是看到了GET/POST/COOKIE等提交的变量的值，但是忘记了有的程序把变量本身的key也当变量提取给函数处理。 </p><br><pre class="prettyprint"><code class="language-php hljs ">    <span class="hljs-preprocessor">&lt;?php</span><br><br>    <span class="hljs-comment">//key.php?aaaa’aaa=1&amp;bb’b=2 </span><br><br>    <span class="hljs-comment">//print_R($_GET); </span><br><br>     <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$_GET</span> <span class="hljs-keyword">AS</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span>)<br><br>    {<br><br>            <span class="hljs-keyword">print</span> <span class="hljs-variable">$key</span>.<span class="hljs-string">“\n”</span>;<br><br>    }<br><br>    <span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="4变量覆盖">4.变量覆盖</h2><br><p>extract()这个函数在指定参数为EXTR_OVERWRITE或者没有指定函数可以导致变量覆盖</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br>    <span class="hljs-variable">$auth</span> = <span class="hljs-string">‘0’</span>;<br>    <span class="hljs-comment">// 这里可以覆盖$auth的变量值</span><br>    extract(<span class="hljs-variable">$_GET</span>);<br>    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$auth</span> == <span class="hljs-number">1</span>){<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“private!”</span>;<br>    } <span class="hljs-keyword">else</span>{<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“public!”</span>;<br>    }<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-variable">$a</span>=<span class="hljs-string">‘hi’</span>;<br><span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$_GET</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span>) {<br>        <span class="hljs-keyword">echo</span> <span class="hljs-variable">$key</span>;<br>        <span class="hljs-variable">$$key</span> = <span class="hljs-variable">$value</span>;<br>}<br><span class="hljs-keyword">print</span> <span class="hljs-variable">$a</span>;<br><span class="hljs-preprocessor">?&gt;</span><br></code></pre><br><h2 id="5strcmp">5.strcmp</h2><br><blockquote><br><p>如果 str1 小于 str2 返回 &lt; 0； 如果 str1 大于 str2 返回 &gt; 0；如果两者相等，返回 0。 <br><br>      5.2 中是将两个参数先转换成string类型。 <br><br>      5.3.3以后，当比较数组和字符串的时候，返回是0。 <br><br>      5.5 中如果参数不是string类型，直接return了<br><br><br></p><br></blockquote><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br>    <span class="hljs-variable">$password</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">‘password’</span>];<br>    <span class="hljs-keyword">if</span> (strcmp(<span class="hljs-string">‘xd’</span>,<span class="hljs-variable">$password</span>)) {<br>     <span class="hljs-keyword">echo</span> <span class="hljs-string">‘NO!’</span>;<br>    } <span class="hljs-keyword">else</span>{<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">‘YES!’</span>;<br>    }<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="6sha1-和-md5-函数">6.sha1 和 md5 函数</h2><br><p>md5 和 sha1 无法处理数组，返回 NULL</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-keyword">if</span> (@sha1([]) ==  <span class="hljs-keyword">false</span>)<br>    <span class="hljs-keyword">echo</span> <span class="hljs-number">1</span>;<br><span class="hljs-keyword">if</span> (@md5([]) ==  <span class="hljs-keyword">false</span>)<br>    <span class="hljs-keyword">echo</span> <span class="hljs-number">2</span>;<br><span class="hljs-keyword">echo</span> var_dump(@sha1([]));</code></pre><br><h2 id="7isnumeric">7.is_numeric</h2><br><p>PHP提供了is_numeric函数，用来变量判断是否为数字。但是函数的范围比较广泛，不仅仅是十进制的数字。</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-keyword">echo</span> is_numeric(<span class="hljs-number">233333</span>);       <span class="hljs-comment"># 1</span><br><span class="hljs-keyword">echo</span> is_numeric(<span class="hljs-string">‘233333’</span>);    <span class="hljs-comment"># 1</span><br><span class="hljs-keyword">echo</span> is_numeric(<span class="hljs-number">0x233333</span>);    <span class="hljs-comment"># 1</span><br><span class="hljs-keyword">echo</span> is_numeric(<span class="hljs-string">‘0x233333’</span>);   <span class="hljs-comment"># 1</span><br><span class="hljs-keyword">echo</span> is_numeric(<span class="hljs-string">‘233333abc’</span>);  <span class="hljs-comment"># 0</span><br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="8pregmatch">8.preg_match</h2><br><p>如果在进行正则表达式匹配的时候，没有限制字符串的开始和结束(^ 和 $)，则可以存在绕过的问题</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-variable">$ip</span> = <span class="hljs-string">‘1.1.1.1 abcd’</span>; <span class="hljs-comment">// 可以绕过</span><br><span class="hljs-keyword">if</span>(!preg_match(<span class="hljs-string">“/(\d+).(\d+).(\d+).(\d+)/“</span>,<span class="hljs-variable">$ip</span>)) {<br>  <span class="hljs-keyword">die</span>(<span class="hljs-string">‘error’</span>);<br>} <span class="hljs-keyword">else</span> {<br>   <span class="hljs-keyword">echo</span>(<span class="hljs-string">‘key…’</span>);<br>}<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="9parsestr">9.parse_str</h2><br><p>与 parse_str() 类似的函数还有 mb_parse_str()，parse_str 将字符串解析成多个变量，如果参数str是URL传递入的查询字符串（query string），则将它解析为变量并设置到当前作用域。</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-comment">//var.php?var=new  </span><br><span class="hljs-variable">$var</span>=<span class="hljs-string">‘init’</span>;<br>parse_str(<span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">‘QUERY_STRING’</span>]);<br><span class="hljs-keyword">print</span> <span class="hljs-variable">$var</span>;</code></pre><br><h2 id="10字符串比较">10.字符串比较</h2><br><p>== 是弱类型的比较，以下比较都为 true</p><br><pre class="prettyprint"><code class="language-php hljs "><br><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-keyword">echo</span> <span class="hljs-number">0</span> == <span class="hljs-string">‘a’</span> ;<span class="hljs-comment">// a 转换为数字为 0    重点注意</span><br><br><span class="hljs-comment">// 0x 开头会被当成16进制54975581388的16进制为 0xccccccccc</span><br><span class="hljs-comment">// 十六进制与整数，被转换为同一进制比较</span><br><span class="hljs-string">‘0xccccccccc’</span> == <span class="hljs-string">‘54975581388’</span> ;<br><span class="hljs-comment">// 字符串在与数字比较前会自动转换为数字，如果不能转换为数字会变成0</span><br><span class="hljs-number">1</span> == <span class="hljs-string">‘1’</span>;<br><span class="hljs-number">1</span> == <span class="hljs-string">‘01’</span>;<br><span class="hljs-number">10</span> == <span class="hljs-string">‘1e1’</span>;<br><span class="hljs-string">‘100’</span> == <span class="hljs-string">‘1e2’</span> ;<br><br><span class="hljs-comment">// 十六进制数与带空格十六进制数，被转换为十六进制整数</span><br><span class="hljs-string">‘0xABCdef’</span>  == <span class="hljs-string">‘     0xABCdef’</span>;<br><span class="hljs-keyword">echo</span> <span class="hljs-string">‘0010e2’</span> == <span class="hljs-string">‘1e3’</span>;<br><span class="hljs-comment">// 0e 开头会被当成数字，又是等于 0<em>10^xxx=0</em></span><br><span class="hljs-comment">// 如果 md5 是以 0e 开头，在做比较的时候，可以用这种方法绕过</span><br><span class="hljs-string">‘0e509367213418206700842008763514’</span> == <span class="hljs-string">‘0e481036490867661113260034900752’</span>;<br><span class="hljs-string">‘0e481036490867661113260034900752’</span> == <span class="hljs-string">‘0’</span> ;<br><br>var_dump(md5(<span class="hljs-string">‘240610708’</span>) == md5(<span class="hljs-string">‘QNKCDZO’</span>));<br>var_dump(md5(<span class="hljs-string">‘aabg7XSs’</span>) == md5(<span class="hljs-string">‘aabC9RqS’</span>));<br>var_dump(sha1(<span class="hljs-string">‘aaroZmOk’</span>) == sha1(<span class="hljs-string">‘aaK1STfY’</span>));<br>var_dump(sha1(<span class="hljs-string">‘aaO8zKZF’</span>) == sha1(<span class="hljs-string">‘aa3OFF9m’</span>));<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="11unset">11.unset</h2><br><p>unset(<span class="MathJax_Preview"></span><span aria-readonly="true" class="MathJax" id="MathJax-Element-1-Frame" role="textbox" style=""><nobr><span class="math" id="MathJax-Span-1" style="width: 16.817em; display: inline-block;"><span style="display: inline-block; position: relative; width: 13.44em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.867em, 1000em, 3.237em, -0.44em); top: -2.827em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math; font-style: italic;">b</span><span class="mi" id="MathJax-Span-4" style="font-family: MathJax_Math; font-style: italic;">a</span><span class="mi" id="MathJax-Span-5" style="font-family: MathJax_Math; font-style: italic;">r</span><span class="mo" id="MathJax-Span-6" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-7" style="font-family: MathJax_Main;">;</span><span class="texatom" id="MathJax-Span-8" style="padding-left: 0.167em;"><span class="mrow" id="MathJax-Span-9"><span class="mo" id="MathJax-Span-10"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">用</span></span></span></span><span class="texatom" id="MathJax-Span-11"><span class="mrow" id="MathJax-Span-12"><span class="mo" id="MathJax-Span-13"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">来</span></span></span></span><span class="texatom" id="MathJax-Span-14"><span class="mrow" id="MathJax-Span-15"><span class="mo" id="MathJax-Span-16"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">销</span></span></span></span><span class="texatom" id="MathJax-Span-17"><span class="mrow" id="MathJax-Span-18"><span class="mo" id="MathJax-Span-19"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">毁</span></span></span></span><span class="texatom" id="MathJax-Span-20"><span class="mrow" id="MathJax-Span-21"><span class="mo" id="MathJax-Span-22"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">指</span></span></span></span><span class="texatom" id="MathJax-Span-23"><span class="mrow" id="MathJax-Span-24"><span class="mo" id="MathJax-Span-25"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">定</span></span></span></span><span class="texatom" id="MathJax-Span-26"><span class="mrow" id="MathJax-Span-27"><span class="mo" id="MathJax-Span-28"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">的</span></span></span></span><span class="texatom" id="MathJax-Span-29"><span class="mrow" id="MathJax-Span-30"><span class="mo" id="MathJax-Span-31"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">变</span></span></span></span><span class="texatom" id="MathJax-Span-32"><span class="mrow" id="MathJax-Span-33"><span class="mo" id="MathJax-Span-34"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">量</span></span></span></span><span class="texatom" id="MathJax-Span-35"><span class="mrow" id="MathJax-Span-36"><span class="mo" id="MathJax-Span-37"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">，</span></span></span></span><span class="texatom" id="MathJax-Span-38"><span class="mrow" id="MathJax-Span-39"><span class="mo" id="MathJax-Span-40"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">如</span></span></span></span><span class="texatom" id="MathJax-Span-41"><span class="mrow" id="MathJax-Span-42"><span class="mo" id="MathJax-Span-43"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">果</span></span></span></span><span class="texatom" id="MathJax-Span-44"><span class="mrow" id="MathJax-Span-45"><span class="mo" id="MathJax-Span-46"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">变</span></span></span></span><span class="texatom" id="MathJax-Span-47"><span class="mrow" id="MathJax-Span-48"><span class="mo" id="MathJax-Span-49"><span style="font-family: STIXGeneral," arial="" unicode="" ms",serif;="" font-size:="" 80%;="" font-style:="" normal;="" font-weight:="" normal;"="">量</span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.827em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.446em; vertical-align: -0.379em;"></span></span></nobr></span><script id="MathJax-Element-1" type="math/tex">bar); 用来销毁指定的变量，如果变量 </script>bar 包含在请求参数中，可能出现销毁一些变量而实现程序逻辑绕过。</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-comment">// <a href="http://127.0.0.1/index.php?_CONFIG=123" target="_blank" rel="external">http://127.0.0.1/index.php?_CONFIG=123</a></span><br><span class="hljs-variable">$_CONFIG</span>[<span class="hljs-string">‘extraSecure’</span>] = <span class="hljs-keyword">true</span>;<br><br><span class="hljs-keyword">foreach</span>(<span class="hljs-keyword">array</span>(<span class="hljs-string">‘_GET’</span>,<span class="hljs-string">‘_POST’</span>) <span class="hljs-keyword">as</span> <span class="hljs-variable">$method</span>) {<br>    <span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$$method</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span>=&gt;<span class="hljs-variable">$value</span>) {<br>      <span class="hljs-comment">// $key == _CONFIG</span><br>      <span class="hljs-comment">// $$key == $_CONFIG</span><br>      <span class="hljs-comment">// 这个函数会把 $_CONFIG 变量销毁</span><br>      <span class="hljs-keyword">unset</span>(<span class="hljs-variable">$$key</span>);<br>    }<br>}<br><br><span class="hljs-keyword">if</span> (<span class="hljs-variable">$_CONFIG</span>[<span class="hljs-string">‘extraSecure’</span>] == <span class="hljs-keyword">false</span>) {<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">‘flag {*}’</span>;<br>}<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="12intval">12.intval()</h2><br><p>int转string：</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-variable">$var</span> = <span class="hljs-number">5</span>;<br>方式<span class="hljs-number">1</span>：<span class="hljs-variable">$item</span> = (string)<span class="hljs-variable">$var</span>;<br>方式<span class="hljs-number">2</span>：<span class="hljs-variable">$item</span> = strval(<span class="hljs-variable">$var</span>); </code></pre><br><p>string转int：intval()函数。</p><br><pre class="prettyprint"><code class="language-php hljs ">var_dump(intval(<span class="hljs-string">‘2’</span>)) <span class="hljs-comment">//2  </span><br>var_dump(intval(<span class="hljs-string">‘3abcd’</span>)) <span class="hljs-comment">//3  </span><br>var_dump(intval(<span class="hljs-string">‘abcd’</span>)) <span class="hljs-comment">//0 </span></code></pre><br><p>说明intval()转换的时候，会将从字符串的开始进行转换知道遇到一个非数字的字符。即使出现无法转换的字符串，intval()不会报错而是返回0。 <br><br>利用代码：<br></p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-variable">$a</span> = <span class="hljs-string">‘10000 union select * from yz’</span>;<br><span class="hljs-keyword">if</span>(intval(<span class="hljs-variable">$a</span>)&gt;<span class="hljs-number">1000</span>)<br>    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$a</span> ;<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="13switch">13.switch()</h2><br><p>如果switch是数字类型的case的判断时，switch会将其中的参数转换为int类型。如下：</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-variable">$i</span> =<span class="hljs-string">“2abc”</span>;<br><span class="hljs-keyword">switch</span> (<span class="hljs-variable">$i</span>) {<br><span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br><span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br><span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br><span class="hljs-keyword">echo</span> <span class="hljs-string">“i is less than 3 but not negative”</span>;<br><span class="hljs-keyword">break</span>;<br><span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br><span class="hljs-keyword">echo</span> <span class="hljs-string">“i is 3”</span>;<br>}<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><p>这个时候程序输出的是i is less than 3 but not negative，是由于switch()函数将$i进行了类型转换，转换结果为2。</p><br><h2 id="14inarray">14.in_array()</h2><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-variable">$array</span>=[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-string">‘3’</span>];<br>var_dump(in_array(<span class="hljs-string">‘abc’</span>, <span class="hljs-variable">$array</span>)); <span class="hljs-comment">//true  </span><br>var_dump(in_array(<span class="hljs-string">‘1bc’</span>, <span class="hljs-variable">$array</span>)); <span class="hljs-comment">//true </span></code></pre><br><p>可以看到上面的情况返回的都是true,因为’abc’会转换为0，’1bc’转换为1。 <br><br>在所有php认为是int的地方输入string，都会被强制转换<br></p><br><h2 id="15serialize-和-unserialize漏洞">15.serialize 和 unserialize漏洞</h2><br><p><strong>1.魔术方法</strong></p><br><p>这里我们先简单介绍一下php中的魔术方法（这里如果对于类、对象、方法不熟的先去学学吧），即Magic方法，php类可能会包含一些特殊的函数叫magic函数，magic函数命名是以符号<strong>开头的，比如 </strong>construct， <strong>destruct，</strong>toString，<strong>sleep，</strong>wakeup等等。这些函数都会在某些特殊时候被自动调用。 <br><br>例如<strong>construct()方法会在一个对象被创建时自动调用，对应的</strong>destruct则会在一个对象被销毁时调用等等。 <br><br>这里有两个比较特别的Magic方法，<strong>sleep 方法会在一个对象被序列化的时候调用。 </strong>wakeup方法会在一个对象被反序列化的时候调用。<br><br></p><br><p>在这里介绍一个序列化漏洞，首先不要相信用户输入的一切 <br><br>看下面代码<br></p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">test</span><br>{</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$username</span> = <span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$password</span> = <span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$file</span> = <span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">out</span><span class="hljs-params">()</span>{</span><br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“username: “</span>.<span class="hljs-variable">$this</span>-&gt;username.<span class="hljs-string">“&lt;br&gt;”</span>.<span class="hljs-string">“password: “</span>.<span class="hljs-variable">$this</span>-&gt;password ;<br>    }<br>     <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title"><strong>toString</strong></span><span class="hljs-params">()</span> {</span><br>        <span class="hljs-keyword">return</span> file_get_contents(<span class="hljs-variable">$this</span>-&gt;file);<br>    }<br>}<br><span class="hljs-variable">$a</span> = <span class="hljs-keyword">new</span> test();<br><span class="hljs-variable">$a</span>-&gt;file = <span class="hljs-string">‘C:\Users\YZ\Desktop\plan.txt’</span>;<br><span class="hljs-keyword">echo</span> serialize(<span class="hljs-variable">$a</span>);<br><span class="hljs-preprocessor">?&gt;</span><br><span class="hljs-comment">//tostring方法会在输出实例的时候执行，如果实例路径是隐秘文件就可以读取了</span><br></code></pre><br><p>下面就可以读取了C:\Users\YZ\Desktop\plan.txt文件了 <br><br>echo unserialize触发了tostring函数<br></p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">test</span><br>{</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$username</span> = <span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$password</span> = <span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$file</span> = <span class="hljs-string">‘’</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">out</span><span class="hljs-params">()</span>{</span><br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">“username: “</span>.<span class="hljs-variable">$this</span>-&gt;username.<span class="hljs-string">“&lt;br&gt;”</span>.<span class="hljs-string">“password: “</span>.<span class="hljs-variable">$this</span>-&gt;password ;<br>    }<br>     <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title"><strong>toString</strong></span><span class="hljs-params">()</span> {</span><br>        <span class="hljs-keyword">return</span> file_get_contents(<span class="hljs-variable">$this</span>-&gt;file);<br>    }<br>}<br><span class="hljs-variable">$a</span> = <span class="hljs-string">‘O:4:”test”:3:{s:8:”username”;s:0:””;s:8:”password”;s:0:””;s:4:”file”;s:28:”C:\Users\YZ\Desktop\plan.txt”;}’</span>;<br><span class="hljs-keyword">echo</span> unserialize(<span class="hljs-variable">$a</span>);<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><h2 id="16session-反序列化漏洞">16.session 反序列化漏洞</h2><br><p>主要原因是 <br><br>ini_set(‘session.serialize_handler’, ‘php_serialize’); <br><br>ini_set(‘session.serialize_handler’, ‘php’); <br><br>两者处理session的方式不同<br><br><br></p><br><p>利用下面代码可以生成session值</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br>ini_set(<span class="hljs-string">‘session.serialize_handler’</span>, <span class="hljs-string">‘php_serialize’</span>);<span class="hljs-comment">//a:1:{s:6:”spoock”;s:3:”111”;}</span><br><span class="hljs-comment">//ini_set(‘session.serialize_handler’, ‘php’);//a|s:3:”111”</span><br>session_start();<br><span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">“spoock”</span>]=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">“a”</span>];<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><p>我们来看看生成的session值</p><br><pre class="prettyprint"><code class="language-php hljs "><br>spoock|s:<span class="hljs-number">3</span>:<span class="hljs-string">“111”</span>;    <span class="hljs-comment">//session键值|内容序列化</span><br>a:<span class="hljs-number">1</span>:{s:<span class="hljs-number">6</span>:<span class="hljs-string">“spoock”</span>;s:<span class="hljs-number">3</span>:<span class="hljs-string">“111”</span>;}a:<span class="hljs-number">1</span>:{s:N:session键值;内容序列化}<br>在ini_set(<span class="hljs-string">‘session.serialize_handler’</span>, <span class="hljs-string">‘php’</span>);中把|之前认为是键值后面的视为序列化<br>那么就可以利用这一漏洞执行一些恶意代码</code></pre><br><p>看下面的例子 <br><br>1.php<br></p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br>ini_set(<span class="hljs-string">‘session.serialize_handler’</span>, <span class="hljs-string">‘php_serialize’</span>);<br>session_start();<br><span class="hljs-variable">$_SESSION</span>[<span class="hljs-string">“spoock”</span>]=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">“a”</span>];<br><span class="hljs-preprocessor">?&gt;</span></code></pre><br><p>2.php</p><br><pre class="prettyprint"><code class="language-php hljs "><span class="hljs-preprocessor">&lt;?php</span><br>   ini_set(<span class="hljs-string">‘session.serialize_handler’</span>, <span class="hljs-string">‘php’</span>);<br>session_start();<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">lemon</span> {</span><br>    <span class="hljs-keyword">var</span> <span class="hljs-variable">$hi</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">construct</span><span class="hljs-params">()</span>{</span><br>        <span class="hljs-variable">$this</span>-&gt;hi = <span class="hljs-string">‘phpinfo();’</span>;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__destruct</span><span class="hljs-params">()</span> {</span><br>         <span class="hljs-keyword">eval</span>(<span class="hljs-variable">$this</span>-&gt;hi);<span class="hljs-comment">//这里很危险，可以执行用户输入的参数</span><br>    }<br>}<br><span class="hljs-preprocessor">?&gt;</span><br></code></pre><br><p>在1.PHP里面输入a参数序列化的值|O:5:”lemon”:1:{s:2:”hi”;s:10:”phpinfo();”;}  <br><br>则被序列化为 <br><br>a:1:{s:6:”spoock”;s:44:”|O:5:”lemon”:1:{s:2:”hi”;s:10:”phpinfo();”;} <br><br>在2.PHP里面打开 <br><br>就可以执行phpinfo（）了 <br><br><a href="http://web.jarvisoj.com:32784/" target="_blank" rel="external">有道web题</a> <br><br><a href="http://blog.csdn.net/qq_31481187/article/details/53189113" target="_blank" rel="external">这里是题解</a><br><br><br><br><br><br></p></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/09/PHPmailer 邮件发送原理及实现/" rel="next" title="PHPmailer 邮件发送原理及实现">
+                <i class="fa fa-chevron-left"></i> PHPmailer 邮件发送原理及实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/18/操作系统实验报告 lab1/" rel="prev" title="操作系统实验报告 lab1">
+                操作系统实验报告 lab1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1md5-compare漏洞"><span class="nav-number">1.</span> <span class="nav-text">1.MD5 compare漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2ereg函数漏洞00截断"><span class="nav-number">2.</span> <span class="nav-text">2.ereg函数漏洞：00截断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3变量本身的key"><span class="nav-number">3.</span> <span class="nav-text">3.变量本身的key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4变量覆盖"><span class="nav-number">4.</span> <span class="nav-text">4.变量覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5strcmp"><span class="nav-number">5.</span> <span class="nav-text">5.strcmp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6sha1-和-md5-函数"><span class="nav-number">6.</span> <span class="nav-text">6.sha1 和 md5 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7isnumeric"><span class="nav-number">7.</span> <span class="nav-text">7.is_numeric</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8pregmatch"><span class="nav-number">8.</span> <span class="nav-text">8.preg_match</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9parsestr"><span class="nav-number">9.</span> <span class="nav-text">9.parse_str</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10字符串比较"><span class="nav-number">10.</span> <span class="nav-text">10.字符串比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11unset"><span class="nav-number">11.</span> <span class="nav-text">11.unset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12intval"><span class="nav-number">12.</span> <span class="nav-text">12.intval()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13switch"><span class="nav-number">13.</span> <span class="nav-text">13.switch()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14inarray"><span class="nav-number">14.</span> <span class="nav-text">14.in_array()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15serialize-和-unserialize漏洞"><span class="nav-number">15.</span> <span class="nav-text">15.serialize 和 unserialize漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16session-反序列化漏洞"><span class="nav-number">16.</span> <span class="nav-text">16.session 反序列化漏洞</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

